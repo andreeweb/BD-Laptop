@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<!-- link back https://www.iconfinder.com/icons/2120161/astronaut_astronomy_satellite_science_space_icon#size=256 -->
+
+<BorderPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@../resources/stylesheets/BlueTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.bd.view.RootViewController">
+    <top>
+        <VBox alignment="BOTTOM_CENTER" prefHeight="100.0" styleClass="pane-header" BorderPane.alignment="CENTER">
+            <children>
+                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                    <VBox.margin>
+                        <Insets bottom="17.0" />
+                    </VBox.margin>
+               <image>
+                  <Image url="@../resources/images/satellite_64.png" />
+               </image>
+                </ImageView>
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <ToolBar>
+                            <items>
+                                <Label fx:id="nameLabel" prefHeight="27.0" styleClass="white-label-sub" text="Benvenuto!" />
+                            </items>
+                        </ToolBar>
+                        <ToolBar nodeOrientation="RIGHT_TO_LEFT" GridPane.columnIndex="1">
+                            <items>
+                                <Button fx:id="exitButton" mnemonicParsing="false" styleClass="button-white" text="Esci" />
+                            </items>
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                            <GridPane.margin>
+                                <Insets />
+                            </GridPane.margin>
+                        </ToolBar>
+                    </children>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </GridPane>
+            </children>
+        </VBox>
+    </top>
+   <bottom>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" styleClass="pane-header" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>

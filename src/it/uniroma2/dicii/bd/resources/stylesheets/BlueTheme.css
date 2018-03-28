@@ -1,0 +1,146 @@
+.background {
+    -fx-background-color: #ffffff;
+}
+
+/*
+ * Red error labels
+ */
+.error-label-sub {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Arial";
+    -fx-text-fill: #ff0015;
+}
+
+/*
+ * Blue labels
+ */
+.label-big {
+    -fx-font-size: 15pt;
+    -fx-font-family: "Arial";
+    -fx-text-fill: #0C3869;
+}
+
+.label-sub {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Arial";
+    -fx-text-fill: #0C3869;
+}
+
+.label-mid {
+    -fx-font-size: 10pt;
+    -fx-font-family: "Arial";
+    -fx-text-fill: #0C3869;
+}
+
+/*
+ * Blue text field
+ */
+.text-field {
+    -fx-text-fill: #0C3869;
+}
+
+/*
+ * Blue style Push Button
+ */
+.button-blue {
+    -fx-padding: 5 22 5 22;
+    -fx-background-color: #0C3869;
+    -fx-font-family: "Arial";
+    -fx-font-size: 11pt;
+    -fx-text-fill: #d8d8d8;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.button-blue:hover {
+    -fx-background-color: #004369;
+}
+
+.button-blue:pressed, .button-blue:default:hover:pressed {
+    -fx-background-color: #0C3869;
+}
+
+/*
+ * Red style Push Button
+ */
+.button-red {
+    -fx-padding: 5 22 5 22;
+    -fx-background-color: #ff0015;
+    -fx-font-family: "Arial";
+    -fx-font-size: 11pt;
+    -fx-text-fill: #d8d8d8;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.button-red:hover {
+    -fx-background-color: #ff4e61;
+}
+
+.button-red:pressed, .button-red:default:hover:pressed {
+    -fx-background-color: #ff0015;
+}
+
+/*
+ * Blue style Push Button casper
+ */
+.button-casper {
+    -fx-background-color: transparent;
+    -fx-padding: 5 22 5 22;
+    -fx-font-family: "Arial";
+    -fx-font-size: 11pt;
+    -fx-text-fill: #0C3869;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.button-casper:hover {
+    -fx-text-fill: #004369;
+}
+
+.button-casper:pressed, .button-casper:default:hover:pressed {
+    -fx-text-fill: #0C3869;
+}
+
+/*
+ * White style Push Button
+ */
+.button-white {
+    -fx-padding: 5 22 5 22;
+    -fx-background-color: #ffffff;
+    -fx-font-family: "Arial";
+    -fx-font-size: 11pt;
+    -fx-text-fill: #0C3869;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.button-white:hover {
+    -fx-background-color: #0C3869;
+    -fx-text-fill: #ffffff;
+}
+
+.button-white:pressed, .button-white:default:hover:pressed {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #0C3869;
+}
+
+/*
+ * White labels
+ */
+.white-label-big {
+    -fx-font-size: 15pt;
+    -fx-font-family: "Arial";
+    -fx-text-fill: #ffffff;
+}
+
+.white-label-sub {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Arial";
+    -fx-text-fill: #ffffff;
+}
+
+/*
+ * Header
+ */
+
+.pane-header {
+    -fx-background-color: #0C3869;
+    -fx-base : #0C3869;
+}
