@@ -1,0 +1,94 @@
+.background {
+    -fx-background-color: #ffffff;
+}
+
+/*
+ * Error labels
+ */
+.error-label-sub {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Arial";
+    -fx-text-fill: #ff0015;
+}
+
+/*
+ * Labels
+ */
+.label-big {
+    -fx-font-size: 15pt;
+    -fx-font-family: "Arial";
+    -fx-text-fill: #240031;
+}
+
+.label-sub {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Arial";
+    -fx-text-fill: #240031;
+}
+
+.label-mid {
+    -fx-font-size: 10pt;
+    -fx-font-family: "Arial";
+    -fx-text-fill: #240031;
+}
+
+/*
+ * Text field
+ */
+.text-field {
+    -fx-text-fill: #240031;
+    -fx-focus-color: #240031;
+    -fx-accent: #240031;
+    -fx-background-color: -fx-text-box-border, -fx-control-inner-background;
+}
+
+/*
+ * Button
+ */
+.button {
+    -fx-padding: 5 22 5 22;
+    -fx-background-color: #240031;
+    -fx-font-family: "Arial";
+    -fx-font-size: 11pt;
+    -fx-text-fill: #d8d8d8;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.button:hover {
+    -fx-background-color: #3b0250;
+}
+
+.button:pressed, .button-blue:default:hover:pressed {
+    -fx-background-color: #240031;
+}
+
+/*
+ * Label button
+ */
+.label-button {
+    -fx-background-color: transparent;
+    -fx-padding: 5 22 5 22;
+    -fx-font-family: "Arial";
+    -fx-font-size: 11pt;
+    -fx-text-fill: #240031;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.label-button:hover {
+    -fx-background-color: transparent;
+    -fx-text-fill: #3b0250;
+}
+
+.label-button:pressed, .label-button:default:hover:pressed {
+    -fx-background-color: transparent;
+    -fx-text-fill: #240031;
+}
+
+/*
+ * Header
+ */
+
+.pane-header {
+    -fx-background-color: #240031;
+    -fx-base : #240031;
+}
