@@ -14,34 +14,8 @@ import javafx.scene.control.Label;
 public class RootViewController {
 
     @FXML
-    private Label nameLabel;
-
-    @FXML
-    private Button exitButton;
-
-    @FXML
     private void initialize() {
 
-        // set action
-        exitButton.setOnAction(this::exitButtonAction);
     }
 
-    /**
-     * Exit/logout button action
-     *
-     * @param event JavaFX event
-     */
-    private void exitButtonAction(ActionEvent event) {
-
-        SceneManager sm = SceneManager.getSingletonInstance();
-        sm.showLoginView();
-    }
-
-    public void setVisibleExitButton(boolean visible){
-        exitButton.setVisible(visible);
-    }
-
-    public void setVisibleNameLabel(boolean visible){
-        nameLabel.setVisible(visible);
-    }
 }

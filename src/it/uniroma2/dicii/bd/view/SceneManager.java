@@ -82,9 +82,6 @@ public class SceneManager {
             // Set view into the center of root layout.
             rootLayout.setCenter(view);
 
-            rootController.setVisibleExitButton(false);
-            rootController.setVisibleNameLabel(false);
-
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -142,5 +139,27 @@ public class SceneManager {
             System.exit(1);
         }
     }*/
+
+    public void showTest() {
+
+        try {
+
+            // Load main view
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("AdminHomeView.fxml"));
+            BorderPane view = (BorderPane)loader.load();
+
+            // Set view into the center of root layout.
+            rootLayout.setCenter(view);
+
+            AdminHomeViewController controller = loader.getController();
+            controller.onCreateView(view);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
 
 }

@@ -4,7 +4,6 @@ import it.uniroma2.dicii.bd.view.SceneManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -15,8 +14,8 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        primaryStage.setTitle("Elephant");
-        primaryStage.getIcons().add(new Image("file:resources/images/elephant-128.png"));
+        primaryStage.setTitle("Astra");
+        //primaryStage.getIcons().add(new Image("file:resources/images/"));
 
         // onCreateView with root layout
 

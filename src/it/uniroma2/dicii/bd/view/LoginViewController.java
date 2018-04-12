@@ -44,6 +44,8 @@ public class LoginViewController {
      */
     private void loginButtonAction(ActionEvent event) {
 
+        SceneManager.getSingletonInstance().showTest();
+
         /*UserBean userBean = new UserBean(usernameText.getText(), passwordText.getText());
 
         try {

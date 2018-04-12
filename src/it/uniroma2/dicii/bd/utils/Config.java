@@ -13,7 +13,7 @@ public class Config {
 
     private Properties properties;
     private static Config instance          = null;
-    private static final String filename    = "config.properties";
+    private static final String filename    = "it/uniroma2/dicii/bd/resources/config.properties";
 
     private Config() {
 
