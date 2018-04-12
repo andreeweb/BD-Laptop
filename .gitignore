@@ -2,7 +2,6 @@
 .idea/copyright/
 .idea/libraries/
 .idea/workspace.xml
-lib/
 out/
 /.idea/runConfigurations/WebApp.xml
 /.idea/runConfigurations/LaptopApp.xml
