@@ -17,28 +17,6 @@ public class Config {
 
     private Config() {
 
-    }
-
-    /**
-     * Return or inizialize the Config singleton istance
-     *
-     * @return reference to singleton istance
-     */
-    public synchronized static final Config getSingletonInstance(){
-
-        if (Config.instance == null){
-            Config.instance = new Config();
-            instance.initConfig();
-        }
-
-        return instance;
-    }
-
-    /**
-     * Init config file
-     */
-    private void initConfig(){
-
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         InputStream resourceStream = loader.getResourceAsStream(filename);
         properties = new Properties();
@@ -49,6 +27,19 @@ public class Config {
             e.printStackTrace();
             System.exit(1);
         }
+    }
+
+    /**
+     * Return or inizialize the Config singleton istance
+     *
+     * @return reference to singleton istance
+     */
+    public synchronized static final Config getSingletonInstance(){
+
+        if (Config.instance == null)
+            Config.instance = new Config();
+
+        return instance;
     }
 
     /**

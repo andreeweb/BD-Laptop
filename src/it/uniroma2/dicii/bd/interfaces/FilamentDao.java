@@ -12,6 +12,13 @@ public interface FilamentDao {
      *
      * @return array
      */
-    void insert(Filament filament, Connection conn) throws DaoException;
+    void insert(Filament filament) throws DaoException;
+
+    /**
+     *
+     * @param filament
+     * @throws DaoException
+     */
+    void insertBoundary(Filament filament) throws DaoException;
 
 }

@@ -92,3 +92,87 @@
     -fx-background-color: #240031;
     -fx-base : #240031;
 }
+
+/*
+ * Dashboard buttons
+ */
+
+.user-manager-button {
+    -fx-pref-width: 165px;
+    -fx-pref-height: 165px;
+    -fx-background-color: transparent;
+    -fx-background-image: url('../images/menu_icon_user_management.png');
+    -fx-background-repeat: no-repeat;
+}
+
+.user-manager-button:hover {
+    -fx-pref-width: 165px;
+    -fx-pref-height: 165px;
+    -fx-background-color: transparent;
+    -fx-background-image: url('../images/menu_icon_user_management-hover.png');
+    -fx-background-repeat: no-repeat;
+}
+
+.import-data-button {
+    -fx-pref-width: 165px;
+    -fx-pref-height: 165px;
+    -fx-background-color: transparent;
+    -fx-background-image: url('../images/menu_icon_import_data.png');
+    -fx-background-repeat: no-repeat;
+}
+
+.import-data-button:hover {
+    -fx-pref-width: 165px;
+    -fx-pref-height: 165px;
+    -fx-background-color: transparent;
+    -fx-background-image: url('../images/menu_icon_import_data-hover.png');
+    -fx-background-repeat: no-repeat;
+}
+
+.insert-data-button {
+    -fx-pref-width: 165px;
+    -fx-pref-height: 165px;
+    -fx-background-color: transparent;
+    -fx-background-image: url('../images/menu_icon_insert_data.png');
+    -fx-background-repeat: no-repeat;
+}
+
+.insert-data-button:hover {
+    -fx-pref-width: 165px;
+    -fx-pref-height: 165px;
+    -fx-background-color: transparent;
+    -fx-background-image: url('../images/menu_icon_insert_data-hover.png');
+    -fx-background-repeat: no-repeat;
+}
+
+.search-button {
+    -fx-pref-width: 165px;
+    -fx-pref-height: 165px;
+    -fx-background-color: transparent;
+    -fx-background-image: url('../images/menu_icon_search.png');
+    -fx-background-repeat: no-repeat;
+}
+
+.search-button:hover {
+    -fx-pref-width: 165px;
+    -fx-pref-height: 165px;
+    -fx-background-color: transparent;
+    -fx-background-image: url('../images/menu_icon_search-hover.png');
+    -fx-background-repeat: no-repeat;
+}
+
+.logout-button {
+    -fx-pref-width: 165px;
+    -fx-pref-height: 165px;
+    -fx-background-color: transparent;
+    -fx-background-image: url('../images/menu_icon_logout.png');
+    -fx-background-repeat: no-repeat;
+}
+
+.logout-button:hover {
+    -fx-pref-width: 165px;
+    -fx-pref-height: 165px;
+    -fx-background-color: transparent;
+    -fx-background-image: url('../images/menu_icon_logout-hover.png');
+    -fx-background-repeat: no-repeat;
+}

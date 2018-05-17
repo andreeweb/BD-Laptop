@@ -14,6 +14,7 @@ public class UserBean {
     private String surname;
     private String username;
     private String password;
+    private String email;
     private UserRole userRole;
 
     public UserBean(String username, String password) {
@@ -23,7 +24,7 @@ public class UserBean {
 
     /**
      *
-     * @return the name of the user bean
+     * @return name
      */
     public String getName() {
         return name;
@@ -31,7 +32,7 @@ public class UserBean {
 
     /**
      *
-     * @return the surname of the user bean
+     * @return surname
      */
     public String getSurname() {
         return surname;
@@ -39,7 +40,7 @@ public class UserBean {
 
     /**
      *
-     * @param name the name of the user bean
+     * @param name set
      */
     public void setName(String name) {
         this.name = name;
@@ -47,7 +48,7 @@ public class UserBean {
 
     /**
      *
-     * @param surname the surname of the user bean
+     * @param surname set
      */
     public void setSurname(String surname) {
         this.surname = surname;
@@ -55,7 +56,15 @@ public class UserBean {
 
     /**
      *
-     * @return the username of the user bean
+     * @param email set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     *
+     * @return username
      */
     public String getUsername() {
         return username;
@@ -63,7 +72,7 @@ public class UserBean {
 
     /**
      *
-     * @return the password of the user bean
+     * @return password
      */
     public String getPassword() {
         return password;
@@ -71,7 +80,15 @@ public class UserBean {
 
     /**
      *
-     * @param username the username of the user bean
+     * @return email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     *
+     * @param username set
      */
     public void setUsername(String username) {
         this.username = username;
@@ -79,7 +96,7 @@ public class UserBean {
 
     /**
      *
-     * @param password the password of the user bean
+     * @param password set
      */
     public void setPassword(String password) {
         this.password = password;
@@ -96,7 +113,7 @@ public class UserBean {
 
     /**
      *
-     * @param userRole new userRole for user bean
+     * @param userRole set
      * @see UserRole
      */
     public void setUserRole(UserRole userRole) {

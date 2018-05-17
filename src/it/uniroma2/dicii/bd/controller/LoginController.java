@@ -1,7 +1,11 @@
 package it.uniroma2.dicii.bd.controller;
 
 import it.uniroma2.dicii.bd.bean.UserBean;
+import it.uniroma2.dicii.bd.dao.DaoFactory;
 import it.uniroma2.dicii.bd.exception.DaoException;
+import it.uniroma2.dicii.bd.interfaces.UserDao;
+import it.uniroma2.dicii.bd.model.User;
+import it.uniroma2.dicii.bd.utils.Sha;
 
 /**
  * Controller class for Login Use Case
@@ -20,15 +24,16 @@ public class LoginController {
      */
     public UserBean validateLogin(UserBean userBean) throws DaoException {
 
-        /*UserDao dao = DaoFactory.getSingletonInstance().getUserDAO(Persistence.File);
+        UserDao dao = DaoFactory.getSingletonInstance().getUserDAO();
         User user = dao.getUserByUsernameAndPassword(userBean.getUsername(), Sha.sha256(userBean.getPassword()));
 
         userBean.setUserRole(user.getUserRole());
         userBean.setName(user.getName());
         userBean.setSurname(user.getSurname());
+        userBean.setUsername(user.getUsername());
+        userBean.setPassword("");
+        userBean.setEmail(user.getEmail());
 
-        return userBean;*/
-
-        return null;
+        return userBean;
     }
 }

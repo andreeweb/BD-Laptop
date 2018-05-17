@@ -1,5 +1,6 @@
 package it.uniroma2.dicii.bd;
 
+import it.uniroma2.dicii.bd.dao.ConnectionManager;
 import it.uniroma2.dicii.bd.view.SceneManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +9,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URI;
+
+import org.apache.commons.dbcp2.BasicDataSource;
 
 public class MainApp extends Application {
 
@@ -44,6 +48,7 @@ public class MainApp extends Application {
     }
 
     public static void main(String[] args) throws IOException {
+
         launch(args);
     }
 }

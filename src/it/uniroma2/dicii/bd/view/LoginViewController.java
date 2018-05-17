@@ -1,5 +1,8 @@
 package it.uniroma2.dicii.bd.view;
 
+import it.uniroma2.dicii.bd.bean.UserBean;
+import it.uniroma2.dicii.bd.controller.LoginController;
+import it.uniroma2.dicii.bd.exception.DaoException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -44,9 +47,7 @@ public class LoginViewController {
      */
     private void loginButtonAction(ActionEvent event) {
 
-        SceneManager.getSingletonInstance().showTest();
-
-        /*UserBean userBean = new UserBean(usernameText.getText(), passwordText.getText());
+        UserBean userBean = new UserBean(usernameText.getText(), passwordText.getText());
 
         try {
 
@@ -55,10 +56,11 @@ public class LoginViewController {
 
             switch (userBean.getUserRole()){
 
-                case SECRETARY:
-                    SceneManager.getSingletonInstance().showSecretaryView();
+                case ADMIN:
+                    SceneManager.getSingletonInstance().showAdminHomeView();
                     break;
-                case TECHNICIAN:
+                case USER:
+                    //SceneManager.getSingletonInstance().showUserHomeView();
                     break;
             }
 
@@ -67,7 +69,7 @@ public class LoginViewController {
             errorLabel.setManaged(true);
             errorLabel.setText("Username e/o password errati.");
             e.printStackTrace();
-        }*/
+        }
 
     }
 }

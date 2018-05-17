@@ -92,62 +92,14 @@ public class SceneManager {
      * Shows the main view inside the root layout.
      *
      */
-    /*public void showSecretaryView() {
-
-        try {
-
-            // Load main view
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("SecretaryView.fxml"));
-            BorderPane view = (BorderPane)loader.load();
-
-            // Set view into the center of root layout.
-            rootLayout.setCenter(view);
-            rootController.setVisibleExitButton(true);
-            rootController.setVisibleNameLabel(true);
-
-            SecretaryViewController controller = loader.getController();
-            controller.onCreateView();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-    }*/
-
-    /**
-     * Shows the main view inside the root layout.
-     *
-     */
-    /*public void showSecretaryDetailView(IssueBean issueBean) {
-
-        try {
-
-            // Load main view
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("SecretaryViewDetail.fxml"));
-            BorderPane view = (BorderPane)loader.load();
-
-            // Set view into the center of root layout.
-            rootLayout.setCenter(view);
-
-            SecretaryViewDetailController controller = loader.getController();
-            controller.onCreateView(issueBean);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-    }*/
-
-    public void showTest() {
+    public void showAdminHomeView() {
 
         try {
 
             // Load main view
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("AdminHomeView.fxml"));
-            BorderPane view = (BorderPane)loader.load();
+            BorderPane view = loader.load();
 
             // Set view into the center of root layout.
             rootLayout.setCenter(view);
@@ -155,11 +107,35 @@ public class SceneManager {
             AdminHomeViewController controller = loader.getController();
             controller.onCreateView(view);
 
-
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
     }
+
+    /**
+     * Shows the main view inside the root layout.
+     *
+     */
+    /*public void showUserHomeView() {
+
+        try {
+
+            // Load main view
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("AdminHomeView.fxml"));
+            BorderPane view = loader.load();
+
+            // Set view into the center of root layout.
+            rootLayout.setCenter(view);
+
+            AdminHomeViewController controller = loader.getController();
+            controller.onCreateView(view);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }*/
 
 }
