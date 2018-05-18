@@ -33,7 +33,7 @@ public class PGUserDao implements UserDao {
             stm = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
             // query
-            String sql = "SELECT * " + "FROM system_user where username = '" + username + "' AND password = '" + password + "';";
+            String sql = "SELECT * FROM system_user where username = '" + username + "' AND password = '" + password + "';";
 
             // execute
             ResultSet rs = stm.executeQuery(sql);

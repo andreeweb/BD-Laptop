@@ -3,7 +3,6 @@ package it.uniroma2.dicii.bd.dao;
 import it.uniroma2.dicii.bd.utils.Config;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -34,7 +33,7 @@ public class ConnectionManager {
         connectionPool.setDriverClassName(Config.getSingletonInstance().getProperty("dbdriver"));
         connectionPool.setUrl(dbUrl);
 
-        connectionPool.setInitialSize(15);
+        connectionPool.setInitialSize(30);
         connectionPool.setMaxTotal(100);
 
     }

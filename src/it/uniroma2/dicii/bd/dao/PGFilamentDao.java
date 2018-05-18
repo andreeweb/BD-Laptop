@@ -4,39 +4,22 @@ import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.FilamentDao;
 import it.uniroma2.dicii.bd.model.Filament;
 import it.uniroma2.dicii.bd.model.GPoint;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.LinkedList;
 
 public class PGFilamentDao implements FilamentDao{
 
     @Override
-    public void insert(Filament filament) throws DaoException {
+    public void insertFilament(Filament filament) throws DaoException {
 
         ConnectionManager manager = ConnectionManager.getSingletonInstance();
-
-        PreparedStatement statement = null;
         Connection conn = null;
 
         try {
 
-            final String sql = "INSERT INTO filament(idfil, name, total_flux, mean_density, mean_temperature, ellipticity, contrast) values (?,?,?,?,?,?,?)";
-
             conn = manager.getConnectionFromConnectionPool();
-            statement = conn.prepareStatement(sql);
 
-            statement.setInt(1, filament.getIdfil());
-            statement.setString(2, filament.getName());
-            statement.setBigDecimal(3, filament.getTotalFlux());
-            statement.setBigDecimal(4, filament.getMeanDensity());
-            statement.setFloat(5, filament.getMeanTemperature());
-            statement.setFloat(6, filament.getEllipticity());
-            statement.setFloat(7, filament.getContrast());
-            statement.executeUpdate();
-
-            // Clean-up
-            statement.close();
+            this._insertFilament(filament, conn);
             conn.close();
 
         }  catch (SQLException e) {
@@ -46,10 +29,6 @@ public class PGFilamentDao implements FilamentDao{
         } finally {
 
             try {
-
-                if (statement != null)
-                    statement.close();
-
                 if (conn != null)
                     conn.close();
 
@@ -62,73 +41,176 @@ public class PGFilamentDao implements FilamentDao{
     }
 
     @Override
-    public void insertBoundary(Filament filament) throws DaoException {
-
-        System.out.println("QUI!!");
+    public void insertAllBoundaryPointPerFilament(Filament filament) throws DaoException {
 
         ConnectionManager manager = ConnectionManager.getSingletonInstance();
-
-        PreparedStatement statement = null;
         Connection conn = null;
 
         try {
 
             conn = manager.getConnectionFromConnectionPool();
 
-            // start transaction
-            conn.setAutoCommit(false);
-
             for (GPoint point : filament.getBoundary()) {
-
-                final String sqlPoint = "INSERT INTO point(galactic_longitude, galactic_latitude) values (?,?)";
-                statement = conn.prepareStatement(sqlPoint);
-                statement.setFloat(1, point.getGlongitude());
-                statement.setFloat(2, point.getGlatitude());
-                statement.executeUpdate();
-
-                final String sqlFilamentPoint = "INSERT INTO filament_boundary(filament, galactic_longitude, galactic_latitude) values (?,?,?)";
-                statement = conn.prepareStatement(sqlFilamentPoint);
-                statement.setInt(1, filament.getIdfil());
-                statement.setFloat(2, point.getGlongitude());
-                statement.setFloat(3, point.getGlatitude());
-                statement.executeUpdate();
-
-                System.out.println("Inserted");
+                this._insertGPoint(point, conn);
+                this._insertFilamentBoundaryPointRelation(filament, point, conn);
             }
 
-            // commit
-            conn.commit();
-
-            // Clean-up
-            statement.close();
             conn.close();
 
-        }  catch (SQLException e) {
-
-            try {
-
-                if (conn != null)
-                    conn.rollback();
-
-            } catch (SQLException ex) {
-
-                throw new DaoException(ex.getMessage(), ex.getCause());
-            }
+        } catch (SQLException e) {
 
             throw new DaoException(e.getMessage(), e.getCause());
 
         } finally {
 
             try {
-
-                if (statement != null)
-                    statement.close();
-
                 if (conn != null)
                     conn.close();
 
             } catch (SQLException e) {
 
+                throw new DaoException(e.getMessage(), e.getCause());
+            }
+        }
+    }
+
+    @Override
+    public void insertArrayFilamentBoundaryPoint(LinkedList<Filament> filaments) throws DaoException {
+
+        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        Connection conn = null;
+
+        try {
+
+            conn = manager.getConnectionFromConnectionPool();
+
+            for (;;){
+
+                if (filaments.size() == 0)
+                    break;
+
+                Filament filament = filaments.poll();
+
+                for (GPoint point : filament.getBoundary()) {
+                    this._insertGPoint(point, conn);
+                    this._insertFilamentBoundaryPointRelation(filament, point, conn);
+                }
+            }
+
+            conn.close();
+
+        } catch (SQLException e) {
+
+            throw new DaoException(e.getMessage(), e.getCause());
+
+        } finally {
+
+            try {
+                if (conn != null)
+                    conn.close();
+
+            } catch (SQLException e) {
+
+                throw new DaoException(e.getMessage(), e.getCause());
+            }
+        }
+    }
+
+    private void _insertFilament(Filament filament, Connection connection) throws DaoException {
+
+        final String sql = "INSERT INTO filament(idfil, name, total_flux, mean_density, mean_temperature, ellipticity, contrast) values (?,?,?,?,?,?,?)";
+        PreparedStatement preparedStatement = null;
+
+        try {
+
+            preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, filament.getIdfil());
+            preparedStatement.setString(2, filament.getName());
+            preparedStatement.setBigDecimal(3, filament.getTotalFlux());
+            preparedStatement.setBigDecimal(4, filament.getMeanDensity());
+            preparedStatement.setFloat(5, filament.getMeanTemperature());
+            preparedStatement.setFloat(6, filament.getEllipticity());
+            preparedStatement.setFloat(7, filament.getContrast());
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+
+        }  catch (SQLException e) {
+
+            throw new DaoException(e.getMessage(), e.getCause());
+
+        } finally {
+
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+
+            } catch (SQLException e) {
+
+                throw new DaoException(e.getMessage(), e.getCause());
+            }
+        }
+    }
+
+    private void _insertFilamentBoundaryPointRelation(Filament filament, GPoint point, Connection connection) throws DaoException {
+
+        final String sqlFilamentPoint = "INSERT INTO filament_boundary(filament, galactic_longitude, galactic_latitude) values (?,?,?) ON conflict (filament, galactic_longitude, galactic_latitude) do nothing";
+        PreparedStatement preparedStatement = null;
+
+        try {
+
+            preparedStatement = connection.prepareStatement(sqlFilamentPoint);
+
+            preparedStatement.setInt(1, filament.getIdfil());
+            preparedStatement.setDouble(2, point.getGlongitude());
+            preparedStatement.setDouble(3, point.getGlatitude());
+
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+
+        }catch (SQLException e){
+
+            throw new DaoException(e.getMessage(), e.getCause());
+
+        }finally {
+
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } catch (SQLException e) {
+                throw new DaoException(e.getMessage(), e.getCause());
+            }
+        }
+    }
+
+    private void _insertGPoint(GPoint point, Connection connection) throws DaoException {
+
+        final String sqlPoint = "INSERT INTO point(galactic_longitude, galactic_latitude) values (?,?) ON conflict (galactic_longitude, galactic_latitude) do nothing";
+        PreparedStatement preparedStatement = null;
+
+        try {
+
+            preparedStatement = connection.prepareStatement(sqlPoint);
+
+            preparedStatement.setDouble(1, point.getGlongitude());
+            preparedStatement.setDouble(2, point.getGlatitude());
+
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+
+        }catch (SQLException e){
+
+            throw new DaoException(e.getMessage(), e.getCause());
+
+        }finally {
+
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } catch (SQLException e) {
                 throw new DaoException(e.getMessage(), e.getCause());
             }
         }

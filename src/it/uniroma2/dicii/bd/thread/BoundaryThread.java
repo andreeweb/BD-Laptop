@@ -5,7 +5,6 @@ import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.FilamentDao;
 import it.uniroma2.dicii.bd.model.Filament;
 
-import java.sql.Connection;
 import java.util.LinkedList;
 
 public class BoundaryThread implements Runnable{
@@ -14,12 +13,9 @@ public class BoundaryThread implements Runnable{
     private FilamentDao dao;
 
     public BoundaryThread(LinkedList<Filament> filaments) {
-
         this.filaments = filaments;
-
         try {
             this.dao = DaoFactory.getSingletonInstance().getFilamentDAO();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -27,22 +23,12 @@ public class BoundaryThread implements Runnable{
 
     @Override
     public void run() {
-
-        for (;;){
-
-            if (filaments.size() == 0) {
-                break;
-            }
-
-            try{
-
-                dao.insertBoundary(filaments.poll());
-
-            }catch (DaoException e){
-
-                e.printStackTrace();
-            }
+        try {
+            dao.insertArrayFilamentBoundaryPoint(filaments);
+        } catch (DaoException e) {
+            e.printStackTrace();
         }
+
     }
 }
 
