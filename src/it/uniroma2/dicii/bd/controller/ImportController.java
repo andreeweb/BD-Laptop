@@ -19,7 +19,7 @@ import java.util.List;
 
 public class ImportController {
 
-    // -1 because the last thread start if there is a leftover
+    // -1 because the last thread start only if there is a leftover
     final private int maxThreadPerImport = Integer.valueOf(Config.getSingletonInstance().getProperty("maxThread")) - 1;
 
     public void importFilament(String filePath) throws IOException {
@@ -30,6 +30,8 @@ public class ImportController {
 
         int csvSize = this.countRows(filePath);
         int filamentPerThread = csvSize / maxThreadPerImport;
+
+        int total = 1; // +1 header csv
 
         System.out.println("CSV Size: " + csvSize);
         System.out.println("Filament per Thread: " + filamentPerThread);
@@ -68,6 +70,8 @@ public class ImportController {
 
             if (linkedlist.size() == filamentPerThread){
 
+                total+=linkedlist.size();
+
                 Thread thread = new Thread(new FilamentThread(linkedlist));
                 thread.start();
                 threadList.add(thread);
@@ -82,12 +86,17 @@ public class ImportController {
 
         // handle leftover
         if (linkedlist.size() > 0){
+
+            total+=linkedlist.size();
+
             Thread thread = new Thread(new FilamentThread(linkedlist));
             thread.start();
             threadList.add(thread);
 
             System.out.println(thread.getName() + " Start");
         }
+
+        System.out.println("total " + total);
 
         // JOIN thread
         for (Thread thread : threadList) {
@@ -206,10 +215,11 @@ public class ImportController {
 
         ImportController importController = new ImportController();
 
+        importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Herschel.csv");
+        //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Spitzer.csv");
+
         //importController.importBoundary("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Herschel.csv");
         //importController.importBoundary("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Spitzer.csv");
-        //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Herschel.csv");
-        //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Spitzer.csv");
 
 
     }

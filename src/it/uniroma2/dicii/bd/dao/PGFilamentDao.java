@@ -122,7 +122,7 @@ public class PGFilamentDao implements FilamentDao{
 
     private void _insertFilament(Filament filament, Connection connection) throws DaoException {
 
-        final String sql = "INSERT INTO filament(idfil, name, total_flux, mean_density, mean_temperature, ellipticity, contrast) values (?,?,?,?,?,?,?)";
+        final String sql = "INSERT INTO filament(idfil, name, total_flux, mean_density, mean_temperature, ellipticity, contrast) values (?,?,?,?,?,?,?) ON conflict (idfil) do nothing";
         PreparedStatement preparedStatement = null;
 
         try {
