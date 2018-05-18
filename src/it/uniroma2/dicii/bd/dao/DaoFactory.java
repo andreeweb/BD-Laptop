@@ -2,7 +2,9 @@ package it.uniroma2.dicii.bd.dao;
 
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.FilamentDao;
+import it.uniroma2.dicii.bd.interfaces.GPointDao;
 import it.uniroma2.dicii.bd.interfaces.UserDao;
+import it.uniroma2.dicii.bd.model.GPoint;
 import it.uniroma2.dicii.bd.utils.Config;
 
 public class DaoFactory {
@@ -14,9 +16,9 @@ public class DaoFactory {
     }
 
     /**
-     * Return an istance of concrete user dao using Reflection
+     * Return an instance of concrete Filament dao using Reflection
      *
-     * @return UserDao object
+     * @return FilamentDao object
      * @throws DaoException error with database connection or wrong type in config
      */
     public FilamentDao getFilamentDAO() throws DaoException {
@@ -27,6 +29,29 @@ public class DaoFactory {
 
             Class<?> c = Class.forName(filamentDaoClass);
             return (FilamentDao) c.newInstance();
+
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+
+            e.printStackTrace();
+            throw new DaoException("Invalid type : " + filamentDaoClass, e.getCause());
+        }
+
+    }
+
+    /**
+     * Return an instance of concrete GPoint dao using Reflection
+     *
+     * @return GPointDao object
+     * @throws DaoException error with database connection or wrong type in config
+     */
+    public GPointDao getGPointDAO() throws DaoException {
+
+        String filamentDaoClass = Config.getSingletonInstance().getProperty("gPointDaoClass");
+
+        try {
+
+            Class<?> c = Class.forName(filamentDaoClass);
+            return (GPointDao) c.newInstance();
 
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 

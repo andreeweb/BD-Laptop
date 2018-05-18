@@ -2,6 +2,7 @@ package it.uniroma2.dicii.bd.dao;
 
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.FilamentDao;
+import it.uniroma2.dicii.bd.interfaces.GPointDao;
 import it.uniroma2.dicii.bd.model.Filament;
 import it.uniroma2.dicii.bd.model.GPoint;
 import java.sql.*;
@@ -48,10 +49,12 @@ public class PGFilamentDao implements FilamentDao{
 
         try {
 
+            GPointDao dao = DaoFactory.getSingletonInstance().getGPointDAO();
+
             conn = manager.getConnectionFromConnectionPool();
 
             for (GPoint point : filament.getBoundary()) {
-                this._insertGPoint(point, conn);
+                dao.insertGPoint(point);
                 this._insertFilamentBoundaryPointRelation(filament, point, conn);
             }
 
@@ -82,6 +85,7 @@ public class PGFilamentDao implements FilamentDao{
 
         try {
 
+            GPointDao dao = DaoFactory.getSingletonInstance().getGPointDAO();
             conn = manager.getConnectionFromConnectionPool();
 
             for (;;){
@@ -92,7 +96,7 @@ public class PGFilamentDao implements FilamentDao{
                 Filament filament = filaments.poll();
 
                 for (GPoint point : filament.getBoundary()) {
-                    this._insertGPoint(point, conn);
+                    dao.insertGPoint(point);
                     this._insertFilamentBoundaryPointRelation(filament, point, conn);
                 }
             }
@@ -185,35 +189,4 @@ public class PGFilamentDao implements FilamentDao{
         }
     }
 
-    private void _insertGPoint(GPoint point, Connection connection) throws DaoException {
-
-        final String sqlPoint = "INSERT INTO point(galactic_longitude, galactic_latitude) values (?,?) ON conflict (galactic_longitude, galactic_latitude) do nothing";
-        PreparedStatement preparedStatement = null;
-
-        try {
-
-            preparedStatement = connection.prepareStatement(sqlPoint);
-
-            preparedStatement.setDouble(1, point.getGlongitude());
-            preparedStatement.setDouble(2, point.getGlatitude());
-
-            preparedStatement.executeUpdate();
-
-            preparedStatement.close();
-
-        }catch (SQLException e){
-
-            throw new DaoException(e.getMessage(), e.getCause());
-
-        }finally {
-
-            try {
-                if (preparedStatement != null)
-                    preparedStatement.close();
-            } catch (SQLException e) {
-                throw new DaoException(e.getMessage(), e.getCause());
-            }
-        }
-
-    }
 }
