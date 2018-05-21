@@ -222,6 +222,8 @@ public class AdminImportViewController {
                     this.updateGuiAfterImport();
                 });
 
+                break;
+
             }
 
             case "boundary":{
