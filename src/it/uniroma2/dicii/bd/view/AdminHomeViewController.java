@@ -11,6 +11,9 @@ public class AdminHomeViewController {
     private Button importButton;
 
     @FXML
+    private Button logoutButton;
+
+    @FXML
     private Button userManagementButton;
 
     @FXML
@@ -18,11 +21,21 @@ public class AdminHomeViewController {
 
         importButton.setOnAction(this::importButtonAction);
         userManagementButton.setOnAction(this::userButtonAction);
+        logoutButton.setOnAction(this::logoutAction);
     }
 
     public void onCreateView(Pane view){
 
 
+    }
+
+    /**
+     * Logout
+     *
+     * @param actionEvent
+     */
+    private void logoutAction(ActionEvent actionEvent) {
+        SceneManager.getSingletonInstance().showLoginView();
     }
 
     /**
