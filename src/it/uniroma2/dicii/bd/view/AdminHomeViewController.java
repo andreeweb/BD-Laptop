@@ -11,9 +11,13 @@ public class AdminHomeViewController {
     private Button importButton;
 
     @FXML
+    private Button userManagementButton;
+
+    @FXML
     private void initialize() {
 
         importButton.setOnAction(this::importButtonAction);
+        userManagementButton.setOnAction(this::userButtonAction);
     }
 
     public void onCreateView(Pane view){
@@ -28,6 +32,15 @@ public class AdminHomeViewController {
      */
     private void importButtonAction(ActionEvent event) {
         SceneManager.getSingletonInstance().showAdminImportView();
+    }
+
+    /**
+     * User button action
+     *
+     * @param event JavaFX event
+     */
+    private void userButtonAction(ActionEvent event) {
+        SceneManager.getSingletonInstance().showAdminUserManagementView();
     }
 
 }

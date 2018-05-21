@@ -10,6 +10,7 @@ import it.uniroma2.dicii.bd.enumeration.UserRole;
 
 public class UserBean {
 
+    private Integer userID;
     private String name;
     private String surname;
     private String username;
@@ -17,9 +18,12 @@ public class UserBean {
     private String email;
     private UserRole userRole;
 
-    public UserBean(String username, String password) {
-        this.username = username;
-        this.password = password;
+    /**
+     *
+     * @return
+     */
+    public Integer getUserID() {
+        return userID;
     }
 
     /**
@@ -118,5 +122,13 @@ public class UserBean {
      */
     public void setUserRole(UserRole userRole) {
         this.userRole = userRole;
+    }
+
+    /**
+     *
+     * @param userID
+     */
+    public void setUserID(Integer userID) {
+        this.userID = userID;
     }
 }

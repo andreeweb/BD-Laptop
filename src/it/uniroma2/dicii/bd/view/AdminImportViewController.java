@@ -170,9 +170,7 @@ public class AdminImportViewController {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Dialog");
-            alert.setHeaderText("Error");
-            alert.setContentText("Please select a file for import!");
-
+            alert.setHeaderText("Please select a file for import!");
             alert.showAndWait();
 
             return;
@@ -184,9 +182,7 @@ public class AdminImportViewController {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Dialog");
-                alert.setHeaderText("Error");
-                alert.setContentText("Please select CSV type!");
-
+                alert.setHeaderText("Please select CSV type!");
                 alert.showAndWait();
 
                 break;

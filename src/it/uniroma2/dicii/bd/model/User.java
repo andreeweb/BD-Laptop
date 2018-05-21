@@ -9,12 +9,21 @@ import it.uniroma2.dicii.bd.enumeration.UserRole;
  */
 public class User {
 
+    private Integer userID;
     private String name;
     private String surname;
     private String username;
     private String password;
     private String email;
     private UserRole userRole;
+
+    /**
+     *
+     * @return
+     */
+    public Integer getUserID() {
+        return userID;
+    }
 
     /**
      *
@@ -116,11 +125,20 @@ public class User {
 
     /**
      *
+     * @param userID
+     */
+    public void setUserID(Integer userID) {
+        this.userID = userID;
+    }
+
+    /**
+     *
      * @return string formatted "name surname"
      */
     @Override
     public String toString() {
         return name + " " + surname;
     }
+
 
 }

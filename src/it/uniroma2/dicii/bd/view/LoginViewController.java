@@ -47,7 +47,10 @@ public class LoginViewController {
      */
     private void loginButtonAction(ActionEvent event) {
 
-        UserBean userBean = new UserBean(usernameText.getText(), passwordText.getText());
+        UserBean userBean = new UserBean();
+
+        userBean.setPassword(passwordText.getText());
+        userBean.setUsername(usernameText.getText());
 
         try {
 

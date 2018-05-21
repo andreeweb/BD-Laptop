@@ -128,6 +128,31 @@ public class SceneManager {
      * Shows the upload view
      *
      */
+    public void showAdminUserManagementView() {
+
+        try {
+
+            // Load main view
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("AdminUserManagement.fxml"));
+            BorderPane view = loader.load();
+
+            // Set view into the center of root layout.
+            rootLayout.setCenter(view);
+
+            AdminUserManagementController controller = loader.getController();
+            controller.onCreateView();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    /**
+     * Shows the upload view
+     *
+     */
     public void showAdminImportView() {
 
         try {
