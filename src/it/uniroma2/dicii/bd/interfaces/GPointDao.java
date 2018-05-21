@@ -11,4 +11,5 @@ public interface GPointDao {
      * @return array
      */
     void insertGPoint(GPoint point) throws DaoException;
+
 }

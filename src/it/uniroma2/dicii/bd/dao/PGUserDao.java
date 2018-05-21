@@ -17,6 +17,7 @@ import java.sql.*;
 
 public class PGUserDao implements UserDao {
 
+    @Override
     public User getUserByUsernameAndPassword(String username, String password) throws DaoException {
 
         Statement stm = null;
@@ -25,20 +26,15 @@ public class PGUserDao implements UserDao {
 
         try {
 
-            // get connection
             ConnectionManager manager = ConnectionManager.getSingletonInstance();
             conn = manager.getConnectionFromConnectionPool();
 
-            // create statement
             stm = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
-            // query
             String sql = "SELECT * FROM system_user where username = '" + username + "' AND password = '" + password + "';";
 
-            // execute
             ResultSet rs = stm.executeQuery(sql);
 
-            // rs empty
             if (!rs.first())
                 throw new DaoException("User not found");
 
@@ -47,10 +43,8 @@ public class PGUserDao implements UserDao {
             if (moreThanOne)
                 throw new DaoException("Multiple user in DB with same credentials");
 
-            // set cursor
             rs.first();
 
-            // read data
             user = new User();
             user.setName(rs.getString("name"));
             user.setSurname(rs.getString("surname"));
@@ -59,7 +53,6 @@ public class PGUserDao implements UserDao {
             user.setEmail(rs.getString("email"));
             user.setUserRole(UserRole.valueOf(rs.getString("role")));
 
-            // Clean-up
             rs.close();
             stm.close();
             conn.close();

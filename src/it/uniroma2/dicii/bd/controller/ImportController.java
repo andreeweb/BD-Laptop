@@ -1,5 +1,8 @@
 package it.uniroma2.dicii.bd.controller;
 
+import it.uniroma2.dicii.bd.dao.DaoFactory;
+import it.uniroma2.dicii.bd.exception.DaoException;
+import it.uniroma2.dicii.bd.interfaces.GPointDao;
 import it.uniroma2.dicii.bd.model.Filament;
 import it.uniroma2.dicii.bd.model.GPoint;
 import it.uniroma2.dicii.bd.thread.BoundaryThread;
@@ -22,7 +25,14 @@ public class ImportController {
     // -1 because the last thread start only if there is a leftover
     final private int maxThreadPerImport = Integer.valueOf(Config.getSingletonInstance().getProperty("maxThread")) - 1;
 
-    public void importFilament(String filePath) throws IOException {
+    /**
+     *
+     * Import file filament
+     *
+     * @param filePath csv file path
+     * @throws IOException
+     */
+    public double importFilament(String filePath) throws IOException {
 
         // Join list and time counting
         long startTime = System.nanoTime();
@@ -76,8 +86,6 @@ public class ImportController {
                 thread.start();
                 threadList.add(thread);
 
-                System.out.println(thread.getName() + " Start");
-
                 // reset
                 linkedlist = new LinkedList<Filament>();
             }
@@ -93,7 +101,6 @@ public class ImportController {
             thread.start();
             threadList.add(thread);
 
-            System.out.println(thread.getName() + " Start");
         }
 
         System.out.println("total " + total);
@@ -110,9 +117,18 @@ public class ImportController {
 
         long endTime = System.nanoTime();
         System.out.println((endTime - startTime)/ 1000000000.0);
+
+        return (endTime - startTime)/ 1000000000.0;
     }
 
-    public void importBoundary(String filePath) throws IOException {
+    /**
+     *
+     * Import file filament boundary
+     *
+     * @param filePath csv file path
+     * @throws IOException
+     */
+    public double importBoundary(String filePath) throws IOException {
 
         // Join list and time counting
         List<Thread> threadList = new ArrayList<>();
@@ -162,8 +178,6 @@ public class ImportController {
                     thread.start();
                     threadList.add(thread);
 
-                    System.out.println(thread.getName() + " Start");
-
                     // reset
                     linkedlist = new LinkedList<Filament>();
                 }
@@ -193,7 +207,6 @@ public class ImportController {
             thread.start();
             threadList.add(thread);
 
-            System.out.println(thread.getName() + " Start");
         }
 
         System.out.println("total " + total);
@@ -209,19 +222,8 @@ public class ImportController {
 
         long endTime = System.nanoTime();
         System.out.println((endTime - startTime)/ 1000000000.0);
-    }
 
-    public static void main(String[] args) throws IOException {
-
-        ImportController importController = new ImportController();
-
-        importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Herschel.csv");
-        //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Spitzer.csv");
-
-        //importController.importBoundary("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Herschel.csv");
-        //importController.importBoundary("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Spitzer.csv");
-
-
+        return (endTime - startTime)/ 1000000000.0;
     }
 
     /**
@@ -282,6 +284,20 @@ public class ImportController {
         }
 
         return filament;
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        ImportController importController = new ImportController();
+
+        //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Herschel.csv");
+        //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Spitzer.csv");
+
+        //importController.importBoundary("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Herschel.csv");
+        //importController.importBoundary("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Spitzer.csv");
+
+        // errore
+        importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Herschel.csv");
     }
 
 }

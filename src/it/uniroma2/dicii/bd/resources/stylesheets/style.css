@@ -62,6 +62,23 @@
     -fx-background-color: #240031;
 }
 
+.button-red {
+    -fx-padding: 5 22 5 22;
+    -fx-background-color: red;
+    -fx-font-family: "Arial";
+    -fx-font-size: 11pt;
+    -fx-text-fill: white;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.button-red:hover {
+    -fx-background-color: darkred;
+}
+
+.button-red:pressed, .button-blue:default:hover:pressed {
+    -fx-background-color: darkred;
+}
+
 /*
  * Label button
  */
@@ -72,6 +89,19 @@
     -fx-font-size: 11pt;
     -fx-text-fill: #240031;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.back-button {
+    -fx-background-color: transparent;
+    -fx-font-family: "Arial";
+    -fx-font-size: 12pt;
+    -fx-text-fill: #240031;
+    -fx-text-alignment: left;
+}
+
+.back-button:hover {
+    -fx-background-color: transparent;
+    -fx-text-fill: #3b0250;
 }
 
 .label-button:hover {

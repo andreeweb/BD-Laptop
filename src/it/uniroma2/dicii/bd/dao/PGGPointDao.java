@@ -4,9 +4,7 @@ import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.GPointDao;
 import it.uniroma2.dicii.bd.model.GPoint;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class PGGPointDao implements GPointDao{
 

@@ -2,6 +2,7 @@ package it.uniroma2.dicii.bd.view;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -19,6 +20,7 @@ public class SceneManager {
      */
     private BorderPane rootLayout;
     private RootViewController rootController;
+    private Stage stage;
 
     /**
      *
@@ -46,6 +48,15 @@ public class SceneManager {
      */
     public void setRootLayout(BorderPane rootLayout) {
         this.rootLayout = rootLayout;
+    }
+
+    /**
+     * Is called by the main application
+     *
+     * @param stage reference to main stage
+     */
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     /**
@@ -106,6 +117,32 @@ public class SceneManager {
 
             AdminHomeViewController controller = loader.getController();
             controller.onCreateView(view);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    /**
+     * Shows the upload view
+     *
+     */
+    public void showAdminImportView() {
+
+        try {
+
+            // Load main view
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("AdminImportView.fxml"));
+            BorderPane view = loader.load();
+
+            // Set view into the center of root layout.
+            rootLayout.setCenter(view);
+
+            AdminImportViewController controller = loader.getController();
+            controller.onCreateView(view);
+            controller.setStage(stage);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -25,6 +25,8 @@ public class FilamentThread implements Runnable{
     @Override
     public void run() {
 
+        System.out.println(Thread.currentThread().getId() + " Start");
+
         for (;;){
 
             if (filaments.size() == 0)
@@ -36,5 +38,7 @@ public class FilamentThread implements Runnable{
                 e.printStackTrace();
             }
         }
+
+        System.out.println(Thread.currentThread().getId() + " Stop");
     }
 }

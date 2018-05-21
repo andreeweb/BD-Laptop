@@ -23,12 +23,16 @@ public class BoundaryThread implements Runnable{
 
     @Override
     public void run() {
+
+        System.out.println(Thread.currentThread().getId() + " Start");
+
         try {
             dao.insertArrayFilamentBoundaryPoint(filaments);
         } catch (DaoException e) {
             e.printStackTrace();
         }
 
+        System.out.println(Thread.currentThread().getId() + " Stop");
     }
 }
 

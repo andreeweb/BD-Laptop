@@ -39,6 +39,7 @@ public class MainApp extends Application {
             SceneManager sm = SceneManager.getSingletonInstance();
             sm.setRootLayout(rootLayout);
             sm.setRootController(loader.getController());
+            sm.setStage(primaryStage);
             sm.init();
 
         } catch (IOException e) {
