@@ -176,6 +176,31 @@ public class SceneManager {
     }
 
     /**
+     * Shows the add user view
+     *
+     */
+    public void showAdminInsertUserView() {
+
+        try {
+
+            // Load main view
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("AdminInsertUserView.fxml"));
+            BorderPane view = loader.load();
+
+            // Set view into the center of root layout.
+            rootLayout.setCenter(view);
+
+            AdminInsertUserViewController controller = loader.getController();
+            controller.onCreateView();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    /**
      * Shows the main view inside the root layout.
      *
      */

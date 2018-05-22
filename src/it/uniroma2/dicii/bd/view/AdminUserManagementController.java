@@ -2,21 +2,21 @@ package it.uniroma2.dicii.bd.view;
 
 import it.uniroma2.dicii.bd.bean.UserBean;
 import it.uniroma2.dicii.bd.controller.UserManagementController;
-import it.uniroma2.dicii.bd.enumeration.UserRole;
 import it.uniroma2.dicii.bd.exception.DaoException;
-import it.uniroma2.dicii.bd.utils.Sha;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 import java.util.List;
 import java.util.Optional;
 
 public class AdminUserManagementController {
+
+    @FXML
+    private Button addUser;
 
     @FXML
     private Button backButton;
@@ -42,24 +42,6 @@ public class AdminUserManagementController {
     private ObservableList<UserBean> userBeans = FXCollections.observableArrayList();
 
     @FXML
-    private TextField insertedName;
-
-    @FXML
-    private TextField insertedSurname;
-
-    @FXML
-    private TextField insertedUsername;
-
-    @FXML
-    private TextField insertedPassword;
-
-    @FXML
-    private TextField insertedEmail;
-
-    @FXML
-    private Button saveUser;
-
-    @FXML
     private void initialize() {
 
         // Listen for selection changes and show the person details when changed.
@@ -67,7 +49,7 @@ public class AdminUserManagementController {
         userBeanTableViewTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         backButton.setOnAction(this::backButtonAction);
-        saveUser.setOnAction(this::saveUser);
+        addUser.setOnAction(this::addUserAction);
     }
 
     /**
@@ -98,6 +80,16 @@ public class AdminUserManagementController {
     }
 
     /**
+     * Add user action
+     *
+     * @param actionEvent JavaFX event
+     */
+    private void addUserAction(ActionEvent actionEvent) {
+
+        SceneManager.getSingletonInstance().showAdminInsertUserView();
+    }
+
+    /**
      * Show user bean detail view
      *
      * @param userBean
@@ -125,38 +117,6 @@ public class AdminUserManagementController {
 
                 e.printStackTrace();
             }
-        }
-
-        SceneManager.getSingletonInstance().showAdminUserManagementView();
-    }
-
-    /**
-     *
-     */
-    public void saveUser(ActionEvent e) {
-
-        UserBean newUserBean = new UserBean();
-        newUserBean.setName(insertedName.getText());
-        newUserBean.setSurname(insertedSurname.getText());
-        newUserBean.setUsername(insertedUsername.getText());
-        newUserBean.setPassword(Sha.sha256(insertedPassword.getText()));
-        newUserBean.setEmail(insertedEmail.getText());
-        newUserBean.setUserRole(UserRole.USER);
-
-        UserManagementController controller = new UserManagementController();
-
-        try {
-
-            controller.saveUser(newUserBean);
-
-        } catch (DaoException ex) {
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error Dialog");
-            alert.setHeaderText("Error while saving user!");
-            alert.showAndWait();
-
-            ex.printStackTrace();
         }
 
         SceneManager.getSingletonInstance().showAdminUserManagementView();
