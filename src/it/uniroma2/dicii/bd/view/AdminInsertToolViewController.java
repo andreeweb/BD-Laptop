@@ -83,12 +83,10 @@ public class AdminInsertToolViewController {
             return;
         }
 
-        ToolBean toolBean = new ToolBean();
-        toolBean.setName(insertedName.getText());
+        ToolBean toolBean = new ToolBean(insertedName.getText());
         toolBean.setBand(insertedBand.getText());
 
-        SatelliteBean satelliteBean = new SatelliteBean();
-        satelliteBean.setName(satelliteBeanNames.get(satelliteComboBox.getSelectionModel().getSelectedIndex()));
+        SatelliteBean satelliteBean = new SatelliteBean(satelliteBeanNames.get(satelliteComboBox.getSelectionModel().getSelectedIndex()));
 
         toolBean.setSatellite(satelliteBean);
 

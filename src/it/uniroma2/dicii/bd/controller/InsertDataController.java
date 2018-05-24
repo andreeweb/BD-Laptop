@@ -33,8 +33,7 @@ public class InsertDataController {
 
         for (Satellite satellite:list) {
 
-            SatelliteBean satelliteBean = new SatelliteBean();
-            satelliteBean.setName(satellite.getName());
+            SatelliteBean satelliteBean = new SatelliteBean(satellite.getName());
             satelliteBean.setFirstObservation(satellite.getFirstObservation());
             satelliteBean.setLastObservation(satellite.getLastObservation());
             satelliteBean.setAgency(satellite.getAgency());
@@ -55,8 +54,7 @@ public class InsertDataController {
      */
     public void saveSatellite(SatelliteBean satelliteBean) throws DaoException {
 
-        Satellite satellite = new Satellite();
-        satellite.setName(satelliteBean.getName());
+        Satellite satellite = new Satellite(satelliteBean.getName());
         satellite.setFirstObservation(satelliteBean.getFirstObservation());
         satellite.setLastObservation(satelliteBean.getLastObservation());
         satellite.setAgency(satelliteBean.getAgency());
@@ -73,8 +71,7 @@ public class InsertDataController {
      */
     public void deleteSatellite(SatelliteBean satelliteBean) throws DaoException {
 
-        Satellite satellite = new Satellite();
-        satellite.setName(satelliteBean.getName());
+        Satellite satellite = new Satellite(satelliteBean.getName());
         satellite.setFirstObservation(satelliteBean.getFirstObservation());
         satellite.setLastObservation(satelliteBean.getLastObservation());
         satellite.setAgency(satelliteBean.getAgency());
@@ -97,12 +94,10 @@ public class InsertDataController {
 
         for (Tool tool:list) {
 
-            ToolBean toolBean = new ToolBean();
-            toolBean.setName(tool.getName());
+            ToolBean toolBean = new ToolBean(tool.getName());
             toolBean.setBand(tool.getBand());
 
-            SatelliteBean satelliteBean = new SatelliteBean();
-            satelliteBean.setName(tool.getSatellite().getName());
+            SatelliteBean satelliteBean = new SatelliteBean(tool.getSatellite().getName());
 
             toolBean.setSatellite(satelliteBean);
 
@@ -126,8 +121,7 @@ public class InsertDataController {
         tool.setName(toolBean.getName());
         tool.setBand(toolBean.getBand());
 
-        Satellite satellite = new Satellite();
-        satellite.setName(toolBean.getSatellite().getName());
+        Satellite satellite = new Satellite(toolBean.getSatellite().getName());
 
         tool.setSatellite(satellite);
 
@@ -147,8 +141,7 @@ public class InsertDataController {
         tool.setName(toolBean.getName());
         tool.setBand(toolBean.getBand());
 
-        Satellite satellite = new Satellite();
-        satellite.setName(toolBean.getSatellite().getName());
+        Satellite satellite = new Satellite(toolBean.getSatellite().getName());
 
         tool.setSatellite(satellite);
 

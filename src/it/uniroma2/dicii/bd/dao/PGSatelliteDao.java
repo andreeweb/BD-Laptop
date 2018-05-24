@@ -32,8 +32,7 @@ public class PGSatelliteDao implements SatelliteDao {
 
             while(rs.next()) {
 
-                Satellite satellite = new Satellite();
-                satellite.setName(rs.getString("name"));
+                Satellite satellite = new Satellite(rs.getString("name"));
                 satellite.setFirstObservation(rs.getDate("first_observation"));
                 satellite.setLastObservation(rs.getDate("last_observation"));
                 satellite.setAgency(rs.getString("agency"));

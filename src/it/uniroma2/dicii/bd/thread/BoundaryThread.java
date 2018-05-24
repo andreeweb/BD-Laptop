@@ -26,10 +26,16 @@ public class BoundaryThread implements Runnable{
 
         System.out.println(Thread.currentThread().getId() + " Start");
 
-        try {
-            dao.insertArrayFilamentBoundaryPoint(filaments);
-        } catch (DaoException e) {
-            e.printStackTrace();
+        for (;;){
+
+            if (filaments.size() == 0)
+                break;
+
+            try{
+                dao.insertAllBoundaryPointPerFilament(filaments.poll());
+            }catch (DaoException e){
+                e.printStackTrace();
+            }
         }
 
         System.out.println(Thread.currentThread().getId() + " Stop");

@@ -14,13 +14,24 @@ public class Filament {
     private Float ellipticity;
     private Float contrast;
     private List<GPoint> boundary;
+    private Tool tool;
 
-    public Filament() {
-        boundary = new ArrayList<>();
+    public Filament(Integer idfil) {
+
+        this.idfil = idfil;
+        this.boundary = new ArrayList<>();
     }
 
     public void addBoundaryPoint(GPoint point){
         boundary.add(point);
+    }
+
+    /**
+     *
+     * @return tool
+     */
+    public Tool getTool() {
+        return tool;
     }
 
     /**
@@ -141,6 +152,14 @@ public class Filament {
      */
     public void setContrast(float contrast) {
         this.contrast = contrast;
+    }
+
+    /**
+     *
+     * @param tool set
+     */
+    public void setTool(Tool tool) {
+        this.tool = tool;
     }
 
     @Override

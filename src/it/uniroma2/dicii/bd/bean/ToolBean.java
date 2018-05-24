@@ -6,6 +6,10 @@ public class ToolBean {
     private String band;
     private SatelliteBean satellite;
 
+    public ToolBean(String name) {
+        this.name = name;
+    }
+
     /**
      *
      * @return name

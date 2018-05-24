@@ -21,6 +21,7 @@ public class PGFilamentDao implements FilamentDao{
             conn = manager.getConnectionFromConnectionPool();
 
             this._insertFilament(filament, conn);
+            this._insertFilamentToolRelation(filament, conn);
             conn.close();
 
         }  catch (SQLException e) {
@@ -56,49 +57,6 @@ public class PGFilamentDao implements FilamentDao{
             for (GPoint point : filament.getBoundary()) {
                 dao.insertGPoint(point);
                 this._insertFilamentBoundaryPointRelation(filament, point, conn);
-            }
-
-            conn.close();
-
-        } catch (SQLException e) {
-
-            throw new DaoException(e.getMessage(), e.getCause());
-
-        } finally {
-
-            try {
-                if (conn != null)
-                    conn.close();
-
-            } catch (SQLException e) {
-
-                throw new DaoException(e.getMessage(), e.getCause());
-            }
-        }
-    }
-
-    @Override
-    public void insertArrayFilamentBoundaryPoint(LinkedList<Filament> filaments) throws DaoException {
-
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
-        Connection conn = null;
-
-        try {
-
-            GPointDao dao = DaoFactory.getSingletonInstance().getGPointDAO();
-            conn = manager.getConnectionFromConnectionPool();
-
-            for (;;){
-
-                if (filaments.size() == 0)
-                    break;
-
-                Filament filament = filaments.poll();
-
-                for (GPoint point : filament.getBoundary()) {
-                    dao.insertGPoint(point);
-                    this._insertFilamentBoundaryPointRelation(filament, point, conn);
-                }
             }
 
             conn.close();
@@ -169,6 +127,37 @@ public class PGFilamentDao implements FilamentDao{
             preparedStatement.setInt(1, filament.getIdfil());
             preparedStatement.setDouble(2, point.getGlongitude());
             preparedStatement.setDouble(3, point.getGlatitude());
+
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+
+        }catch (SQLException e){
+
+            throw new DaoException(e.getMessage(), e.getCause());
+
+        }finally {
+
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } catch (SQLException e) {
+                throw new DaoException(e.getMessage(), e.getCause());
+            }
+        }
+    }
+
+    private void _insertFilamentToolRelation(Filament filament, Connection connection) throws DaoException {
+
+        final String sqlFilamentPoint = "INSERT INTO tool_filament(nametool, filament) values (?,?) ON conflict (nametool, filament) do nothing";
+        PreparedStatement preparedStatement = null;
+
+        try {
+
+            preparedStatement = connection.prepareStatement(sqlFilamentPoint);
+
+            preparedStatement.setString(1, filament.getTool().getName());
+            preparedStatement.setInt(2, filament.getIdfil());
 
             preparedStatement.executeUpdate();
 

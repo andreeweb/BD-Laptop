@@ -11,6 +11,10 @@ public class SatelliteBean {
     private Date lastObservation;
     private String agency;
 
+    public SatelliteBean(String name) {
+        this.name = name;
+    }
+
     /**
      *
      * @return name

@@ -24,11 +24,4 @@ public interface FilamentDao {
      * @throws DaoException
      */
     void insertAllBoundaryPointPerFilament(Filament filament) throws DaoException;
-
-    /**
-     *
-     * @param filaments
-     * @throws DaoException
-     */
-    void insertArrayFilamentBoundaryPoint(LinkedList<Filament> filaments) throws DaoException;
 }

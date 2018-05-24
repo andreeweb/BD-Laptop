@@ -56,8 +56,7 @@ public class AdminInsertSatelliteViewController {
      */
     public void saveSatellite(ActionEvent event) {
 
-        SatelliteBean satelliteBean = new SatelliteBean();
-        satelliteBean.setName(insertedName.getText());
+        SatelliteBean satelliteBean = new SatelliteBean(insertedName.getText());
 
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {

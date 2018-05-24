@@ -2,9 +2,12 @@ package it.uniroma2.dicii.bd.controller;
 
 import it.uniroma2.dicii.bd.dao.DaoFactory;
 import it.uniroma2.dicii.bd.exception.DaoException;
+import it.uniroma2.dicii.bd.exception.ExceptionDialog;
 import it.uniroma2.dicii.bd.interfaces.GPointDao;
 import it.uniroma2.dicii.bd.model.Filament;
 import it.uniroma2.dicii.bd.model.GPoint;
+import it.uniroma2.dicii.bd.model.Satellite;
+import it.uniroma2.dicii.bd.model.Tool;
 import it.uniroma2.dicii.bd.thread.BoundaryThread;
 import it.uniroma2.dicii.bd.thread.FilamentThread;
 import it.uniroma2.dicii.bd.utils.Config;
@@ -53,7 +56,7 @@ public class ImportController {
         Reader reader = Files.newBufferedReader(Paths.get(filePath));
         CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
                 .withSkipHeaderRecord(true)
-                .withHeader("IDFIL", "NAME", "TOTAL_FLUX", "MEAN_DENS", "MEAN_TEMP", "ELLIPTICITY", "CONTRAST")
+                .withHeader("IDFIL", "NAME", "TOTAL_FLUX", "MEAN_DENS", "MEAN_TEMP", "ELLIPTICITY", "CONTRAST", "SATELLITE", "INSTRUMENT")
                 .withIgnoreHeaderCase()
                 .withTrim());
 
@@ -71,14 +74,24 @@ public class ImportController {
             String ellipticity = csvRecord.get("ELLIPTICITY");
             String contrast = csvRecord.get("CONTRAST");
 
-            Filament filament = new Filament();
-            filament.setIdfil(Integer.parseInt(idfil));
+            Filament filament = new Filament(Integer.parseInt(idfil));
             filament.setName(name);
             filament.setTotalFlux((new BigDecimal(total_flux)));
             filament.setMeanDensity(new BigDecimal(mean_density));
             filament.setMeanTemperature(Float.parseFloat(mean_temperature));
             filament.setEllipticity(Float.parseFloat(ellipticity));
             filament.setContrast(Float.parseFloat(contrast));
+
+            String toolName = csvRecord.get("INSTRUMENT");
+            String satelliteName = csvRecord.get("SATELLITE");
+
+            Tool tool = new Tool();
+            tool.setName(toolName);
+
+            Satellite satellite = new Satellite(satelliteName);
+            tool.setSatellite(satellite);
+
+            filament.setTool(tool);
 
             linkedlist.add(filament);
 
@@ -140,12 +153,12 @@ public class ImportController {
 
         // import settings
         String actualFilamentID = null;
-        Filament filament = new Filament();
+        Filament filament = new Filament(-1);
 
         int total = 1; // +1 header csv
 
         int distinctFIl = this.countDistinctFilamentRows(filePath);
-        int filamentPerThread = distinctFIl;
+        int filamentPerThread;
         if (maxThreadPerImport > 0)
             filamentPerThread = distinctFIl / maxThreadPerImport;
         else
@@ -190,7 +203,7 @@ public class ImportController {
                     linkedlist = new LinkedList<Filament>();
                 }
 
-                filament = new Filament();
+                filament = new Filament(-1);
             }
 
             filament.setIdfil(Integer.parseInt(idfil));
@@ -232,6 +245,7 @@ public class ImportController {
         System.out.println((endTime - startTime)/ 1000000000.0);
 
         return (endTime - startTime)/ 1000000000.0;
+
     }
 
     /**
@@ -294,11 +308,11 @@ public class ImportController {
         return filament;
     }
 
-    /*public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 
         ImportController importController = new ImportController();
 
-        //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Herschel.csv");
+        importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Herschel.csv");
         //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Spitzer.csv");
 
         //importController.importBoundary("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Herschel.csv");
@@ -306,6 +320,6 @@ public class ImportController {
 
         // errore
         //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Herschel.csv");
-    }*/
+    }
 
 }

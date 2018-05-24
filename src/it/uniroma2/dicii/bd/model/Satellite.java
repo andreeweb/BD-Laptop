@@ -9,6 +9,10 @@ public class Satellite {
     private Date lastObservation;
     private String agency;
 
+    public Satellite(String name) {
+        this.name = name;
+    }
+
     /**
      *
      * @return name
