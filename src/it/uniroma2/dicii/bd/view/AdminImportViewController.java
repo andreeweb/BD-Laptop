@@ -35,7 +35,7 @@ public class AdminImportViewController {
     private Button backButton;
 
     @FXML
-    private ComboBox typeComboBox;
+    private ComboBox<String> typeComboBox;
 
     @FXML
     private TextArea exampleTextArea;
@@ -193,7 +193,7 @@ public class AdminImportViewController {
                 this.updateGuiBeforeImport();
 
                 Task<Integer> task = new Task<Integer>() {
-                    @Override protected Integer call() throws IOException {
+                    @Override protected Integer call() throws Exception {
 
                         ImportController importController = new ImportController();
                         double time = importController.importFilament(filePath);
@@ -227,7 +227,7 @@ public class AdminImportViewController {
                 this.updateGuiBeforeImport();
 
                 Task<Integer> task = new Task<Integer>() {
-                    @Override protected Integer call() throws IOException {
+                    @Override protected Integer call() throws Exception {
 
                         ImportController importController = new ImportController();
                         double time = importController.importBoundary(filePath);

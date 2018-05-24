@@ -1,10 +1,9 @@
 package it.uniroma2.dicii.bd.dao;
 
 import it.uniroma2.dicii.bd.exception.DaoException;
-import it.uniroma2.dicii.bd.interfaces.FilamentDao;
-import it.uniroma2.dicii.bd.interfaces.GPointDao;
-import it.uniroma2.dicii.bd.interfaces.UserDao;
+import it.uniroma2.dicii.bd.interfaces.*;
 import it.uniroma2.dicii.bd.model.GPoint;
+import it.uniroma2.dicii.bd.model.Satellite;
 import it.uniroma2.dicii.bd.utils.Config;
 
 public class DaoFactory {
@@ -62,7 +61,7 @@ public class DaoFactory {
     }
 
     /**
-     * Return an istance of concrete user dao using Reflection
+     * Return an instance of concrete user dao using Reflection
      *
      * @return UserDao object
      * @throws DaoException error with database connection or wrong type in config
@@ -75,6 +74,52 @@ public class DaoFactory {
 
             Class<?> c = Class.forName(userDaoClass);
             return (UserDao) c.newInstance();
+
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+
+            e.printStackTrace();
+            throw new DaoException("Invalid type : " + userDaoClass, e.getCause());
+        }
+
+    }
+
+    /**
+     * Return an instance of concrete satellite dao using Reflection
+     *
+     * @return SatelliteDao object
+     * @throws DaoException error with database connection or wrong type in config
+     */
+    public SatelliteDao getSatelliteDAO() throws DaoException{
+
+        String userDaoClass = Config.getSingletonInstance().getProperty("satelliteDaoClass");
+
+        try {
+
+            Class<?> c = Class.forName(userDaoClass);
+            return (SatelliteDao) c.newInstance();
+
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+
+            e.printStackTrace();
+            throw new DaoException("Invalid type : " + userDaoClass, e.getCause());
+        }
+
+    }
+
+    /**
+     * Return an instance of concrete tool dao using Reflection
+     *
+     * @return ToolDao object
+     * @throws DaoException error with database connection or wrong type in config
+     */
+    public ToolDao getToolDAO() throws DaoException{
+
+        String userDaoClass = Config.getSingletonInstance().getProperty("toolDaoClass");
+
+        try {
+
+            Class<?> c = Class.forName(userDaoClass);
+            return (ToolDao) c.newInstance();
 
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 

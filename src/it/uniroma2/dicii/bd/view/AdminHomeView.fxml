@@ -36,7 +36,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="162.0" prefWidth="179.0" styleClass="insert-data-button" stylesheets="@../resources/stylesheets/style.css" />
+                  <Button fx:id="insertDataButton" mnemonicParsing="false" prefHeight="162.0" prefWidth="179.0" styleClass="insert-data-button" stylesheets="@../resources/stylesheets/style.css" />
                </children></HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
                <children>

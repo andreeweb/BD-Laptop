@@ -19,7 +19,7 @@ public class User {
 
     /**
      *
-     * @return
+     * @return userID
      */
     public Integer getUserID() {
         return userID;
@@ -125,7 +125,7 @@ public class User {
 
     /**
      *
-     * @param userID
+     * @param userID set
      */
     public void setUserID(Integer userID) {
         this.userID = userID;

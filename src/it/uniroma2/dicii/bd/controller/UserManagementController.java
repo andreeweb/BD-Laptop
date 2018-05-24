@@ -2,7 +2,6 @@ package it.uniroma2.dicii.bd.controller;
 
 import it.uniroma2.dicii.bd.bean.UserBean;
 import it.uniroma2.dicii.bd.dao.DaoFactory;
-import it.uniroma2.dicii.bd.enumeration.UserRole;
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.UserDao;
 import it.uniroma2.dicii.bd.model.User;
@@ -20,7 +19,7 @@ public class UserManagementController {
     /**
      * Get all user from database
      *
-     * @return issue list
+     * @return user list
      * @throws DaoException error in dao
      */
     public List<UserBean> getUserBeanList() throws DaoException {

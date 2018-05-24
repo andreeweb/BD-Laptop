@@ -90,7 +90,7 @@ public class AdminUserManagementController {
     }
 
     /**
-     * Show user bean detail view
+     * Detail row action
      *
      * @param userBean
      */
@@ -112,7 +112,7 @@ public class AdminUserManagementController {
 
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Dialog");
-                alert.setHeaderText("Error while delete user!");
+                alert.setHeaderText("Error while deleting user!");
                 alert.showAndWait();
 
                 e.printStackTrace();

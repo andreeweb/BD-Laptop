@@ -22,8 +22,7 @@ import java.util.List;
 
 public class ImportController {
 
-    // -1 because the last thread start only if there is a leftover
-    final private int maxThreadPerImport = Integer.valueOf(Config.getSingletonInstance().getProperty("maxThread")) - 1;
+    final private int maxThreadPerImport = Integer.valueOf(Config.getSingletonInstance().getProperty("maxThread"));
 
     /**
      *
@@ -32,14 +31,19 @@ public class ImportController {
      * @param filePath csv file path
      * @throws IOException
      */
-    public double importFilament(String filePath) throws IOException {
+    public double importFilament(String filePath) throws Exception {
 
         // Join list and time counting
         long startTime = System.nanoTime();
         List<Thread> threadList = new ArrayList<>();
 
         int csvSize = this.countRows(filePath);
-        int filamentPerThread = csvSize / maxThreadPerImport;
+
+        int filamentPerThread = csvSize;
+        if (maxThreadPerImport > 0)
+            filamentPerThread = filamentPerThread / maxThreadPerImport;
+        else
+            throw new Exception("maxThreadPerImport in config must be greater than zero");
 
         int total = 1; // +1 header csv
 
@@ -128,7 +132,7 @@ public class ImportController {
      * @param filePath csv file path
      * @throws IOException
      */
-    public double importBoundary(String filePath) throws IOException {
+    public double importBoundary(String filePath) throws Exception {
 
         // Join list and time counting
         List<Thread> threadList = new ArrayList<>();
@@ -141,8 +145,12 @@ public class ImportController {
         int total = 1; // +1 header csv
 
         int distinctFIl = this.countDistinctFilamentRows(filePath);
+        int filamentPerThread = distinctFIl;
+        if (maxThreadPerImport > 0)
+            filamentPerThread = distinctFIl / maxThreadPerImport;
+        else
+            throw new Exception("maxThreadPerImport in config must be greater than zero");
 
-        int filamentPerThread = distinctFIl / maxThreadPerImport;
         System.out.println("Filament per Thread: " + filamentPerThread);
 
         System.out.println();
@@ -286,7 +294,7 @@ public class ImportController {
         return filament;
     }
 
-    public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
 
         ImportController importController = new ImportController();
 
@@ -297,7 +305,7 @@ public class ImportController {
         //importController.importBoundary("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Spitzer.csv");
 
         // errore
-        importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Herschel.csv");
-    }
+        //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Herschel.csv");
+    }*/
 
 }

@@ -17,11 +17,15 @@ public class AdminHomeViewController {
     private Button userManagementButton;
 
     @FXML
+    private Button insertDataButton;
+
+    @FXML
     private void initialize() {
 
         importButton.setOnAction(this::importButtonAction);
         userManagementButton.setOnAction(this::userButtonAction);
         logoutButton.setOnAction(this::logoutAction);
+        insertDataButton.setOnAction(this::insertDataButtonAction);
     }
 
     public void onCreateView(Pane view){
@@ -56,4 +60,12 @@ public class AdminHomeViewController {
         SceneManager.getSingletonInstance().showAdminUserManagementView();
     }
 
+    /**
+     * Insert data button action
+     *
+     * @param event JavaFX event
+     */
+    private void insertDataButtonAction(ActionEvent event) {
+        SceneManager.getSingletonInstance().showAdminInsertDataView(0);
+    }
 }

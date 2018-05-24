@@ -78,7 +78,7 @@ public class SceneManager {
     }
 
     /**
-     * Shows the login view inside the root layout.
+     *
      *
      */
     public void showLoginView() {
@@ -100,7 +100,7 @@ public class SceneManager {
     }
 
     /**
-     * Shows the main view inside the root layout.
+     *
      *
      */
     public void showAdminHomeView() {
@@ -125,7 +125,7 @@ public class SceneManager {
     }
 
     /**
-     * Shows the upload view
+     *
      *
      */
     public void showAdminUserManagementView() {
@@ -150,7 +150,7 @@ public class SceneManager {
     }
 
     /**
-     * Shows the upload view
+     *
      *
      */
     public void showAdminImportView() {
@@ -176,7 +176,7 @@ public class SceneManager {
     }
 
     /**
-     * Shows the add user view
+     *
      *
      */
     public void showAdminInsertUserView() {
@@ -192,6 +192,82 @@ public class SceneManager {
             rootLayout.setCenter(view);
 
             AdminInsertUserViewController controller = loader.getController();
+            controller.onCreateView();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    /**
+     *
+     *
+     */
+    public void showAdminInsertDataView(Integer tabSelected) {
+
+        try {
+
+            // Load main view
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("AdminInsertDataView.fxml"));
+            BorderPane view = loader.load();
+
+            // Set view into the center of root layout.
+            rootLayout.setCenter(view);
+
+            AdminInsertDataViewController controller = loader.getController();
+            controller.onCreateView(tabSelected);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+
+    /**
+     *
+     *
+     */
+    public void showAdminInsertToolView() {
+
+        try {
+
+            // Load main view
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("AdminInsertToolView.fxml"));
+            BorderPane view = loader.load();
+
+            // Set view into the center of root layout.
+            rootLayout.setCenter(view);
+
+            AdminInsertToolViewController controller = loader.getController();
+            controller.onCreateView();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    /**
+     *
+     *
+     */
+    public void showAdminInsertSatelliteView() {
+
+        try {
+
+            // Load main view
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("AdminInsertSatelliteView.fxml"));
+            BorderPane view = loader.load();
+
+            // Set view into the center of root layout.
+            rootLayout.setCenter(view);
+
+            AdminInsertSatelliteViewController controller = loader.getController();
             controller.onCreateView();
 
         } catch (IOException e) {

@@ -9,11 +9,11 @@
 
 <BorderPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@../resources/stylesheets/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.bd.view.AdminInsertUserViewController">
    <top>
-      <VBox prefHeight="50.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="backButton" contentDisplay="CENTER" mnemonicParsing="false" styleClass="back-button" text="&lt; User list">
                <VBox.margin>
-                  <Insets top="10.0" />
+                  <Insets top="5.0" />
                </VBox.margin></Button>
          </children>
       </VBox>

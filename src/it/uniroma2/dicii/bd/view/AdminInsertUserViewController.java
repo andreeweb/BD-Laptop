@@ -4,6 +4,7 @@ import it.uniroma2.dicii.bd.bean.UserBean;
 import it.uniroma2.dicii.bd.controller.UserManagementController;
 import it.uniroma2.dicii.bd.enumeration.UserRole;
 import it.uniroma2.dicii.bd.exception.DaoException;
+import it.uniroma2.dicii.bd.exception.ExceptionDialog;
 import it.uniroma2.dicii.bd.utils.Sha;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -71,10 +72,8 @@ public class AdminInsertUserViewController {
 
         } catch (DaoException ex) {
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error Dialog");
-            alert.setHeaderText("Error while saving user!");
-            alert.showAndWait();
+            ExceptionDialog exceptionDialog = new ExceptionDialog(ex);
+            exceptionDialog.show();
 
             ex.printStackTrace();
         }
