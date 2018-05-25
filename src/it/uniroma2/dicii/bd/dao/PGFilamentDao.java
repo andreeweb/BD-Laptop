@@ -1,8 +1,10 @@
 package it.uniroma2.dicii.bd.dao;
 
 import it.uniroma2.dicii.bd.exception.DaoException;
+import it.uniroma2.dicii.bd.interfaces.BranchDao;
 import it.uniroma2.dicii.bd.interfaces.FilamentDao;
 import it.uniroma2.dicii.bd.interfaces.GPointDao;
+import it.uniroma2.dicii.bd.model.Branch;
 import it.uniroma2.dicii.bd.model.Filament;
 import it.uniroma2.dicii.bd.model.GPoint;
 import java.sql.*;

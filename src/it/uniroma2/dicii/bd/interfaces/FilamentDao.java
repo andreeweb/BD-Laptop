@@ -12,7 +12,7 @@ public interface FilamentDao {
     /**
      * Insert filament on database
      *
-     * @return array
+     * @throws DaoException
      */
     void insertFilament(Filament filament) throws DaoException;
 

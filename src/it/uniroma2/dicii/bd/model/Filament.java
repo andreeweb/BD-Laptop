@@ -15,15 +15,38 @@ public class Filament {
     private Float contrast;
     private List<GPoint> boundary;
     private Tool tool;
+    private List<Branch> branches;
 
     public Filament(Integer idfil) {
 
         this.idfil = idfil;
+
+        this.branches = new ArrayList<>();
         this.boundary = new ArrayList<>();
     }
 
+    /**
+     *
+     * @return branches
+     */
+    public List<Branch> getBranches() {
+        return branches;
+    }
+
+    /**
+     *
+     * @param point set
+     */
     public void addBoundaryPoint(GPoint point){
         boundary.add(point);
+    }
+
+    /**
+     *
+     * @param branch set
+     */
+    public void addBranch(Branch branch){
+        branches.add(branch);
     }
 
     /**
@@ -173,6 +196,7 @@ public class Filament {
                 ", ellipticity=" + ellipticity +
                 ", contrast=" + contrast +
                 ", boundary=" + boundary +
+                ", branches=" + branches +
                 '}';
     }
 }

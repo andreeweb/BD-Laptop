@@ -2,6 +2,7 @@ package it.uniroma2.dicii.bd.dao;
 
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.*;
+import it.uniroma2.dicii.bd.model.Branch;
 import it.uniroma2.dicii.bd.model.GPoint;
 import it.uniroma2.dicii.bd.model.Satellite;
 import it.uniroma2.dicii.bd.utils.Config;
@@ -120,6 +121,29 @@ public class DaoFactory {
 
             Class<?> c = Class.forName(userDaoClass);
             return (ToolDao) c.newInstance();
+
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+
+            e.printStackTrace();
+            throw new DaoException("Invalid type : " + userDaoClass, e.getCause());
+        }
+
+    }
+
+    /**
+     * Return an instance of concrete branch dao using Reflection
+     *
+     * @return BranchDao object
+     * @throws DaoException error with database connection or wrong type in config
+     */
+    public BranchDao getBranchDAO() throws DaoException{
+
+        String userDaoClass = Config.getSingletonInstance().getProperty("branchDaoClass");
+
+        try {
+
+            Class<?> c = Class.forName(userDaoClass);
+            return (BranchDao) c.newInstance();
 
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 

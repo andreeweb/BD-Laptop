@@ -1,15 +1,14 @@
 package it.uniroma2.dicii.bd.controller;
 
 import it.uniroma2.dicii.bd.dao.DaoFactory;
+import it.uniroma2.dicii.bd.enumeration.BranchType;
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.exception.ExceptionDialog;
 import it.uniroma2.dicii.bd.interfaces.GPointDao;
-import it.uniroma2.dicii.bd.model.Filament;
-import it.uniroma2.dicii.bd.model.GPoint;
-import it.uniroma2.dicii.bd.model.Satellite;
-import it.uniroma2.dicii.bd.model.Tool;
+import it.uniroma2.dicii.bd.model.*;
 import it.uniroma2.dicii.bd.thread.BoundaryThread;
 import it.uniroma2.dicii.bd.thread.FilamentThread;
+import it.uniroma2.dicii.bd.thread.SkeletonThread;
 import it.uniroma2.dicii.bd.utils.Config;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -22,10 +21,142 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class ImportController {
 
+    // USE ONLY IN DEBUG !!!
+    public static Integer checkSizeDebug;
+    public static Boolean DEBUG = true;
+
     final private int maxThreadPerImport = Integer.valueOf(Config.getSingletonInstance().getProperty("maxThread"));
+
+    /**
+     *
+     * Import file skeleton
+     *
+     * @param filePath csv file path
+     * @throws IOException
+     */
+    public double importSkeleton(String filePath) throws Exception {
+
+        if (ImportController.DEBUG)
+            ImportController.checkSizeDebug = 1; //+1 HEADER
+
+        // Join list and time counting
+        List<Thread> threadList = new ArrayList<>();
+        long startTime = System.nanoTime();
+
+        int csvSize = this.countRows(filePath);
+
+        int distinctBranchRows = this.countDistinctBranchRows(filePath);
+        int branchPerThread;
+        if (maxThreadPerImport > 0)
+            branchPerThread = distinctBranchRows / maxThreadPerImport;
+        else
+            throw new Exception("maxThreadPerImport in config must be greater than zero");
+
+        System.out.println("CSV Size: " + csvSize);
+        System.out.println("Branch per Thread: " + branchPerThread);
+        System.out.println();
+
+        Reader reader = Files.newBufferedReader(Paths.get(filePath));
+        CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
+                .withSkipHeaderRecord(true)
+                .withHeader("IDFIL", "IDBRANCH", "TYPE", "GLON_BR", "GLAT_BR", "N", "FLUX")
+                .withIgnoreHeaderCase()
+                .withTrim());
+
+        // List for single thread
+        LinkedList<Branch> linkedlist = new LinkedList<Branch>();
+        Branch branch = new Branch(-1, null);
+
+        for (CSVRecord csvRecord : csvParser) {
+
+            //System.out.println("Record No - " + csvRecord.getRecordNumber());
+
+            try {
+
+                String idfil = csvRecord.get("IDFIL");
+                String idBranch = csvRecord.get("IDBRANCH");
+                String type = csvRecord.get("TYPE");
+                String n = csvRecord.get("N");
+                String flux = csvRecord.get("FLUX");
+                String g_lon = csvRecord.get("GLON_BR");
+                String g_lat = csvRecord.get("GLAT_BR");
+
+                if (linkedlist.size() > 0){
+
+                    // check if last branch is the same of this new iteration
+                    // if not, create new branch
+                    if (!linkedlist.getLast().getIdBranch().equals(Integer.valueOf(idBranch))){
+
+                        branch = new Branch(Integer.valueOf(idBranch), new Filament(Integer.valueOf(idfil)));
+                        branch.setType(BranchType.valueOf(type));
+                        linkedlist.add(branch);
+                    }
+
+                }else{
+
+                    branch = new Branch(Integer.valueOf(idBranch), new Filament(Integer.valueOf(idfil)));
+                    branch.setType(BranchType.valueOf(type));
+                    linkedlist.add(branch);
+                }
+
+                double glon = Double.valueOf(g_lon);
+                double glat = Double.valueOf(g_lat);
+                Integer sNumber = Integer.valueOf(n);
+
+                GPointBranch gpoint = new GPointBranch(glon, glat,sNumber);
+                gpoint.setFlux(new BigDecimal(flux));
+
+                // add branch point
+                branch.addPoint(gpoint);
+
+            }catch (Exception e){
+
+                System.out.println("Error, skipper row No - " + csvRecord.getRecordNumber());
+                e.printStackTrace();
+            }
+
+            if (linkedlist.size() == branchPerThread){
+
+                Thread thread = new Thread(new SkeletonThread(linkedlist));
+                thread.start();
+                threadList.add(thread);
+
+                // reset list per thread
+                linkedlist = new LinkedList<Branch>();
+            }
+        }
+
+        // handle leftover
+        if (linkedlist.size() > 0){
+
+            Thread thread = new Thread(new SkeletonThread(linkedlist));
+            thread.start();
+            threadList.add(thread);
+
+        }
+
+        for (Thread thread : threadList) {
+            try {
+                thread.join();
+                //System.out.println(thread.getName() + " Finished its job");
+            } catch (InterruptedException e) {
+                System.out.println("Interrupted Exception thrown by : " + thread.getName());
+            }
+        }
+
+        // COMPARE THIS WITH THE CSV SIZE
+        if (ImportController.DEBUG)
+            System.out.println("\nDEBUG - Compare with CSV size: " + ImportController.checkSizeDebug);
+
+        long endTime = System.nanoTime();
+        System.out.println((endTime - startTime)/ 1000000000.0);
+
+        return (endTime - startTime)/ 1000000000.0;
+    }
 
     /**
      *
@@ -35,6 +166,9 @@ public class ImportController {
      * @throws IOException
      */
     public double importFilament(String filePath) throws Exception {
+
+        if (ImportController.DEBUG)
+            ImportController.checkSizeDebug = 1; //+1 HEADER
 
         // Join list and time counting
         long startTime = System.nanoTime();
@@ -47,8 +181,6 @@ public class ImportController {
             filamentPerThread = filamentPerThread / maxThreadPerImport;
         else
             throw new Exception("maxThreadPerImport in config must be greater than zero");
-
-        int total = 1; // +1 header csv
 
         System.out.println("CSV Size: " + csvSize);
         System.out.println("Filament per Thread: " + filamentPerThread);
@@ -66,38 +198,44 @@ public class ImportController {
 
             //System.out.println("Record No - " + csvRecord.getRecordNumber());
 
-            String idfil = csvRecord.get("IDFIL");
-            String name = csvRecord.get("NAME");
-            String total_flux = csvRecord.get("TOTAL_FLUX");
-            String mean_density = csvRecord.get("MEAN_DENS");
-            String mean_temperature = csvRecord.get("MEAN_TEMP");
-            String ellipticity = csvRecord.get("ELLIPTICITY");
-            String contrast = csvRecord.get("CONTRAST");
+            try{
 
-            Filament filament = new Filament(Integer.parseInt(idfil));
-            filament.setName(name);
-            filament.setTotalFlux((new BigDecimal(total_flux)));
-            filament.setMeanDensity(new BigDecimal(mean_density));
-            filament.setMeanTemperature(Float.parseFloat(mean_temperature));
-            filament.setEllipticity(Float.parseFloat(ellipticity));
-            filament.setContrast(Float.parseFloat(contrast));
+                String idfil = csvRecord.get("IDFIL");
+                String name = csvRecord.get("NAME");
+                String total_flux = csvRecord.get("TOTAL_FLUX");
+                String mean_density = csvRecord.get("MEAN_DENS");
+                String mean_temperature = csvRecord.get("MEAN_TEMP");
+                String ellipticity = csvRecord.get("ELLIPTICITY");
+                String contrast = csvRecord.get("CONTRAST");
 
-            String toolName = csvRecord.get("INSTRUMENT");
-            String satelliteName = csvRecord.get("SATELLITE");
+                Filament filament = new Filament(Integer.parseInt(idfil));
+                filament.setName(name);
+                filament.setTotalFlux((new BigDecimal(total_flux)));
+                filament.setMeanDensity(new BigDecimal(mean_density));
+                filament.setMeanTemperature(Float.parseFloat(mean_temperature));
+                filament.setEllipticity(Float.parseFloat(ellipticity));
+                filament.setContrast(Float.parseFloat(contrast));
 
-            Tool tool = new Tool();
-            tool.setName(toolName);
+                String toolName = csvRecord.get("INSTRUMENT");
+                String satelliteName = csvRecord.get("SATELLITE");
 
-            Satellite satellite = new Satellite(satelliteName);
-            tool.setSatellite(satellite);
+                Tool tool = new Tool();
+                tool.setName(toolName);
 
-            filament.setTool(tool);
+                Satellite satellite = new Satellite(satelliteName);
+                tool.setSatellite(satellite);
 
-            linkedlist.add(filament);
+                filament.setTool(tool);
+
+                linkedlist.add(filament);
+
+            }catch (Exception e){
+
+                System.out.println("Error, skipper row No - " + csvRecord.getRecordNumber());
+                e.printStackTrace();
+            }
 
             if (linkedlist.size() == filamentPerThread){
-
-                total+=linkedlist.size();
 
                 Thread thread = new Thread(new FilamentThread(linkedlist));
                 thread.start();
@@ -111,16 +249,10 @@ public class ImportController {
 
         // handle leftover
         if (linkedlist.size() > 0){
-
-            total+=linkedlist.size();
-
             Thread thread = new Thread(new FilamentThread(linkedlist));
             thread.start();
             threadList.add(thread);
-
         }
-
-        System.out.println("total " + total);
 
         // JOIN thread
         for (Thread thread : threadList) {
@@ -131,6 +263,10 @@ public class ImportController {
                 System.out.println("Interrupted Exception thrown by : " + thread.getName());
             }
         }
+
+        // COMPARE THIS WITH THE CSV SIZE
+        if (ImportController.DEBUG)
+            System.out.println("\nDEBUG - Compare with CSV size: " + ImportController.checkSizeDebug);
 
         long endTime = System.nanoTime();
         System.out.println((endTime - startTime)/ 1000000000.0);
@@ -147,15 +283,14 @@ public class ImportController {
      */
     public double importBoundary(String filePath) throws Exception {
 
+        if (ImportController.DEBUG)
+            ImportController.checkSizeDebug = 1; //+1 HEADER
+
         // Join list and time counting
         List<Thread> threadList = new ArrayList<>();
         long startTime = System.nanoTime(); // calcolo tempi import
 
-        // import settings
-        String actualFilamentID = null;
-        Filament filament = new Filament(-1);
-
-        int total = 1; // +1 header csv
+        int csvSize = this.countRows(filePath);
 
         int distinctFIl = this.countDistinctFilamentRows(filePath);
         int filamentPerThread;
@@ -164,8 +299,8 @@ public class ImportController {
         else
             throw new Exception("maxThreadPerImport in config must be greater than zero");
 
+        System.out.println("CSV Size: " + csvSize);
         System.out.println("Filament per Thread: " + filamentPerThread);
-
         System.out.println();
 
         Reader reader = Files.newBufferedReader(Paths.get(filePath));
@@ -177,69 +312,80 @@ public class ImportController {
 
         // List for single thread
         LinkedList<Filament> linkedlist = new LinkedList<Filament>();
+        Filament filament = new Filament(-1);
 
         for (CSVRecord csvRecord : csvParser) {
 
             //System.out.println("Record No - " + csvRecord.getRecordNumber());
 
-            String idfil = csvRecord.get("IDFIL");
+            try{
 
-            // first import set
-            if (actualFilamentID == null)
-                actualFilamentID = idfil;
+                String idfil = csvRecord.get("IDFIL");
+                String g_lon = csvRecord.get("GLON_CONT");
+                String g_lat = csvRecord.get("GLAT_CONT");
 
-            if (!actualFilamentID.equals(idfil)){ // new filament
+                if (linkedlist.size() > 0){
 
-                total+=filament.getBoundary().size(); // check size
-                linkedlist.add(filament);
+                    // check if last filament is the same of this new iteration
+                    // if not, create new branch
+                    if (!linkedlist.getLast().getIdfil().equals(Integer.valueOf(idfil))){
 
-                if (linkedlist.size() == filamentPerThread){
+                        filament = new Filament(Integer.valueOf(idfil));
+                        linkedlist.add(filament);
+                    }
 
-                    Thread thread = new Thread(new BoundaryThread(linkedlist));
-                    thread.start();
-                    threadList.add(thread);
+                }else{
 
-                    // reset
-                    linkedlist = new LinkedList<Filament>();
+                    filament = new Filament(Integer.valueOf(idfil));
+                    linkedlist.add(filament);
                 }
 
-                filament = new Filament(-1);
+
+                // Get point
+                double glon = Double.valueOf(g_lon);
+                double glat = Double.valueOf(g_lat);
+                GPoint gpoint = new GPoint(glon, glat);
+
+                // add point to filament
+                filament.addBoundaryPoint(gpoint);
+
+            }catch (Exception e){
+
+                System.out.println("Error, skipper row No - " + csvRecord.getRecordNumber());
+                e.printStackTrace();
             }
 
-            filament.setIdfil(Integer.parseInt(idfil));
-            actualFilamentID = idfil;
+            if (linkedlist.size() == filamentPerThread){
 
-            // Get point
-            double glon = Double.valueOf(csvRecord.get("GLON_CONT"));
-            double glat = Double.valueOf(csvRecord.get("GLAT_CONT"));
+                Thread thread = new Thread(new BoundaryThread(linkedlist));
+                thread.start();
+                threadList.add(thread);
 
-            GPoint gpoint = new GPoint(glon, glat);
-
-            // add point to filament
-            filament.addBoundaryPoint(gpoint);
+                // reset list per thread
+                linkedlist = new LinkedList<Filament>();
+            }
         }
 
         // handle leftover
         if (linkedlist.size() > 0){
 
-            total+=filament.getBoundary().size();
-
             Thread thread = new Thread(new BoundaryThread(linkedlist));
             thread.start();
             threadList.add(thread);
-
         }
-
-        System.out.println("total " + total);
 
         for (Thread thread : threadList) {
             try {
                 thread.join();
-                System.out.println(thread.getName() + " Finished its job");
+                //System.out.println(thread.getName() + " Finished its job");
             } catch (InterruptedException e) {
                 System.out.println("Interrupted Exception thrown by : " + thread.getName());
             }
         }
+
+        // COMPARE THIS WITH THE CSV SIZE
+        if (ImportController.DEBUG)
+            System.out.println("\nDEBUG - Compare with CSV size: " + ImportController.checkSizeDebug);
 
         long endTime = System.nanoTime();
         System.out.println((endTime - startTime)/ 1000000000.0);
@@ -282,8 +428,33 @@ public class ImportController {
      * @throws IOException file error
      */
     public int countDistinctFilamentRows(String filePath) throws IOException {
+        return this.countDistinctRows(filePath, 0);
+    }
 
-        int filament = 0;
+    /**
+     *
+     * Count how many branch there are in the csv
+     *
+     * @param filePath csv file path
+     * @return number of branch
+     * @throws IOException file error
+     */
+    public int countDistinctBranchRows(String filePath) throws IOException {
+        return this.countDistinctRows(filePath, 1);
+    }
+
+    /**
+     *
+     * Count how many distinct row there are in the csv
+     *
+     * @param filePath csv file path
+     * @param column index
+     * @return distinct row
+     * @throws IOException file error
+     */
+    public int countDistinctRows(String filePath, Integer column) throws IOException {
+
+        int count = 0;
 
         Reader reader = Files.newBufferedReader(Paths.get(filePath));
         CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
@@ -297,22 +468,29 @@ public class ImportController {
 
             // first read set
             if (actualFilamentID == null)
-                actualFilamentID = csvRecord.get(0);
+                actualFilamentID = csvRecord.get(column);
 
-            if (!actualFilamentID.equals(csvRecord.get(0))){
-                filament++;
-                actualFilamentID = csvRecord.get(0);
+            if (!actualFilamentID.equals(csvRecord.get(column))){
+                count++;
+                actualFilamentID = csvRecord.get(column);
             }
         }
 
-        return filament;
+        return count;
+    }
+
+    public static synchronized void increaseDebugCounter(Integer increase){
+        ImportController.checkSizeDebug+=increase;
     }
 
     public static void main(String[] args) throws Exception {
 
         ImportController importController = new ImportController();
 
-        importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Herschel.csv");
+        //importController.importSkeleton("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/scheletro_filamenti_Herschel.csv");
+        importController.importSkeleton("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/scheletro_filamenti_Spitzer.csv");
+
+        //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Herschel.csv");
         //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Spitzer.csv");
 
         //importController.importBoundary("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Herschel.csv");
