@@ -13,8 +13,8 @@ public class Filament {
     private Float meanTemperature;
     private Float ellipticity;
     private Float contrast;
-    private List<GPoint> boundary;
     private Tool tool;
+    private List<GPoint> boundary;
     private List<Branch> branches;
 
     public Filament(Integer idfil) {

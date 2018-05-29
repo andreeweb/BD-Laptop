@@ -154,6 +154,29 @@ public class DaoFactory {
     }
 
     /**
+     * Return an instance of concrete star dao using Reflection
+     *
+     * @return StarDao object
+     * @throws DaoException error with database connection or wrong type in config
+     */
+    public StarDao getStarDAO() throws DaoException{
+
+        String userDaoClass = Config.getSingletonInstance().getProperty("starDaoClass");
+
+        try {
+
+            Class<?> c = Class.forName(userDaoClass);
+            return (StarDao) c.newInstance();
+
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+
+            e.printStackTrace();
+            throw new DaoException("Invalid type : " + userDaoClass, e.getCause());
+        }
+
+    }
+
+    /**
      * Return or inizialize the factory singleton istance
      *
      * @return reference to singleton istance

@@ -33,6 +33,18 @@ public class ImportController {
 
     /**
      *
+     * Import file star
+     *
+     * @param filePath csv file path
+     * @throws IOException
+     */
+    public double importStar(String filePath) throws Exception {
+
+        return 0.0;
+    }
+
+    /**
+     *
      * Import file skeleton
      *
      * @param filePath csv file path
