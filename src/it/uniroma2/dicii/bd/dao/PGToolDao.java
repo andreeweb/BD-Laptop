@@ -33,8 +33,7 @@ public class PGToolDao implements ToolDao{
 
             while(rs.next()) {
 
-                Tool tool = new Tool();
-                tool.setName(rs.getString("tool"));
+                Tool tool = new Tool(rs.getString("tool"));
                 tool.setBand(rs.getString("band"));
 
                 Satellite satellite = new Satellite(rs.getString("satellite"));

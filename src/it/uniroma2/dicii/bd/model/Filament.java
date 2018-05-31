@@ -1,5 +1,10 @@
 package it.uniroma2.dicii.bd.model;
 
+import it.uniroma2.dicii.bd.dao.DaoFactory;
+import it.uniroma2.dicii.bd.exception.DaoException;
+import it.uniroma2.dicii.bd.interfaces.BranchDao;
+import it.uniroma2.dicii.bd.interfaces.FilamentDao;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +28,22 @@ public class Filament {
 
         this.branches = new ArrayList<>();
         this.boundary = new ArrayList<>();
+    }
+
+    /**
+     *
+     * @param boundary set
+     */
+    public void setBoundary(List<GPoint> boundary) {
+        this.boundary = boundary;
+    }
+
+    /**
+     *
+     * @param branches set
+     */
+    public void setBranches(List<Branch> branches) {
+        this.branches = branches;
     }
 
     /**
@@ -195,8 +216,60 @@ public class Filament {
                 ", meanTemperature=" + meanTemperature +
                 ", ellipticity=" + ellipticity +
                 ", contrast=" + contrast +
+                ", tool=" + tool +
                 ", boundary=" + boundary +
                 ", branches=" + branches +
                 '}';
+    }
+
+    /**
+     * test
+     * @param args
+     */
+    public static void main(String[] args) throws DaoException {
+
+        FilamentDao filamentDao = DaoFactory.getSingletonInstance().getFilamentDAO();
+
+        /*GPoint point = filamentDao.getFilamentCentroidByID(52);
+        System.out.println("Centroid by ID: " + point.getGlatitude() + " " + point.getGlongitude());
+
+        point = filamentDao.getFilamentCentroidByName("HiGALFil013.8059-1.2194");
+        System.out.println("Centroid by Name: " + point.getGlatitude() + " " + point.getGlongitude());
+
+        point = filamentDao.getFilamentExtensionByID(52);
+        System.out.println("Extension by ID: " + point.getGlatitude() + " " + point.getGlongitude());
+
+        point = filamentDao.getFilamentExtensionByName("HiGALFil013.8059-1.2194");
+        System.out.println("Extension by Name: " + point.getGlatitude() + " " + point.getGlongitude());
+
+        Integer numberOfsegment = filamentDao.getCountFilamentSegmentByID(52);
+        System.out.println("Number of segment by ID: " + numberOfsegment);
+
+        numberOfsegment = filamentDao.getCountFilamentSegmentByName("HiGALFil013.8059-1.2194");
+        System.out.println("Number of segment by Name: " + numberOfsegment);
+
+        List<Filament> filamentList = filamentDao.getFilamentsByLuminanceAndEllipticity(10.0, 2.0f);
+        for (Filament filament : filamentList){
+            System.out.println(filament.getName());
+        }
+
+        filamentList = filamentDao.getFilamentsByNumberOfSegments(27, 29);
+        for (Filament filament : filamentList){
+            System.out.println(filament.getName());
+        }*/
+
+        Branch branch = new Branch(31, new Filament(52));
+
+        BranchDao branchDao = DaoFactory.getSingletonInstance().getBranchDAO();
+
+        GPoint point = branchDao.getBranchMaxVertex(branch);
+        System.out.println("Max vertex: " + point.getGlongitude() + " " + point.getGlatitude());
+        point = branchDao.getBranchMinVertex(branch);
+        System.out.println("Min vertex: " + point.getGlongitude() + " " + point.getGlatitude());
+
+        List<GPoint> boundary = filamentDao.getFilamentBoundary(branch.getFilament());
+        for (GPoint p : boundary){
+            System.out.println(p.getGlatitude() + " " + p.getGlongitude());
+        }
     }
 }

@@ -277,6 +277,112 @@ public class SceneManager {
     }
 
     /**
+     *
+     *
+     */
+    public void showAdminSearchView() {
+
+        try {
+
+            // Load main view
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("AdminSearchView.fxml"));
+            BorderPane view = loader.load();
+
+            // Set view into the center of root layout.
+            rootLayout.setCenter(view);
+
+            AdminSearchViewController controller = loader.getController();
+            controller.onCreateView();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    /**
+     *
+     *
+     */
+    public void showR5ViewController() {
+
+        try {
+
+            // Load main view
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("R5View.fxml"));
+            BorderPane view = loader.load();
+
+            // Set view into the center of root layout.
+            rootLayout.setCenter(view);
+
+            R5ViewController controller = loader.getController();
+            controller.onCreateView();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    /**
+     *
+     *
+     */
+    public void showR6ViewController() {
+
+    }
+
+    /**
+     *
+     *
+     */
+    public void showR7ViewController() {
+
+    }
+
+    /**
+     *
+     *
+     */
+    public void showR8ViewController() {
+
+    }
+
+    /**
+     *
+     *
+     */
+    public void showR9ViewController() {
+
+    }
+
+    /**
+     *
+     *
+     */
+    public void showR10ViewController() {
+
+    }
+
+    /**
+     *
+     *
+     */
+    public void showR11ViewController() {
+
+    }
+
+    /**
+     *
+     *
+     */
+    public void showR12ViewController() {
+
+    }
+
+    /**
      * Shows the main view inside the root layout.
      *
      */

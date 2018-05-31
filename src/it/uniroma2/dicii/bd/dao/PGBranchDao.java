@@ -7,9 +7,7 @@ import it.uniroma2.dicii.bd.model.Branch;
 import it.uniroma2.dicii.bd.model.GPoint;
 import it.uniroma2.dicii.bd.model.GPointBranch;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class PGBranchDao implements BranchDao{
 
@@ -44,6 +42,148 @@ public class PGBranchDao implements BranchDao{
             }
         }
 
+    }
+
+    @Override
+    public GPoint getBranchMaxVertex(Branch branch) throws DaoException {
+
+        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        Connection conn = null;
+        GPoint maxVertex = null;
+
+        try {
+
+            conn = manager.getConnectionFromConnectionPool();
+
+            maxVertex = this._getBranchVertex(branch, Integer.MAX_VALUE, conn);
+
+            conn.close();
+
+        } catch (SQLException e) {
+
+            throw new DaoException(e.getMessage(), e.getCause());
+
+        } finally {
+
+            try {
+                if (conn != null)
+                    conn.close();
+
+            } catch (SQLException e) {
+
+                throw new DaoException(e.getMessage(), e.getCause());
+            }
+        }
+
+        return maxVertex;
+    }
+
+    @Override
+    public GPoint getBranchMinVertex(Branch branch) throws DaoException {
+
+        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        Connection conn = null;
+        GPoint maxVertex = null;
+
+        try {
+
+            conn = manager.getConnectionFromConnectionPool();
+
+            maxVertex = this._getBranchVertex(branch, Integer.MIN_VALUE, conn);
+
+            conn.close();
+
+        } catch (SQLException e) {
+
+            throw new DaoException(e.getMessage(), e.getCause());
+
+        } finally {
+
+            try {
+                if (conn != null)
+                    conn.close();
+
+            } catch (SQLException e) {
+
+                throw new DaoException(e.getMessage(), e.getCause());
+            }
+        }
+
+        return maxVertex;
+    }
+
+    private GPoint _getBranchVertex(Branch branch, Integer value,Connection conn) throws DaoException {
+
+        Statement stmt = null;
+        GPoint vertex = null;
+        String sql = null;
+
+        try {
+
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            if (value == Integer.MAX_VALUE){
+
+                sql = "SELECT sequence, idbranch, galactic_longitude, galactic_latitude " +
+                        "FROM filament " +
+                        "JOIN filament_branch ON filament_branch.filament=filament.idfil " +
+                        "JOIN branch ON filament_branch.branch = branch.idbranch " +
+                        "WHERE idbranch='31' AND sequence IN " +
+                        "(  SELECT MAX(sequence) " +
+                        "   FROM filament " +
+                        "   JOIN filament_branch ON filament_branch.filament=filament.idfil " +
+                        "   WHERE filament_branch.branch='" + branch.getIdBranch() + "');";
+
+            }else if(value == Integer.MIN_VALUE){
+
+                sql = "SELECT sequence, idbranch, galactic_longitude, galactic_latitude " +
+                        "FROM filament " +
+                        "JOIN filament_branch ON filament_branch.filament=filament.idfil " +
+                        "JOIN branch ON filament_branch.branch = branch.idbranch " +
+                        "WHERE idbranch='31' AND sequence IN " +
+                        "(  SELECT MIN(sequence) " +
+                        "   FROM filament " +
+                        "   JOIN filament_branch ON filament_branch.filament=filament.idfil " +
+                        "   WHERE filament_branch.branch='" + branch.getIdBranch() + "');";
+
+            }else{
+
+                throw new DaoException("Wrong constant");
+            }
+
+            // execute
+            ResultSet rs = stmt.executeQuery(sql);
+
+            if (!rs.first())
+                throw new DaoException("Branch not found");
+
+            rs.first();
+
+            vertex = new GPoint(rs.getDouble("galactic_longitude"), rs.getDouble("galactic_latitude"));
+
+            // Clean-up
+            rs.close();
+            stmt.close();
+
+        } catch (SQLException e) {
+            throw new DaoException(e.getMessage());
+
+        } finally {
+
+            try {
+
+                if (stmt != null)
+                    stmt.close();
+
+                if (conn != null)
+                    conn.close();
+
+            } catch (SQLException e) {
+                throw new DaoException(e.getMessage());
+            }
+        }
+
+        return vertex;
     }
 
     private void _insertBranch(Branch branch, Connection connection) throws DaoException {

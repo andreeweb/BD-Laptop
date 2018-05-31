@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@../resources/stylesheets/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.bd.view.AdminSearchViewController">
+   <top>
+      <VBox prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefWidth="1200.0">
+               <children>
+                  <HBox prefWidth="600.0">
+                     <children>
+                        <Button fx:id="backButton" contentDisplay="CENTER" mnemonicParsing="false" styleClass="back-button" text="&lt; Dashboard" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <Label text="Search" textFill="#3b0250" BorderPane.alignment="TOP_LEFT">
+               <BorderPane.margin>
+                  <Insets left="30.0" top="30.0" />
+               </BorderPane.margin>
+               <font>
+                  <Font size="35.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="30.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="5.0" right="10.0" top="5.0" />
+         </BorderPane.margin>
+      </VBox>
+   </top>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="reqFN5" mnemonicParsing="false" styleClass="label-button-menu-list" text="- REQ-FN-5 Search Filament">
+               <VBox.margin>
+                  <Insets left="30.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="reqFN6" mnemonicParsing="false" styleClass="label-button-menu-list" text="- REQ-FN-6 Search structure by contrast and ellipticity">
+               <VBox.margin>
+                  <Insets left="30.0" top="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="reqFN7" mnemonicParsing="false" styleClass="label-button-menu-list" text="- REQ-FN-7 Search structure by number of segment">
+               <VBox.margin>
+                  <Insets left="30.0" top="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="reqFN8" mnemonicParsing="false" styleClass="label-button-menu-list" text="- REQ-FN-8 Search object inside region">
+               <VBox.margin>
+                  <Insets left="30.0" top="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="reqFN9" mnemonicParsing="false" styleClass="label-button-menu-list" text="- REQ-FN-9 Search star inside filament">
+               <VBox.margin>
+                  <Insets left="30.0" top="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="reqFN10" mnemonicParsing="false" styleClass="label-button-menu-list" text="- REQ-FN-10 Search star inside region">
+               <VBox.margin>
+                  <Insets left="30.0" top="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="reqFN11" mnemonicParsing="false" styleClass="label-button-menu-list" text="- REQ-FN-11 Vertex distance">
+               <VBox.margin>
+                  <Insets left="30.0" top="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="reqFN12" mnemonicParsing="false" styleClass="label-button-menu-list" text="- REQ-FN-12 Star position">
+               <VBox.margin>
+                  <Insets left="30.0" top="10.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+         <BorderPane.margin>
+            <Insets top="20.0" />
+         </BorderPane.margin>
+      </VBox>
+   </center>
+</BorderPane>

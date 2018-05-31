@@ -40,7 +40,7 @@
                </children></HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="162.0" prefWidth="179.0" styleClass="search-button" stylesheets="@../resources/stylesheets/style.css" />
+                  <Button fx:id="searchButton" mnemonicParsing="false" prefHeight="162.0" prefWidth="179.0" styleClass="search-button" stylesheets="@../resources/stylesheets/style.css" />
                </children></HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <children>

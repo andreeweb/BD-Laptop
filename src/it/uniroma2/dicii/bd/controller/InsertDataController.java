@@ -117,8 +117,7 @@ public class InsertDataController {
      */
     public void saveTool(ToolBean toolBean) throws DaoException {
 
-        Tool tool = new Tool();
-        tool.setName(toolBean.getName());
+        Tool tool = new Tool(toolBean.getName());
         tool.setBand(toolBean.getBand());
 
         Satellite satellite = new Satellite(toolBean.getSatellite().getName());
@@ -137,8 +136,7 @@ public class InsertDataController {
      */
     public void deleteTool(ToolBean toolBean) throws DaoException {
 
-        Tool tool = new Tool();
-        tool.setName(toolBean.getName());
+        Tool tool = new Tool(toolBean.getName());
         tool.setBand(toolBean.getBand());
 
         Satellite satellite = new Satellite(toolBean.getSatellite().getName());

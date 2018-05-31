@@ -6,6 +6,7 @@ import it.uniroma2.dicii.bd.model.GPoint;
 
 import java.sql.Connection;
 import java.util.LinkedList;
+import java.util.List;
 
 public interface FilamentDao {
 
@@ -24,4 +25,112 @@ public interface FilamentDao {
      * @throws DaoException
      */
     void insertAllBoundaryPointPerFilament(Filament filament) throws DaoException;
+
+    /**
+     *
+     * Return filament centroid
+     *
+     * @param filamentID
+     * @return centroid point
+     * @throws DaoException filament not found
+     */
+    GPoint getFilamentCentroidByID(Integer filamentID) throws DaoException;
+
+    /**
+     *
+     * Return filament centroid
+     *
+     * @param filamentName
+     * @return centroid point
+     * @throws DaoException filament not found
+     */
+    GPoint getFilamentCentroidByName(String filamentName) throws DaoException;
+
+    /**
+     *
+     * Get filament extension
+     *
+     * @param filamentID
+     * @return
+     * @throws DaoException
+     */
+    GPoint getFilamentExtensionByID(Integer filamentID) throws DaoException;
+
+    /**
+     *
+     * Get filament extension
+     *
+     * @param filamentName
+     * @return
+     * @throws DaoException
+     */
+    GPoint getFilamentExtensionByName(String filamentName) throws DaoException;
+
+    /**
+     *
+     * Get number of filament's segment
+     *
+     * @param filamentName
+     * @return
+     * @throws DaoException
+     */
+    Integer getCountFilamentSegmentByName(String filamentName) throws DaoException;
+
+    /**
+     *
+     * Get number of filament's segment
+     *
+     * @param filamentID
+     * @return
+     * @throws DaoException
+     */
+    Integer getCountFilamentSegmentByID(Integer filamentID) throws DaoException;
+
+    /**
+     *
+     * Get filaments by Luminance and Ellipticity
+     *
+     * @return Filament list
+     * @throws DaoException
+     */
+    List<Filament> getFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity) throws DaoException;
+
+    /**
+     *
+     * Get filaments by number of segments
+     *
+     * @param from
+     * @param to
+     * @return Filament list
+     * @throws DaoException
+     */
+    List<Filament> getFilamentsByNumberOfSegments(Integer from, Integer to) throws DaoException;
+
+    /**
+     *
+     * Get filaments inside square region
+     *
+     * @param side
+     * @return
+     * @throws DaoException
+     */
+    List<Filament> getFilamentInsideSquareRegion(Double side) throws DaoException;
+
+    /**
+     *
+     * Get filaments inside circle region
+     *
+     * @param radius
+     * @return
+     * @throws DaoException
+     */
+    List<Filament> getFilamentInsideCircleRegion(Double radius) throws DaoException;
+
+    /**
+     *
+     * @param filament
+     * @return
+     * @throws DaoException
+     */
+    List<GPoint> getFilamentBoundary(Filament filament) throws DaoException;
 }

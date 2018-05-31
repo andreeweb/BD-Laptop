@@ -231,8 +231,7 @@ public class ImportController {
                 String toolName = csvRecord.get("INSTRUMENT");
                 String satelliteName = csvRecord.get("SATELLITE");
 
-                Tool tool = new Tool();
-                tool.setName(toolName);
+                Tool tool = new Tool(toolName);
 
                 Satellite satellite = new Satellite(satelliteName);
                 tool.setSatellite(satellite);

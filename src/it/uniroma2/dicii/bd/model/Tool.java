@@ -6,6 +6,10 @@ public class Tool {
     private String band;
     private Satellite satellite;
 
+    public Tool(String name) {
+        this.name = name;
+    }
+
     /**
      *
      * @return name

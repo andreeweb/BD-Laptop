@@ -58,7 +58,7 @@
     -fx-background-color: #3b0250;
 }
 
-.button:pressed, .button-blue:default:hover:pressed {
+.button:pressed, .button:default:hover:pressed {
     -fx-background-color: #240031;
 }
 
@@ -75,7 +75,7 @@
     -fx-background-color: darkred;
 }
 
-.button-red:pressed, .button-blue:default:hover:pressed {
+.button-red:pressed, .button-red:default:hover:pressed {
     -fx-background-color: darkred;
 }
 
@@ -91,6 +91,35 @@
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 
+.label-button:hover {
+    -fx-background-color: transparent;
+    -fx-text-fill: #3b0250;
+}
+
+.label-button:pressed, .label-button:default:hover:pressed {
+    -fx-background-color: transparent;
+    -fx-text-fill: #240031;
+}
+
+.label-button-menu-list {
+    -fx-background-color: transparent;
+    -fx-padding: 5 22 5 22;
+    -fx-font-family: "Arial";
+    -fx-font-size: 16pt;
+    -fx-text-fill: #240031;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.label-button-menu-list:hover {
+    -fx-background-color: transparent;
+    -fx-text-fill: #3b0250;
+}
+
+.label-button-menu-list:pressed, .label-button-menu-list:default:hover:pressed {
+    -fx-background-color: transparent;
+    -fx-text-fill: #240031;
+}
+
 .back-button {
     -fx-background-color: transparent;
     -fx-font-family: "Arial";
@@ -102,16 +131,6 @@
 .back-button:hover {
     -fx-background-color: transparent;
     -fx-text-fill: #3b0250;
-}
-
-.label-button:hover {
-    -fx-background-color: transparent;
-    -fx-text-fill: #3b0250;
-}
-
-.label-button:pressed, .label-button:default:hover:pressed {
-    -fx-background-color: transparent;
-    -fx-text-fill: #240031;
 }
 
 /*
