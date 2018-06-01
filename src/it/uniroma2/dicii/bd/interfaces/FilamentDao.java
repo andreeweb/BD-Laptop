@@ -93,7 +93,7 @@ public interface FilamentDao {
      * @return Filament list
      * @throws DaoException
      */
-    List<Filament> getFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity) throws DaoException;
+    List<Filament> getFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max) throws DaoException;
 
     /**
      *

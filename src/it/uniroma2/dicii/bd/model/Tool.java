@@ -17,6 +17,51 @@ public class Tool {
 
     /**
      *
+     * Check if tool have this band
+     *
+     * @param band
+     * @return
+     */
+    public Boolean haveBandEquals(Float band){
+
+        if (this.bands.contains(band))
+            return true;
+
+        return false;
+    }
+
+    /**
+     *
+     * Check if tool have this band
+     *
+     * @param band
+     * @return
+     */
+    public Boolean haveBandGreaterThan(Float band){
+
+        for (Float b : this.bands){
+            if (b > band){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * Check if tool have this band
+     *
+     * @param band
+     * @return
+     */
+    public Boolean haveBandGreaterEqualThan(Float band){
+
+        return this.haveBandEquals(band) && this.haveBandGreaterThan(band);
+    }
+
+    /**
+     *
      * @return name
      */
     public String getName() {

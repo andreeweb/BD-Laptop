@@ -394,6 +394,7 @@ public class AdminImportViewController {
         importButton.setDisable(true);
         importFilamentTextField.setDisable(true);
         backButton.setDisable(true);
+        satelliteComboBox.setDisable(true);
     }
 
     /**
@@ -409,6 +410,7 @@ public class AdminImportViewController {
         importButton.setDisable(false);
         importFilamentTextField.setDisable(false);
         backButton.setDisable(false);
+        satelliteComboBox.setDisable(false);
     }
 
     /**
@@ -424,6 +426,7 @@ public class AdminImportViewController {
         importButton.setDisable(false);
         importFilamentTextField.setDisable(false);
         backButton.setDisable(false);
+        satelliteComboBox.setDisable(false);
         statusLabel.setText("Import error, please select correct type and csv!");
 
     }

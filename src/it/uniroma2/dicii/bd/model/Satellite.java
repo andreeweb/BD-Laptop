@@ -26,51 +26,36 @@ public class Satellite {
         // prostella lambda = 70μm
 
         switch (type){
+
             case UNBOUND:{
 
                 return new Tool(null);
             }
-            case STAR:{
 
-                for (Tool tool : this.tools){
-                    List<Float> bands = tool.getBands();
-
-                    for (Float band : bands){
-                        System.out.println(band);
-                    }
-
-                    if (bands.contains(8.0f)){
+            case STAR: {
+                for (Tool tool : this.tools)
+                    if (tool.haveBandEquals(8.0f))
                         return tool;
-                    }
-                }
 
                 break;
             }
+
             case PRESTELLAR:{
-
-                for (Tool tool : this.tools){
-                    List<Float> bands = tool.getBands();
-                    for (Float band : bands){
-                        if (band >= 160.0f){
-                            return tool;
-                        }
-                    }
-
-                }
-
-                break;
-            }
-            case PROTOSTELLAR:{
-
-                for (Tool tool : this.tools){
-                    List<Float> bands = tool.getBands();
-                    if (bands.contains(70.0f)){
+                for (Tool tool : this.tools)
+                    if (tool.haveBandGreaterThan(160.0f))
                         return tool;
-                    }
-                }
 
                 break;
             }
+
+            case PROTOSTELLAR:{
+                for (Tool tool : this.tools)
+                    if (tool.haveBandEquals(70.0f))
+                        return tool;
+
+                break;
+            }
+
             default:{
 
                 throw new Exception("No tool found");

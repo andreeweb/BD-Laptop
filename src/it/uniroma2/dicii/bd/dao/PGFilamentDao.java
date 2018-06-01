@@ -300,7 +300,7 @@ public class PGFilamentDao implements FilamentDao{
     }
 
     @Override
-    public List<Filament> getFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity) throws DaoException {
+    public List<Filament> getFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max) throws DaoException {
 
         ConnectionManager manager = ConnectionManager.getSingletonInstance();
         Connection conn = null;
@@ -310,7 +310,7 @@ public class PGFilamentDao implements FilamentDao{
 
             conn = manager.getConnectionFromConnectionPool();
 
-            filamentList = _getFilamentsByLuminanceAndEllipticity(percentageLuminance, ellipticity, filamentList, conn);
+            filamentList = _getFilamentsByLuminanceAndEllipticity(percentageLuminance, ellipticity_min, ellipticity_max, filamentList, conn);
 
             conn.close();
 
@@ -492,7 +492,7 @@ public class PGFilamentDao implements FilamentDao{
                     "JOIN filament_branch ON filament_branch.filament=filament.idfil " +
                     "JOIN branch ON filament_branch.branch = branch.idbranch " +
                     "GROUP BY filament.idfil " +
-                    "HAVING COUNT(idbranch) > '" + from + "' AND COUNT(idbranch) < '" + to + "';";
+                    "HAVING COUNT(DISTINCT idbranch) >= " + from + " AND COUNT(DISTINCT idbranch) <= " + to + " ORDER BY idfil";
 
             // execute
             ResultSet rs = stmt.executeQuery(sql);
@@ -535,7 +535,7 @@ public class PGFilamentDao implements FilamentDao{
         return filamentList;
     }
 
-    private List<Filament> _getFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity, List<Filament> filamentList, Connection conn) throws DaoException {
+    private List<Filament> _getFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max, List<Filament> filamentList, Connection conn) throws DaoException {
 
         Statement stmt = null;
 
@@ -547,7 +547,7 @@ public class PGFilamentDao implements FilamentDao{
 
             String sql = "SELECT * " +
                     "FROM filament " +
-                    "WHERE contrast>'" + contrast + "' and ellipticity>'" + ellipticity +"'";
+                    "WHERE contrast >= " + contrast + " and ellipticity >= " +  ellipticity_min + " and ellipticity <= " +  ellipticity_max + "";
 
             // execute
             ResultSet rs = stmt.executeQuery(sql);
@@ -668,14 +668,14 @@ public class PGFilamentDao implements FilamentDao{
 
             if (filament.getIdfil() != null){
 
-                sql = "SELECT MIN(galactic_longitude)-MAX(galactic_longitude) AS longitude, MIN(galactic_latitude)-MAX(galactic_latitude) AS latitude " +
+                sql = "SELECT MAX(galactic_longitude)-MIN(galactic_longitude) AS longitude, MAX(galactic_latitude)-MIN(galactic_latitude) AS latitude " +
                         "FROM filament " +
                         "JOIN filament_boundary ON filament.idfil=filament_boundary.filament " +
                         "WHERE idfil='" + filament.getIdfil() +"'";
 
             }else if(filament.getName() != null){
 
-                sql = "SELECT MIN(galactic_longitude)-MAX(galactic_longitude) AS longitude, MIN(galactic_latitude)-MAX(galactic_latitude) AS latitude " +
+                sql = "SELECT MAX(galactic_longitude)-MIN(galactic_longitude) AS longitude, MAX(galactic_latitude)-MIN(galactic_latitude) AS latitude " +
                         "FROM filament " +
                         "JOIN filament_boundary ON filament.idfil=filament_boundary.filament " +
                         "WHERE name='" + filament.getName() +"'";
@@ -733,14 +733,14 @@ public class PGFilamentDao implements FilamentDao{
 
             if (filament.getIdfil() != null){
 
-                sql = "SELECT COUNT(*) " +
+                sql = "SELECT COUNT(DISTINCT branch) " +
                         "FROM filament_branch " +
                         "JOIN branch ON filament_branch.branch = branch.idbranch " +
                         "WHERE filament_branch.filament='" + filament.getIdfil() +"'";
 
             }else if(filament.getName() != null){
 
-                sql = "SELECT COUNT(*) " +
+                sql = "SELECT COUNT(DISTINCT branch) " +
                         "FROM filament_branch " +
                         "JOIN filament ON filament_branch.filament=filament.idfil " +
                         "JOIN branch ON filament_branch.branch = branch.idbranch " +
