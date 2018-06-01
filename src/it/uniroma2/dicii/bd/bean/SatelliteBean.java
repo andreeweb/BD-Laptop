@@ -1,8 +1,11 @@
 package it.uniroma2.dicii.bd.bean;
 
 
+import it.uniroma2.dicii.bd.model.Tool;
+
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class SatelliteBean {
 
@@ -10,10 +13,28 @@ public class SatelliteBean {
     private Date firstObservation;
     private Date lastObservation;
     private String agency;
+    private List<ToolBean> tools;
 
     public SatelliteBean(String name) {
         this.name = name;
     }
+
+    /**
+     *
+     * @return tools
+     */
+    public List<ToolBean> getTools() {
+        return tools;
+    }
+
+    /**
+     *
+     * @param tools set
+     */
+    public void setTools(List<ToolBean> tools) {
+        this.tools = tools;
+    }
+
 
     /**
      *

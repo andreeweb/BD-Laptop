@@ -1,14 +1,20 @@
 package it.uniroma2.dicii.bd.controller;
 
+import it.uniroma2.dicii.bd.bean.SatelliteBean;
 import it.uniroma2.dicii.bd.dao.DaoFactory;
+import it.uniroma2.dicii.bd.dao.PGToolDao;
 import it.uniroma2.dicii.bd.enumeration.BranchType;
+import it.uniroma2.dicii.bd.enumeration.StarType;
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.exception.ExceptionDialog;
 import it.uniroma2.dicii.bd.interfaces.GPointDao;
+import it.uniroma2.dicii.bd.interfaces.SatelliteDao;
+import it.uniroma2.dicii.bd.interfaces.ToolDao;
 import it.uniroma2.dicii.bd.model.*;
 import it.uniroma2.dicii.bd.thread.BoundaryThread;
 import it.uniroma2.dicii.bd.thread.FilamentThread;
 import it.uniroma2.dicii.bd.thread.SkeletonThread;
+import it.uniroma2.dicii.bd.thread.StarThread;
 import it.uniroma2.dicii.bd.utils.Config;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -27,9 +33,9 @@ public class ImportController {
 
     // USE ONLY IN DEBUG !!!
     public static Integer checkSizeDebug;
-    public static Boolean DEBUG = true;
+    public static Boolean DEBUG = false;
 
-    final private int maxThreadPerImport = Integer.valueOf(Config.getSingletonInstance().getProperty("maxThread"));
+    final private Integer maxThreadPerImport = Integer.valueOf(Config.getSingletonInstance().getProperty("maxThread"));
 
     /**
      *
@@ -38,9 +44,107 @@ public class ImportController {
      * @param filePath csv file path
      * @throws IOException
      */
-    public double importStar(String filePath) throws Exception {
+    public double importStar(String filePath, SatelliteBean satelliteBean) throws Exception {
 
-        return 0.0;
+        if (ImportController.DEBUG)
+            ImportController.checkSizeDebug = 1; //+1 HEADER
+
+        // Join list and time counting
+        long startTime = System.nanoTime();
+        List<Thread> threadList = new ArrayList<>();
+
+        int csvSize = this.countRows(filePath);
+
+        int starPerThread = csvSize;
+        if (maxThreadPerImport > 0)
+            starPerThread = starPerThread / maxThreadPerImport;
+        else
+            throw new Exception("maxThreadPerImport in config must be greater than zero");
+
+        System.out.println("CSV Size: " + csvSize);
+        System.out.println("Star per Thread: " + starPerThread);
+
+        Reader reader = Files.newBufferedReader(Paths.get(filePath));
+        CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
+                .withSkipHeaderRecord(true)
+                .withHeader("IDSTAR", "NAMESTAR", "GLON_ST", "GLAT_ST", "FLUX_ST", "TYPE_ST")
+                .withIgnoreHeaderCase()
+                .withTrim());
+
+        LinkedList<Star> linkedlist = new LinkedList<Star>();
+
+        // get satellite tools
+        ToolDao toolDao = DaoFactory.getSingletonInstance().getToolDAO();
+        Satellite satellite = new Satellite(satelliteBean.getName());
+        satellite.setTools(toolDao.getTools(satellite));
+
+        for (CSVRecord csvRecord : csvParser) {
+
+            //System.out.println("Record No - " + csvRecord.getRecordNumber());
+
+            try{
+
+                String idStar = csvRecord.get("IDSTAR");
+                String name = csvRecord.get("NAMESTAR");
+                String glon = csvRecord.get("GLON_ST");
+                String glat = csvRecord.get("GLAT_ST");
+                String flux = csvRecord.get("FLUX_ST");
+                String type = csvRecord.get("TYPE_ST");
+
+                Star star = new Star(Integer.valueOf(idStar));
+                star.setName(name);
+                star.setFlux(new BigDecimal(flux));
+                star.setPosition(new GPoint(Double.valueOf(glon), Double.valueOf(glat)));
+                star.setType(StarType.valueOf(type));
+
+                Tool tool = satellite.getToolForTypeStar(StarType.valueOf(type));
+                star.setTool(tool);
+
+                linkedlist.add(star);
+
+            }catch (Exception e){
+
+                System.out.println("Error, skipper row No - " + csvRecord.getRecordNumber());
+                e.printStackTrace();
+            }
+
+            if (linkedlist.size() == starPerThread){
+
+                Thread thread = new Thread(new StarThread(linkedlist));
+                thread.start();
+                threadList.add(thread);
+
+                // reset
+                linkedlist = new LinkedList<Star>();
+            }
+
+        }
+
+        // handle leftover
+        if (linkedlist.size() > 0){
+            Thread thread = new Thread(new StarThread(linkedlist));
+            thread.start();
+            threadList.add(thread);
+        }
+
+        // JOIN thread
+        for (Thread thread : threadList) {
+            try {
+                thread.join();
+                //System.out.println(thread.getName() + " Finished its job");
+            } catch (InterruptedException e) {
+                System.out.println("Interrupted Exception thrown by : " + thread.getName());
+            }
+        }
+
+        // COMPARE THIS WITH THE CSV SIZE
+        if (ImportController.DEBUG)
+            System.out.println("\nDEBUG - Compare with CSV size: " + ImportController.checkSizeDebug);
+
+        long endTime = System.nanoTime();
+        System.out.println((endTime - startTime)/ 1000000000.0);
+
+        return (endTime - startTime)/ 1000000000.0;
     }
 
     /**
@@ -115,11 +219,7 @@ public class ImportController {
                     linkedlist.add(branch);
                 }
 
-                double glon = Double.valueOf(g_lon);
-                double glat = Double.valueOf(g_lat);
-                Integer sNumber = Integer.valueOf(n);
-
-                GPointBranch gpoint = new GPointBranch(glon, glat,sNumber);
+                GPointBranch gpoint = new GPointBranch(Double.valueOf(g_lon), Double.valueOf(g_lat), Integer.valueOf(n));
                 gpoint.setFlux(new BigDecimal(flux));
 
                 // add branch point
@@ -353,9 +453,7 @@ public class ImportController {
 
 
                 // Get point
-                double glon = Double.valueOf(g_lon);
-                double glat = Double.valueOf(g_lat);
-                GPoint gpoint = new GPoint(glon, glat);
+                GPoint gpoint = new GPoint(Double.valueOf(g_lon), Double.valueOf(g_lat));
 
                 // add point to filament
                 filament.addBoundaryPoint(gpoint);
@@ -498,8 +596,10 @@ public class ImportController {
 
         ImportController importController = new ImportController();
 
+        importController.importStar("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/stelle_Herschel.csv", new SatelliteBean("Herschel"));
+
         //importController.importSkeleton("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/scheletro_filamenti_Herschel.csv");
-        importController.importSkeleton("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/scheletro_filamenti_Spitzer.csv");
+        //importController.importSkeleton("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/scheletro_filamenti_Spitzer.csv");
 
         //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Herschel.csv");
         //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Spitzer.csv");

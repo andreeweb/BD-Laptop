@@ -50,6 +50,17 @@
                   <Insets top="30.0" />
                </VBox.margin>
             </HBox>
+            <HBox fx:id="satelliteHBox">
+               <children>
+                  <ComboBox fx:id="satelliteComboBox" prefWidth="1200.0" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+            </HBox>
             <Label text="CSV Example format">
                <VBox.margin>
                   <Insets top="20.0" />

@@ -2,10 +2,10 @@ package it.uniroma2.dicii.bd.model;
 
 public class GPoint {
 
-    private double glongitude;
-    private double glatitude;
+    private Double glongitude;
+    private Double glatitude;
 
-    public GPoint(double glongitude, double glatitude) {
+    public GPoint(Double glongitude, Double glatitude) {
         this.glongitude = glongitude;
         this.glatitude = glatitude;
     }
@@ -14,7 +14,7 @@ public class GPoint {
      *
      * @return Galactic longitude
      */
-    public double getGlongitude() {
+    public Double getGlongitude() {
         return glongitude;
     }
 
@@ -22,7 +22,7 @@ public class GPoint {
      *
      * @return Galactic latitude
      */
-    public double getGlatitude() {
+    public Double getGlatitude() {
         return glatitude;
     }
 
@@ -30,7 +30,7 @@ public class GPoint {
      *
      * @param glongitude set
      */
-    public void setGlongitude(double glongitude) {
+    public void setGlongitude(Double glongitude) {
         this.glongitude = glongitude;
     }
 
@@ -38,7 +38,15 @@ public class GPoint {
      *
      * @param glatitude set
      */
-    public void setGlatitude(double glatitude) {
+    public void setGlatitude(Double glatitude) {
         this.glatitude = glatitude;
+    }
+
+    @Override
+    public String toString() {
+        return "GPoint{" +
+                "glongitude=" + glongitude +
+                ", glatitude=" + glatitude +
+                '}';
     }
 }

@@ -23,7 +23,7 @@ public class PGFilamentDao implements FilamentDao{
             conn = manager.getConnectionFromConnectionPool();
 
             this._insertFilament(filament, conn);
-            this._insertFilamentToolRelation(filament, conn);
+
             conn.close();
 
         }  catch (SQLException e) {
@@ -789,8 +789,8 @@ public class PGFilamentDao implements FilamentDao{
 
     private void _insertFilament(Filament filament, Connection connection) throws DaoException {
 
-        final String sql = "INSERT INTO filament(idfil, name, total_flux, mean_density, mean_temperature, ellipticity, contrast) " +
-                "values (?,?,?,?,?,?,?) ON conflict (idfil) do nothing";
+        final String sql = "INSERT INTO filament(idfil, name, total_flux, mean_density, mean_temperature, ellipticity, contrast, nameTool) " +
+                "values (?,?,?,?,?,?,?,?) ON conflict (idfil) do nothing";
         PreparedStatement preparedStatement = null;
 
         try {
@@ -804,6 +804,7 @@ public class PGFilamentDao implements FilamentDao{
             preparedStatement.setFloat(5, filament.getMeanTemperature());
             preparedStatement.setFloat(6, filament.getEllipticity());
             preparedStatement.setFloat(7, filament.getContrast());
+            preparedStatement.setString(8, filament.getTool().getName());
             preparedStatement.executeUpdate();
 
             preparedStatement.close();
@@ -838,38 +839,6 @@ public class PGFilamentDao implements FilamentDao{
             preparedStatement.setInt(1, filament.getIdfil());
             preparedStatement.setDouble(2, point.getGlongitude());
             preparedStatement.setDouble(3, point.getGlatitude());
-
-            preparedStatement.executeUpdate();
-
-            preparedStatement.close();
-
-        }catch (SQLException e){
-
-            throw new DaoException(e.getMessage(), e.getCause());
-
-        }finally {
-
-            try {
-                if (preparedStatement != null)
-                    preparedStatement.close();
-            } catch (SQLException e) {
-                throw new DaoException(e.getMessage(), e.getCause());
-            }
-        }
-    }
-
-    private void _insertFilamentToolRelation(Filament filament, Connection connection) throws DaoException {
-
-        final String sqlFilamentPoint = "INSERT INTO tool_filament(nametool, filament) " +
-                "values (?,?) ON conflict (nametool, filament) do nothing";
-        PreparedStatement preparedStatement = null;
-
-        try {
-
-            preparedStatement = connection.prepareStatement(sqlFilamentPoint);
-
-            preparedStatement.setString(1, filament.getTool().getName());
-            preparedStatement.setInt(2, filament.getIdfil());
 
             preparedStatement.executeUpdate();
 

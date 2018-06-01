@@ -1,13 +1,18 @@
 package it.uniroma2.dicii.bd.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Tool {
 
     private String name;
-    private String band;
     private Satellite satellite;
+    private String band;
+    private List<Float> bands;
 
     public Tool(String name) {
         this.name = name;
+        this.bands = new ArrayList<>();
     }
 
     /**
@@ -22,8 +27,16 @@ public class Tool {
      *
      * @return band
      */
-    public String getBand() {
+    public String getBandString() {
         return band;
+    }
+
+    /**
+     *
+     * @return band
+     */
+    public List<Float> getBands() {
+        return bands;
     }
 
     /**
@@ -47,7 +60,12 @@ public class Tool {
      * @param band set
      */
     public void setBand(String band) {
+
         this.band = band;
+
+        for (String val: band.split(",")) {
+            bands.add(Float.valueOf(val));
+        }
     }
 
     /**
@@ -57,4 +75,15 @@ public class Tool {
     public void setSatellite(Satellite satellite) {
         this.satellite = satellite;
     }
+
+    @Override
+    public String toString() {
+        return "Tool{" +
+                "name='" + name + '\'' +
+                ", satellite=" + satellite +
+                ", band='" + band + '\'' +
+                ", bands=" + bands +
+                '}';
+    }
 }
+

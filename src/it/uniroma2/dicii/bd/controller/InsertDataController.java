@@ -89,13 +89,13 @@ public class InsertDataController {
     public List<ToolBean> getToolBeanList() throws DaoException {
 
         ToolDao dao = DaoFactory.getSingletonInstance().getToolDAO();
-        List<Tool> list = dao.getTools();
+        List<Tool> list = dao.getAllTools();
         List<ToolBean> beanList = new ArrayList<ToolBean>();
 
         for (Tool tool:list) {
 
             ToolBean toolBean = new ToolBean(tool.getName());
-            toolBean.setBand(tool.getBand());
+            toolBean.setBand(tool.getBandString());
 
             SatelliteBean satelliteBean = new SatelliteBean(tool.getSatellite().getName());
 

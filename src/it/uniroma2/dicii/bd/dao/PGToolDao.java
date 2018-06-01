@@ -12,7 +12,7 @@ import java.util.List;
 public class PGToolDao implements ToolDao{
 
     @Override
-    public List<Tool> getTools() throws DaoException {
+    public List<Tool> getTools(Satellite satellite) throws DaoException {
 
         List<Tool> list = new ArrayList<Tool>();
 
@@ -26,7 +26,69 @@ public class PGToolDao implements ToolDao{
 
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
-            String sql = "SELECT tool.name as tool, satellite.name as satellite, band FROM tool JOIN satellite ON tool.satellite = satellite.name";
+            String sql = "SELECT tool.name as tool, satellite.name as satellite, band " +
+                    "FROM tool " +
+                    "JOIN satellite ON tool.satellite = satellite.name " +
+                    "WHERE satellite='" + satellite.getName() + "'";
+
+            System.out.println(sql);
+
+            // execute
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while(rs.next()) {
+
+                Tool tool = new Tool(rs.getString("tool"));
+                tool.setBand(rs.getString("band"));
+
+                tool.setSatellite(satellite);
+                list.add(tool);
+            }
+
+            // Clean-up
+            rs.close();
+            stmt.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            throw new DaoException(e.getMessage());
+
+        } finally {
+
+            try {
+
+                if (stmt != null)
+                    stmt.close();
+
+                if (conn != null)
+                    conn.close();
+
+            } catch (SQLException e) {
+                throw new DaoException(e.getMessage());
+            }
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<Tool> getAllTools() throws DaoException {
+
+        List<Tool> list = new ArrayList<Tool>();
+
+        Statement stmt = null;
+        Connection conn = null;
+
+        try {
+
+            ConnectionManager manager = ConnectionManager.getSingletonInstance();
+            conn = manager.getConnectionFromConnectionPool();
+
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            String sql = "SELECT tool.name as tool, satellite.name as satellite, band " +
+                    "FROM tool " +
+                    "JOIN satellite ON tool.satellite = satellite.name";
 
             // execute
             ResultSet rs = stmt.executeQuery(sql);
@@ -85,7 +147,7 @@ public class PGToolDao implements ToolDao{
             preparedStatement = conn.prepareStatement(sql);
 
             preparedStatement.setString(1, tool.getName());
-            preparedStatement.setString(2, tool.getBand());
+            preparedStatement.setString(2, tool.getBandString());
             preparedStatement.setString(3, tool.getSatellite().getName());
             preparedStatement.executeUpdate();
 
