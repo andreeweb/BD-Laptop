@@ -22,14 +22,18 @@ public class Satellite {
     public Tool getToolForTypeStar(StarType type) throws Exception {
 
         // stella lambda = 8μm
-        // prestella lambda > 160μm
+        // unbound > 160μm
+        // prestella lambda = 160μm
         // prostella lambda = 70μm
 
         switch (type){
 
             case UNBOUND:{
+                for (Tool tool : this.tools)
+                    if (tool.haveBandGreaterThan(160.0f))
+                        return tool;
 
-                return new Tool(null);
+                break;
             }
 
             case STAR: {
@@ -42,7 +46,7 @@ public class Satellite {
 
             case PRESTELLAR:{
                 for (Tool tool : this.tools)
-                    if (tool.haveBandGreaterThan(160.0f))
+                    if (tool.haveBandEquals(160.0f))
                         return tool;
 
                 break;
