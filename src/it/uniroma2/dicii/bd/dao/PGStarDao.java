@@ -49,7 +49,10 @@ public class PGStarDao implements StarDao{
     private void _insertStar(Star star, Connection connection) throws DaoException {
 
         final String sql = "INSERT INTO star(idstar, name_star, type, flux, galactic_longitude, galactic_latitude, nameTool) " +
-                "values (?,?,?,?,?,?,?) ON conflict (idstar) do nothing";
+                "values (?,?,?,?,?,?,?) ON conflict (idstar) " +
+                "DO UPDATE SET name_star=excluded.name_star, type=excluded.type, " +
+                "           flux=excluded.flux, galactic_longitude=excluded.galactic_longitude, " +
+                "           galactic_latitude=excluded.galactic_latitude, nameTool=excluded.nameTool";
 
         PreparedStatement preparedStatement = null;
 

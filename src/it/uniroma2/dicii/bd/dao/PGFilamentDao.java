@@ -790,7 +790,11 @@ public class PGFilamentDao implements FilamentDao{
     private void _insertFilament(Filament filament, Connection connection) throws DaoException {
 
         final String sql = "INSERT INTO filament(idfil, name, total_flux, mean_density, mean_temperature, ellipticity, contrast, nameTool) " +
-                "values (?,?,?,?,?,?,?,?) ON conflict (idfil) do nothing";
+                "values (?,?,?,?,?,?,?,?) ON conflict (idfil) " +
+                "DO UPDATE SET name=excluded.name, total_flux=excluded.total_flux, " +
+                "                   mean_density=excluded.mean_density, mean_temperature=excluded.mean_temperature, " +
+                "                   ellipticity=excluded.ellipticity, contrast=excluded.contrast, nameTool=excluded.nameTool";
+
         PreparedStatement preparedStatement = null;
 
         try {
@@ -829,7 +833,8 @@ public class PGFilamentDao implements FilamentDao{
     private void _insertFilamentBoundaryPointRelation(Filament filament, GPoint point, Connection connection) throws DaoException {
 
         final String sqlFilamentPoint = "INSERT INTO filament_boundary(filament, galactic_longitude, galactic_latitude) " +
-                "values (?,?,?) ON conflict (filament, galactic_longitude, galactic_latitude) do nothing";
+                "values (?,?,?) ON conflict DO NOTHING";
+
         PreparedStatement preparedStatement = null;
 
         try {

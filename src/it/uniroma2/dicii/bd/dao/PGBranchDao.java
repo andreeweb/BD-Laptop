@@ -188,7 +188,8 @@ public class PGBranchDao implements BranchDao{
 
     private void _insertBranch(Branch branch, Connection connection) throws DaoException {
 
-        final String sql = "INSERT INTO branch(idbranch, filament, type) values (?,?,?) ON conflict (idbranch, filament) do nothing";
+        final String sql = "INSERT INTO branch(idbranch, filament, type) values (?,?,?) ON conflict (idbranch, filament) DO UPDATE SET type=excluded.type";
+
         PreparedStatement preparedStatement = null;
 
         try {
@@ -221,7 +222,9 @@ public class PGBranchDao implements BranchDao{
 
     private void _insertFilamentBranchRelation(Branch branch, Connection connection) throws DaoException {
 
-        final String sql = "INSERT INTO filament_branch(branch, filament, galactic_longitude, galactic_latitude, sequence, flux) values (?,?,?,?,?,?) ON conflict (branch, filament, galactic_longitude, galactic_latitude) do nothing";
+        final String sql = "INSERT INTO filament_branch(branch, filament, galactic_longitude, galactic_latitude, sequence, flux) values (?,?,?,?,?,?) ON conflict (branch, filament, galactic_longitude, galactic_latitude)" +
+                "DO UPDATE SET sequence=excluded.sequence, flux=excluded.flux";
+
         PreparedStatement preparedStatement = null;
 
         try {

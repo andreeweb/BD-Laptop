@@ -31,8 +31,6 @@ public class PGToolDao implements ToolDao{
                     "JOIN satellite ON tool.satellite = satellite.name " +
                     "WHERE satellite='" + satellite.getName() + "'";
 
-            System.out.println(sql);
-
             // execute
             ResultSet rs = stmt.executeQuery(sql);
 

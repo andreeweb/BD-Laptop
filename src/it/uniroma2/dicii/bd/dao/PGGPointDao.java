@@ -42,6 +42,7 @@ public class PGGPointDao implements GPointDao{
     private void _insertGPoint(GPoint point, Connection connection) throws DaoException {
 
         final String sqlPoint = "INSERT INTO point(galactic_longitude, galactic_latitude) values (?,?) ON conflict (galactic_longitude, galactic_latitude) do nothing";
+
         PreparedStatement preparedStatement = null;
 
         try {
