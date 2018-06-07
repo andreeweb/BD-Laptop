@@ -300,7 +300,7 @@ public class PGFilamentDao implements FilamentDao{
     }
 
     @Override
-    public List<Filament> getFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max) throws DaoException {
+    public List<Filament> getFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max, Integer limit, Integer offset) throws DaoException {
 
         ConnectionManager manager = ConnectionManager.getSingletonInstance();
         Connection conn = null;
@@ -310,7 +310,7 @@ public class PGFilamentDao implements FilamentDao{
 
             conn = manager.getConnectionFromConnectionPool();
 
-            filamentList = _getFilamentsByLuminanceAndEllipticity(percentageLuminance, ellipticity_min, ellipticity_max, filamentList, conn);
+            filamentList = _getFilamentsByLuminanceAndEllipticity(percentageLuminance, ellipticity_min, ellipticity_max, limit, offset, filamentList, conn);
 
             conn.close();
 
@@ -334,7 +334,7 @@ public class PGFilamentDao implements FilamentDao{
     }
 
     @Override
-    public List<Filament> getFilamentsByNumberOfSegments(Integer from, Integer to) throws DaoException {
+    public List<Filament> getFilamentsByNumberOfSegments(Integer from, Integer to, Integer limit, Integer offset) throws DaoException {
 
         ConnectionManager manager = ConnectionManager.getSingletonInstance();
         Connection conn = null;
@@ -344,7 +344,7 @@ public class PGFilamentDao implements FilamentDao{
 
             conn = manager.getConnectionFromConnectionPool();
 
-            filamentList = _getFilamentsByNumberOfSegments(from, to, filamentList, conn);
+            filamentList = _getFilamentsByNumberOfSegments(from, to, filamentList, limit, offset, conn);
 
             conn.close();
 
@@ -479,7 +479,7 @@ public class PGFilamentDao implements FilamentDao{
         return null;
     }
 
-    private List<Filament> _getFilamentsByNumberOfSegments(Integer from, Integer to, List<Filament> filamentList, Connection conn) throws DaoException {
+    private List<Filament> _getFilamentsByNumberOfSegments(Integer from, Integer to, List<Filament> filamentList, Integer limit, Integer offset, Connection conn) throws DaoException {
 
         Statement stmt = null;
 
@@ -492,7 +492,9 @@ public class PGFilamentDao implements FilamentDao{
                     "JOIN filament_branch ON filament_branch.filament=filament.idfil " +
                     "JOIN branch ON filament_branch.branch = branch.idbranch " +
                     "GROUP BY filament.idfil " +
-                    "HAVING COUNT(DISTINCT idbranch) >= " + from + " AND COUNT(DISTINCT idbranch) <= " + to + " ORDER BY idfil";
+                    "HAVING COUNT(DISTINCT idbranch) >= " + from + " AND COUNT(DISTINCT idbranch) <= " + to + " ORDER BY idfil " +
+                    "LIMIT " + limit +
+                    "OFFSET " + offset;
 
             // execute
             ResultSet rs = stmt.executeQuery(sql);
@@ -535,7 +537,7 @@ public class PGFilamentDao implements FilamentDao{
         return filamentList;
     }
 
-    private List<Filament> _getFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max, List<Filament> filamentList, Connection conn) throws DaoException {
+    private List<Filament> _getFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max, Integer limit, Integer offset, List<Filament> filamentList, Connection conn) throws DaoException {
 
         Statement stmt = null;
 
@@ -547,7 +549,10 @@ public class PGFilamentDao implements FilamentDao{
 
             String sql = "SELECT * " +
                     "FROM filament " +
-                    "WHERE contrast >= " + contrast + " and ellipticity >= " +  ellipticity_min + " and ellipticity <= " +  ellipticity_max + "";
+                    "WHERE contrast >= " + contrast + " and ellipticity >= " +  ellipticity_min + " and ellipticity <= " +  ellipticity_max +
+                    " ORDER BY idfil" +
+                    " LIMIT " + limit +
+                    " OFFSET " + offset;
 
             // execute
             ResultSet rs = stmt.executeQuery(sql);

@@ -90,21 +90,29 @@ public interface FilamentDao {
      *
      * Get filaments by Luminance and Ellipticity
      *
-     * @return Filament list
+     * @param percentageLuminance
+     * @param ellipticity_min
+     * @param ellipticity_max
+     * @param limit
+     * @param offset
+     * @return filaments
      * @throws DaoException
      */
-    List<Filament> getFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max) throws DaoException;
+    List<Filament> getFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max, Integer limit, Integer offset) throws DaoException;
+
 
     /**
      *
-     * Get filaments by number of segments
+     * * Get filaments by number of segments
      *
      * @param from
      * @param to
-     * @return Filament list
+     * @param limit
+     * @param offset
+     * @return filaments
      * @throws DaoException
      */
-    List<Filament> getFilamentsByNumberOfSegments(Integer from, Integer to) throws DaoException;
+    List<Filament> getFilamentsByNumberOfSegments(Integer from, Integer to, Integer limit, Integer offset) throws DaoException;
 
     /**
      *
