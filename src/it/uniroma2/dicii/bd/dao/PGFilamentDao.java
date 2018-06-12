@@ -368,7 +368,7 @@ public class PGFilamentDao implements FilamentDao{
     }
 
     @Override
-    public List<Filament> getFilamentInsideSquareRegion(Double side) throws DaoException {
+    public List<Filament> getFilamentInsideSquareRegion(GPoint center, Float side, Integer limit, Integer offset) throws DaoException {
 
         ConnectionManager manager = ConnectionManager.getSingletonInstance();
         Connection conn = null;
@@ -378,7 +378,7 @@ public class PGFilamentDao implements FilamentDao{
 
             conn = manager.getConnectionFromConnectionPool();
 
-            filamentList = _getFilamentInsideSquareRegion(side, filamentList, conn);
+            filamentList = _getFilamentInsideSquareRegion(center, side, filamentList, conn, limit, offset);
 
             conn.close();
 
@@ -402,7 +402,7 @@ public class PGFilamentDao implements FilamentDao{
     }
 
     @Override
-    public List<Filament> getFilamentInsideCircleRegion(Double radius) throws DaoException {
+    public List<Filament> getFilamentInsideCircleRegion(GPoint center, Float radius, Integer limit, Integer offset) throws DaoException {
 
         ConnectionManager manager = ConnectionManager.getSingletonInstance();
         Connection conn = null;
@@ -412,7 +412,7 @@ public class PGFilamentDao implements FilamentDao{
 
             conn = manager.getConnectionFromConnectionPool();
 
-            filamentList = _getFilamentInsideCircleRegion(radius, filamentList, conn);
+            filamentList = _getFilamentInsideCircleRegion(center, radius, filamentList, conn, limit, offset);
 
             conn.close();
 
@@ -471,12 +471,135 @@ public class PGFilamentDao implements FilamentDao{
 
     // PRIVATE
 
-    private List<Filament> _getFilamentInsideSquareRegion(Double side, List<Filament> filamentList, Connection conn) throws DaoException {
-        return null;
+    private List<Filament> _getFilamentInsideSquareRegion(GPoint center, Float side, List<Filament> filamentList, Connection conn, Integer limit, Integer offset) throws DaoException {
+
+        Statement stmt = null;
+
+        Double diagonal = side*Math.sqrt(2);
+
+        try {
+
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            String sql = "SELECT DISTINCT on (filament) filament, idfil, name, total_flux, mean_density, mean_temperature, ellipticity, contrast " +
+                    "FROM filament_boundary " +
+                    "JOIN filament ON filament.idfil=filament_boundary.filament " +
+                    "WHERE sqrt(power(galactic_longitude - " + center.getGlongitude() + ",2) + power(galactic_latitude - " + center.getGlatitude() + ",2)) <= " + diagonal/2 +
+                    " AND " + (center.getGlongitude() - side/2) + " <= galactic_longitude" +
+                    " AND galactic_longitude <= " + (center.getGlongitude() + side/2) +
+                    " AND " + (center.getGlatitude() - side/2) + " <= galactic_latitude" +
+                    " AND galactic_latitude <= " + (center.getGlatitude() + side/2) +
+                    " AND filament NOT IN " +
+                    "   (SELECT DISTINCT filament " +
+                    "    FROM filament_boundary " +
+                        "WHERE sqrt(power(galactic_longitude - " + center.getGlongitude() + ",2) + power(galactic_latitude - " + center.getGlatitude() + ",2)) > " + diagonal/2 +
+                        " AND " + (center.getGlongitude() - side/2) + " > galactic_longitude" +
+                        " AND galactic_longitude > " + (center.getGlongitude() + side/2) +
+                        " AND " + (center.getGlatitude() - side/2) + " > galactic_latitude" +
+                        " AND galactic_latitude > " + (center.getGlatitude() + side/2) +
+                    ") ORDER BY filament LIMIT " + limit +
+                    " OFFSET " + offset;
+
+            // execute
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()){
+
+                Filament filament = new Filament(rs.getInt("idfil"));
+                filament.setName(rs.getString("name"));
+                filament.setTotalFlux(rs.getBigDecimal("total_flux"));
+                filament.setMeanDensity(rs.getBigDecimal("mean_density"));
+                filament.setMeanTemperature(rs.getFloat("mean_temperature"));
+                filament.setEllipticity(rs.getFloat("ellipticity"));
+                filament.setContrast(rs.getFloat("contrast"));
+
+                filamentList.add(filament);
+            }
+
+            // Clean-up
+            rs.close();
+            stmt.close();
+
+        } catch (SQLException e) {
+            throw new DaoException(e.getMessage());
+
+        } finally {
+
+            try {
+
+                if (stmt != null)
+                    stmt.close();
+
+                if (conn != null)
+                    conn.close();
+
+            } catch (SQLException e) {
+                throw new DaoException(e.getMessage());
+            }
+        }
+
+        return filamentList;
+
     }
 
-    private List<Filament> _getFilamentInsideCircleRegion(Double radius, List<Filament> filamentList, Connection conn) throws DaoException {
-        return null;
+    private List<Filament> _getFilamentInsideCircleRegion(GPoint center, Float radius, List<Filament> filamentList, Connection conn, Integer limit, Integer offset) throws DaoException {
+
+        Statement stmt = null;
+
+        try {
+
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            String sql = "SELECT DISTINCT on (filament) filament, idfil, name, total_flux, mean_density, mean_temperature, ellipticity, contrast " +
+                    "FROM filament_boundary " +
+                    "JOIN filament ON filament.idfil=filament_boundary.filament " +
+                    "WHERE sqrt(power(galactic_longitude - " + center.getGlongitude() + ",2)+power(galactic_latitude - " + center.getGlatitude() + ",2)) <= " + radius +
+                    " AND filament NOT IN " +
+                    "   (SELECT DISTINCT filament " +
+                    "    FROM filament_boundary " +
+                    "    WHERE sqrt(power(galactic_longitude- " + center.getGlongitude() + " ,2)+power(galactic_latitude - " + center.getGlatitude() + " ,2)) > " + radius + ") " +
+                    "LIMIT " + limit +
+                    " OFFSET " + offset;
+
+            // execute
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()){
+
+                Filament filament = new Filament(rs.getInt("idfil"));
+                filament.setName(rs.getString("name"));
+                filament.setTotalFlux(rs.getBigDecimal("total_flux"));
+                filament.setMeanDensity(rs.getBigDecimal("mean_density"));
+                filament.setMeanTemperature(rs.getFloat("mean_temperature"));
+                filament.setEllipticity(rs.getFloat("ellipticity"));
+                filament.setContrast(rs.getFloat("contrast"));
+
+                filamentList.add(filament);
+            }
+
+            // Clean-up
+            rs.close();
+            stmt.close();
+
+        } catch (SQLException e) {
+            throw new DaoException(e.getMessage());
+
+        } finally {
+
+            try {
+
+                if (stmt != null)
+                    stmt.close();
+
+                if (conn != null)
+                    conn.close();
+
+            } catch (SQLException e) {
+                throw new DaoException(e.getMessage());
+            }
+        }
+
+        return filamentList;
     }
 
     private List<Filament> _getFilamentsByNumberOfSegments(Integer from, Integer to, List<Filament> filamentList, Integer limit, Integer offset, Connection conn) throws DaoException {

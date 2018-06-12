@@ -62,8 +62,6 @@ public class R6ViewController {
 
     private ObservableList<FilamentBean> filamentBeans = FXCollections.observableArrayList();
 
-    private ObservableList<Float> ellipticityValues = FXCollections.observableArrayList();
-
     // pagination
     private Integer limit = 20;
     private Integer offset = 0;
@@ -128,25 +126,24 @@ public class R6ViewController {
             if (ellipticityMax < ellipticityMin)
                 throw new NumberFormatException("Min must be minus than Max");
 
+            try {
+
+                List<FilamentBean> listS = controller.getFilamentsByLuminanceAndEllipticityWithLimit(luminance, ellipticityMin, ellipticityMax, limit, offset);
+                filamentBeans.addAll(listS);
+                filamentBeanTableView.setItems(filamentBeans);
+
+            } catch (DaoException e) {
+
+                ExceptionDialog dialog = new ExceptionDialog(e);
+                dialog.show();
+            }
+
         }catch (NumberFormatException nfe){
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information Dialog");
             alert.setHeaderText("Please insert correct value \n Min value Max value and Luminance > 0");
             alert.showAndWait();
-            return;
-        }
-
-        try {
-
-            List<FilamentBean> listS = controller.getFilamentsByLuminanceAndEllipticityWithLimit(luminance, ellipticityMin, ellipticityMax, limit, offset);
-            filamentBeans.addAll(listS);
-            filamentBeanTableView.setItems(filamentBeans);
-
-        } catch (DaoException e) {
-
-            ExceptionDialog dialog = new ExceptionDialog(e);
-            dialog.show();
         }
     }
 

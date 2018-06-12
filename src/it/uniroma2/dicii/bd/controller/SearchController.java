@@ -150,6 +150,17 @@ public class SearchController {
         return filamentBeans;
     }
 
+    // query per REQ-FN-7
+
+    /**
+     *
+     * @param from
+     * @param to
+     * @param limit
+     * @param offset
+     * @return
+     * @throws DaoException
+     */
     public List<FilamentBean> getFilamentsByNumberOfSegments(Integer from, Integer to, Integer limit, Integer offset) throws DaoException {
 
         FilamentDao dao = DaoFactory.getSingletonInstance().getFilamentDAO();
@@ -173,12 +184,55 @@ public class SearchController {
         return filamentBeans;
     }
 
-    // query per REQ-FN-7
-    //List<Filament> getFilamentsByNumberOfSegments(Integer from, Integer to) throws DaoException
-
     // query per REQ-FN-8 TODO
     // List<Filament> getFilamentInsideSquareRegion(Double side) throws DaoException
     // List<Filament> getFilamentInsideCircleRegion(Double radius) throws DaoException
+
+    public List<FilamentBean> getFilamentInsideRegion(String regionType, GPointBean centerBean, Float sideSize, Integer limit, Integer offset) throws DaoException {
+
+        FilamentDao dao = DaoFactory.getSingletonInstance().getFilamentDAO();
+
+        List<FilamentBean> filamentBeans = new ArrayList<>();
+
+        if (regionType.equals("Square")){
+
+            GPoint gPointCenter = new GPoint(centerBean.getGlongitude(), centerBean.getGlatitude());
+            List<Filament> filamentList = dao.getFilamentInsideSquareRegion(gPointCenter, sideSize, limit, offset);
+
+            for (Filament filament : filamentList){
+
+                FilamentBean filamentBean = new FilamentBean(filament.getIdfil());
+                filamentBean.setName(filament.getName());
+                filamentBean.setTotalFlux(filament.getTotalFlux());
+                filamentBean.setMeanDensity(filament.getMeanDensity());
+                filamentBean.setMeanTemperature(filament.getMeanTemperature());
+                filamentBean.setEllipticity(filament.getEllipticity());
+                filamentBean.setContrast(filament.getContrast());
+
+                filamentBeans.add(filamentBean);
+            }
+
+        }else if (regionType.equals("Circle")){
+
+            GPoint gPointCenter = new GPoint(centerBean.getGlongitude(), centerBean.getGlatitude());
+            List<Filament> filamentList = dao.getFilamentInsideCircleRegion(gPointCenter, sideSize, limit, offset);
+
+            for (Filament filament : filamentList){
+
+                FilamentBean filamentBean = new FilamentBean(filament.getIdfil());
+                filamentBean.setName(filament.getName());
+                filamentBean.setTotalFlux(filament.getTotalFlux());
+                filamentBean.setMeanDensity(filament.getMeanDensity());
+                filamentBean.setMeanTemperature(filament.getMeanTemperature());
+                filamentBean.setEllipticity(filament.getEllipticity());
+                filamentBean.setContrast(filament.getContrast());
+
+                filamentBeans.add(filamentBean);
+            }
+        }
+
+        return filamentBeans;
+    }
 
     // query per REQ-FN-9 TODO
 

@@ -119,20 +119,22 @@ public interface FilamentDao {
      * Get filaments inside square region
      *
      * @param side
+     * @param center
      * @return
      * @throws DaoException
      */
-    List<Filament> getFilamentInsideSquareRegion(Double side) throws DaoException;
+    List<Filament> getFilamentInsideSquareRegion(GPoint center, Float side, Integer limit, Integer offset) throws DaoException;
 
     /**
      *
      * Get filaments inside circle region
      *
      * @param radius
+     * @param center
      * @return
      * @throws DaoException
      */
-    List<Filament> getFilamentInsideCircleRegion(Double radius) throws DaoException;
+    List<Filament> getFilamentInsideCircleRegion(GPoint center, Float radius, Integer limit, Integer offset) throws DaoException;
 
     /**
      *

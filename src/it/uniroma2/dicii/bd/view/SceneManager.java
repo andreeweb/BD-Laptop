@@ -382,6 +382,23 @@ public class SceneManager {
      */
     public void showR8ViewController() {
 
+        try {
+
+            // Load main view
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("R8View.fxml"));
+            BorderPane view = loader.load();
+
+            // Set view into the center of root layout.
+            rootLayout.setCenter(view);
+
+            R8ViewController controller = loader.getController();
+            controller.onCreateView();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     /**

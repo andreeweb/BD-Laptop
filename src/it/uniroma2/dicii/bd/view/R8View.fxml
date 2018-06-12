@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@../resources/stylesheets/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.bd.view.R8ViewController">
+    <top>
+        <VBox prefWidth="100.0" BorderPane.alignment="CENTER">
+            <children>
+                <HBox prefWidth="1200.0">
+                    <children>
+                        <HBox prefWidth="600.0">
+                            <children>
+                                <Button fx:id="backButton" contentDisplay="CENTER" mnemonicParsing="false" styleClass="back-button" text="&lt; Search" />
+                            </children>
+                        </HBox>
+                    </children>
+                </HBox>
+                <Label text="Search for an object inside a region" textFill="#3b0250" BorderPane.alignment="TOP_LEFT">
+                    <BorderPane.margin>
+                        <Insets left="30.0" top="30.0" />
+                    </BorderPane.margin>
+                    <font>
+                        <Font size="35.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets left="30.0" top="10.0" />
+                    </VBox.margin>
+                </Label>
+            </children>
+            <BorderPane.margin>
+                <Insets bottom="5.0" right="10.0" top="5.0" />
+            </BorderPane.margin>
+        </VBox>
+    </top>
+    <center>
+        <VBox BorderPane.alignment="CENTER">
+            <children>
+                <VBox>
+                    <children>
+                        <HBox>
+                            <children>
+                                <VBox>
+                                    <children>
+                                        <Label styleClass="label-big" text="Center" />
+                              <TextField fx:id="longitudeCenterTextField" promptText="Longitude">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </TextField>
+                                        <TextField fx:id="latitudeCenterTextField" promptText="Latitude">
+                                            <VBox.margin>
+                                                <Insets top="5.0" />
+                                            </VBox.margin>
+                                        </TextField>
+                                    </children>
+                                    <HBox.margin>
+                                        <Insets />
+                                    </HBox.margin>
+                                </VBox>
+                                <VBox>
+                                    <children>
+                                        <Label styleClass="label-big" text="Type / Size" />
+                                        <HBox>
+                                            <children>
+                                                <VBox>
+                                                    <children>
+                                                        <Label styleClass="label-sub" text="Type" />
+                                                        <ComboBox fx:id="regionTypeComboBox" prefWidth="200.0">
+                                                            <VBox.margin>
+                                                                <Insets top="10.0" />
+                                                            </VBox.margin>
+                                                        </ComboBox>
+                                                    </children>
+                                                    <HBox.margin>
+                                                        <Insets top="20.0" />
+                                                    </HBox.margin>
+                                                </VBox>
+                                                <VBox>
+                                                    <HBox.margin>
+                                                        <Insets left="20.0" top="20.0" />
+                                                    </HBox.margin>
+                                       <children>
+                                          <Label styleClass="label-sub" text="Size" />
+                                          <TextField fx:id="sizeTextField" promptText="Radius / Size">
+                                             <VBox.margin>
+                                                <Insets top="10.0" />
+                                             </VBox.margin>
+                                          </TextField>
+                                       </children>
+                                                </VBox>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                                </VBox>
+                                <Button fx:id="searchButton" mnemonicParsing="false" text="Search">
+                                    <HBox.margin>
+                                        <Insets left="40.0" top="73.0" />
+                                    </HBox.margin>
+                                </Button>
+                            </children>
+                            <VBox.margin>
+                                <Insets bottom="10.0" />
+                            </VBox.margin>
+                        </HBox>
+                    </children>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                    <VBox.margin>
+                        <Insets left="30.0" top="20.0" />
+                    </VBox.margin>
+                </VBox>
+                <TableView fx:id="filamentBeanTableView" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="idColumn" prefWidth="75.0" text="ID" />
+                        <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Name" />
+                        <TableColumn fx:id="fluxColumn" prefWidth="75.0" text="Total Flux" />
+                        <TableColumn fx:id="densityColumn" prefWidth="75.0" text="Mean Density" />
+                        <TableColumn fx:id="temperatureColumn" prefWidth="75.0" text="Mean Temperature" />
+                        <TableColumn fx:id="ellipticityColumn" prefWidth="75.0" text="Ellipticity" />
+                        <TableColumn fx:id="contrastColumn" prefWidth="75.0" text="Contrast" />
+                    </columns>
+                </TableView>
+                <ToolBar prefHeight="40.0" prefWidth="200.0">
+                    <items>
+                        <Button fx:id="prevPageButton" mnemonicParsing="false" text="Prev" />
+                        <Button fx:id="nextPageButton" mnemonicParsing="false" text="Next" />
+                    </items>
+                </ToolBar>
+            </children></VBox>
+    </center>
+</BorderPane>

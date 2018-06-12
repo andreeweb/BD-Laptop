@@ -1,9 +1,11 @@
 package it.uniroma2.dicii.bd.view;
 
 import it.uniroma2.dicii.bd.bean.FilamentBean;
+import it.uniroma2.dicii.bd.bean.GPointBean;
 import it.uniroma2.dicii.bd.controller.SearchController;
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.exception.ExceptionDialog;
+import it.uniroma2.dicii.bd.model.GPoint;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,19 +15,25 @@ import javafx.scene.control.*;
 
 import java.util.List;
 
-public class R7ViewController {
+public class R8ViewController {
 
     @FXML
-    private Button backButton;
+    private TextField latitudeCenterTextField;
 
     @FXML
-    private TextField minNumberText;
+    private TextField longitudeCenterTextField;
 
     @FXML
-    private TextField maxNumberText;
+    private ComboBox<String> regionTypeComboBox;
+
+    @FXML
+    private TextField sizeTextField;
 
     @FXML
     private Button searchButton;
+
+    @FXML
+    private Button backButton;
 
     @FXML
     private Button nextPageButton;
@@ -75,6 +83,16 @@ public class R7ViewController {
         prevPageButton.setOnAction(this::prevButtonAction);
         nextPageButton.setOnAction(this::nextButtonAction);
 
+        ObservableList<String> options =
+                FXCollections.observableArrayList(
+                        "Select region type",
+                        "Square",
+                        "Circle"
+                );
+
+        regionTypeComboBox.setValue("Select region type");
+        regionTypeComboBox.setItems(options);
+
         idColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdfil().toString()));
         nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         fluxColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotalFlux().toString()));
@@ -96,24 +114,26 @@ public class R7ViewController {
 
         SearchController controller = new SearchController();
 
-        Integer minNumberSegment;
-        Integer maxNumberSegment;
+        Float sideSize;
+        Double centerLatitude;
+        Double centerLongitude;
+        String regionType;
 
         try {
 
-            minNumberSegment = Integer.valueOf(minNumberText.getText());
+            centerLatitude = Double.valueOf(latitudeCenterTextField.getText());
+            centerLongitude = Double.valueOf(longitudeCenterTextField.getText());
+            sideSize = Float.valueOf(sizeTextField.getText());
+            regionType = regionTypeComboBox.getSelectionModel().getSelectedItem();
 
-            if (minNumberSegment <= 2)
-                throw new NumberFormatException("Insert number > 2");
+            GPointBean gPointBean = new GPointBean(centerLongitude, centerLatitude);
 
-            maxNumberSegment = Integer.valueOf(maxNumberText.getText());
-
-            if (maxNumberSegment < minNumberSegment)
-                throw new NumberFormatException("Min must be minus than Max");
+            if (regionType.equals("Select region type"))
+                throw new Exception("Please select region type.");
 
             try {
 
-                List<FilamentBean> listS = controller.getFilamentsByNumberOfSegments(minNumberSegment, maxNumberSegment, limit, offset);
+                List<FilamentBean> listS = controller.getFilamentInsideRegion(regionType, gPointBean, sideSize, limit, offset);
                 filamentBeans.addAll(listS);
                 filamentBeanTableView.setItems(filamentBeans);
 
@@ -127,7 +147,14 @@ public class R7ViewController {
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information Dialog");
-            alert.setHeaderText("Please insert correct value \n Min value Max value with Min > 2");
+            alert.setHeaderText("Please insert correct value.");
+            alert.showAndWait();
+
+        }catch (Exception ex){
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText(ex.getMessage());
             alert.showAndWait();
 
         }
@@ -158,6 +185,7 @@ public class R7ViewController {
 
         this.searchButton.fire();
     }
+
 
     /**
      * Back button action
