@@ -7,6 +7,7 @@ import it.uniroma2.dicii.bd.model.GPoint;
 import java.sql.Connection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public interface FilamentDao {
 
@@ -143,4 +144,13 @@ public interface FilamentDao {
      * @throws DaoException
      */
     List<GPoint> getFilamentBoundary(Filament filament) throws DaoException;
+
+    /**
+     *
+     * @param filamentID
+     * @return
+     * @throws DaoException
+     */
+    Map<String, Float> countStarsInsideFilamentByID(Integer filamentID) throws DaoException;
+
 }

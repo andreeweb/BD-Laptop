@@ -10,6 +10,7 @@ import it.uniroma2.dicii.bd.model.GPoint;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SearchController {
 
@@ -184,10 +185,18 @@ public class SearchController {
         return filamentBeans;
     }
 
-    // query per REQ-FN-8 TODO
-    // List<Filament> getFilamentInsideSquareRegion(Double side) throws DaoException
-    // List<Filament> getFilamentInsideCircleRegion(Double radius) throws DaoException
+    // query per REQ-FN-8
 
+    /**
+     *
+     * @param regionType
+     * @param centerBean
+     * @param sideSize
+     * @param limit
+     * @param offset
+     * @return
+     * @throws DaoException
+     */
     public List<FilamentBean> getFilamentInsideRegion(String regionType, GPointBean centerBean, Float sideSize, Integer limit, Integer offset) throws DaoException {
 
         FilamentDao dao = DaoFactory.getSingletonInstance().getFilamentDAO();
@@ -234,7 +243,15 @@ public class SearchController {
         return filamentBeans;
     }
 
-    // query per REQ-FN-9 TODO
+    // query per REQ-FN-9
+
+    public Map<String, Float> getStarsInsideFilamentByID(Integer filamentID) throws DaoException {
+
+        FilamentDao dao = DaoFactory.getSingletonInstance().getFilamentDAO();
+
+        return dao.countStarsInsideFilamentByID(filamentID);
+
+    }
 
     // query per REQ-FN-10 TODO
 

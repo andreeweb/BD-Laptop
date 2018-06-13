@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@../resources/stylesheets/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.bd.view.R9ViewController">
+    <top>
+        <VBox prefWidth="100.0" BorderPane.alignment="CENTER">
+            <children>
+                <HBox prefWidth="1200.0">
+                    <children>
+                        <HBox prefWidth="600.0">
+                            <children>
+                                <Button fx:id="backButton" contentDisplay="CENTER" mnemonicParsing="false" styleClass="back-button" text="&lt; Search" />
+                            </children>
+                        </HBox>
+                    </children>
+                </HBox>
+                <Label text="Search Filament" textFill="#3b0250" BorderPane.alignment="TOP_LEFT">
+                    <BorderPane.margin>
+                        <Insets left="30.0" top="30.0" />
+                    </BorderPane.margin>
+                    <font>
+                        <Font size="35.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets left="30.0" top="10.0" />
+                    </VBox.margin>
+                </Label>
+            </children>
+            <BorderPane.margin>
+                <Insets bottom="5.0" right="10.0" top="5.0" />
+            </BorderPane.margin>
+        </VBox>
+    </top>
+    <center>
+        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <children>
+                <HBox>
+                    <children>
+                        <Button fx:id="searchButton" mnemonicParsing="false" text="Search">
+                            <HBox.margin>
+                                <Insets left="30.0" top="10.0" />
+                            </HBox.margin>
+                        </Button>
+                        <TextField fx:id="searchTextField" promptText="ID" HBox.hgrow="ALWAYS">
+                            <HBox.margin>
+                                <Insets left="10.0" right="30.0" top="10.0" />
+                            </HBox.margin>
+                        </TextField>
+                    </children>
+                </HBox>
+                <VBox>
+                    <children>
+                        <Label text="Results:" textFill="#3b0250">
+                            <font>
+                                <Font name="System Italic" size="24.0" />
+                            </font>
+                        </Label>
+                        <HBox>
+                            <children>
+                                <Label styleClass="label-big" text="Stars:" />
+                                <Label fx:id="numberOfStarLabel" styleClass="label-big" text="****">
+                                    <HBox.margin>
+                                        <Insets bottom="5.0" left="5.0" />
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                            <VBox.margin>
+                                <Insets top="40.0" />
+                            </VBox.margin>
+                        </HBox>
+                        <HBox>
+                            <children>
+                                <Label styleClass="label-big" text="Unbound:">
+                                    <HBox.margin>
+                                        <Insets />
+                                    </HBox.margin>
+                                </Label>
+                                <Label fx:id="unbounStarLabel" styleClass="label-big" text="****">
+                                    <HBox.margin>
+                                        <Insets left="5.0" />
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                            <VBox.margin>
+                                <Insets top="10.0" />
+                            </VBox.margin>
+                        </HBox>
+                  <HBox>
+                     <children>
+                        <Label styleClass="label-big" text="Prestellar:" />
+                        <Label fx:id="prestellarStarLabel" styleClass="label-big" text="****">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="13.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label styleClass="label-big" text="Protostellar:" />
+                        <Label fx:id="protostellarStarLabel" styleClass="label-big" text="****">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                    </children>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                    <VBox.margin>
+                        <Insets left="30.0" top="50.0" />
+                    </VBox.margin>
+                </VBox>
+            </children></VBox>
+    </center>
+</BorderPane>
