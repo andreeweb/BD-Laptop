@@ -21,7 +21,7 @@
                         </HBox>
                     </children>
                 </HBox>
-                <Label text="Search Filament" textFill="#3b0250" BorderPane.alignment="TOP_LEFT">
+                <Label text="Search star inside filament" textFill="#3b0250" BorderPane.alignment="TOP_LEFT">
                     <BorderPane.margin>
                         <Insets left="30.0" top="30.0" />
                     </BorderPane.margin>
