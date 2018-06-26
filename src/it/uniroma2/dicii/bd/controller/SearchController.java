@@ -4,7 +4,9 @@ import it.uniroma2.dicii.bd.bean.FilamentBean;
 import it.uniroma2.dicii.bd.bean.GPointBean;
 import it.uniroma2.dicii.bd.dao.DaoFactory;
 import it.uniroma2.dicii.bd.exception.DaoException;
+import it.uniroma2.dicii.bd.interfaces.BranchDao;
 import it.uniroma2.dicii.bd.interfaces.FilamentDao;
+import it.uniroma2.dicii.bd.model.Branch;
 import it.uniroma2.dicii.bd.model.Filament;
 import it.uniroma2.dicii.bd.model.GPoint;
 
@@ -245,6 +247,12 @@ public class SearchController {
 
     // query per REQ-FN-9
 
+    /**
+     *
+     * @param filamentID
+     * @return
+     * @throws DaoException
+     */
     public Map<String, Float> getStarsInsideFilamentByID(Integer filamentID) throws DaoException {
 
         FilamentDao dao = DaoFactory.getSingletonInstance().getFilamentDAO();
@@ -256,9 +264,62 @@ public class SearchController {
     // query per REQ-FN-10 TODO
 
     // query per REQ-FN-11
-    // GPoint getBranchMaxVertex(Branch branch) throws DaoException;
-    // GPoint getBranchMinVertex(Branch branch) throws DaoException;
-    // List<GPoint> getFilamentBoundary(Filament filament) throws DaoException
+
+    /**
+     *
+     * 0 max vertex, 1 min vertex
+     *
+     * @param branchID
+     * @param filamentID
+     * @return
+     * @throws DaoException
+     */
+    public List<GPointBean> getBranchVertex(Integer branchID, Integer filamentID) throws DaoException {
+
+        List<GPointBean> vertex = new ArrayList<>();
+        BranchDao branchDao = DaoFactory.getSingletonInstance().getBranchDAO();
+
+        Branch branch = new Branch(branchID, new Filament(filamentID));
+
+        GPoint maxVertex = branchDao.getBranchMaxVertex(branch);
+        GPoint minVertex = branchDao.getBranchMinVertex(branch);
+
+        GPointBean maxBeanVertex = new GPointBean(maxVertex.getGlongitude(), maxVertex.getGlatitude());
+        GPointBean minBeanVertex = new GPointBean(minVertex.getGlongitude(), minVertex.getGlatitude());
+
+        vertex.add(maxBeanVertex);
+        vertex.add(minBeanVertex);
+
+        return vertex;
+    }
+
+    /**
+     *
+     * @param vertex
+     * @param filamentID
+     * @return
+     * @throws DaoException
+     */
+    public Double getVertexDistanceFromBoundary(GPointBean vertex, Integer filamentID) throws DaoException {
+
+        FilamentDao filamentDao = DaoFactory.getSingletonInstance().getFilamentDAO();
+
+        List<GPoint> boundary = filamentDao.getFilamentBoundary(new Filament(filamentID));
+
+        Double minDistance = Double.MAX_VALUE;
+
+        for (GPoint p : boundary){
+
+            Double distance = Math.sqrt(
+                                Math.pow((vertex.getGlongitude()-p.getGlongitude()),2) +
+                                Math.pow((vertex.getGlatitude()-p.getGlatitude()),2));
+
+            if (distance < minDistance)
+                minDistance = distance;
+        }
+
+        return minDistance;
+    }
 
     // query per REQ-FN-12 TODO
 }

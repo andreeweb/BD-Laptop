@@ -112,7 +112,7 @@ public class PGBranchDao implements BranchDao{
         return maxVertex;
     }
 
-    private GPoint _getBranchVertex(Branch branch, Integer value,Connection conn) throws DaoException {
+    private GPoint _getBranchVertex(Branch branch, Integer value, Connection conn) throws DaoException {
 
         Statement stmt = null;
         GPoint vertex = null;
@@ -128,7 +128,7 @@ public class PGBranchDao implements BranchDao{
                         "FROM filament " +
                         "JOIN filament_branch ON filament_branch.filament=filament.idfil " +
                         "JOIN branch ON filament_branch.branch = branch.idbranch " +
-                        "WHERE idbranch='31' AND sequence IN " +
+                        "WHERE idbranch=" + branch.getIdBranch() + " AND sequence IN " +
                         "(  SELECT MAX(sequence) " +
                         "   FROM filament " +
                         "   JOIN filament_branch ON filament_branch.filament=filament.idfil " +
@@ -140,7 +140,7 @@ public class PGBranchDao implements BranchDao{
                         "FROM filament " +
                         "JOIN filament_branch ON filament_branch.filament=filament.idfil " +
                         "JOIN branch ON filament_branch.branch = branch.idbranch " +
-                        "WHERE idbranch='31' AND sequence IN " +
+                        "WHERE idbranch=" + branch.getIdBranch() + " AND sequence IN " +
                         "(  SELECT MIN(sequence) " +
                         "   FROM filament " +
                         "   JOIN filament_branch ON filament_branch.filament=filament.idfil " +
