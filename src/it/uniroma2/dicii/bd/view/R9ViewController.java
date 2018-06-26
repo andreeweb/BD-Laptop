@@ -58,7 +58,7 @@ public class R9ViewController {
 
             Integer filamentID = Integer.parseInt(searchTextField.getText());
 
-            Map<String, Float> map = controller.getStarsInsideFilamentByID(filamentID);
+            Map<String, Float> map = controller.countStarsInsideFilamentByID(filamentID);
 
             numberOfStarLabel.setText(String.format("%.0f", map.get("totalStar")));
             unbounStarLabel.setText(String.format("%.2f", map.get("percentageOfUnbound"))+"%");

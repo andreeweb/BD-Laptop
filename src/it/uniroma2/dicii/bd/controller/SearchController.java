@@ -3,14 +3,17 @@ package it.uniroma2.dicii.bd.controller;
 import it.uniroma2.dicii.bd.bean.FilamentBean;
 import it.uniroma2.dicii.bd.bean.GPointBean;
 import it.uniroma2.dicii.bd.dao.DaoFactory;
+import it.uniroma2.dicii.bd.enumeration.StarType;
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.BranchDao;
 import it.uniroma2.dicii.bd.interfaces.FilamentDao;
 import it.uniroma2.dicii.bd.model.Branch;
 import it.uniroma2.dicii.bd.model.Filament;
 import it.uniroma2.dicii.bd.model.GPoint;
+import it.uniroma2.dicii.bd.model.Star;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -253,12 +256,48 @@ public class SearchController {
      * @return
      * @throws DaoException
      */
-    public Map<String, Float> getStarsInsideFilamentByID(Integer filamentID) throws DaoException {
+    public Map<String, Float> countStarsInsideFilamentByID(Integer filamentID) throws DaoException {
 
         FilamentDao dao = DaoFactory.getSingletonInstance().getFilamentDAO();
+        List<Star> starList = dao.getStarsInsideFilamentByID(filamentID);
 
-        return dao.countStarsInsideFilamentByID(filamentID);
+        // for calculating
+        Float numberOfProtostellar = 0.0f;
+        Float numberOfPrestellar = 0.0f;
+        Float numberOfUnbound = 0.0f;
+        Float totalStar = 0.0f;
 
+        for (Star star : starList) {
+
+            switch (star.getType()) {
+
+                case PROTOSTELLAR: {
+                    numberOfProtostellar++;
+                    totalStar++;
+                    break;
+                }
+
+                case PRESTELLAR: {
+                    numberOfPrestellar++;
+                    totalStar++;
+                    break;
+                }
+
+                case UNBOUND: {
+                    numberOfUnbound++;
+                    totalStar++;
+                    break;
+                }
+            }
+        }
+
+        Map<String, Float> map = new HashMap<>();
+        map.put("totalStar", totalStar);
+        map.put("percentageOfProtostellar", (numberOfProtostellar / totalStar) * 100);
+        map.put("percentageOfPrestellar", (numberOfPrestellar / totalStar) * 100);
+        map.put("percentageOfUnbound", (numberOfUnbound / totalStar) * 100);
+
+        return map;
     }
 
     // query per REQ-FN-10 TODO

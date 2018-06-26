@@ -148,7 +148,7 @@ public class PGBranchDao implements BranchDao{
 
                 throw new DaoException("Wrong constant");
             }
-            
+
             // execute
             ResultSet rs = stmt.executeQuery(sql);
 

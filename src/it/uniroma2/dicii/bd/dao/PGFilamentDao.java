@@ -6,6 +6,8 @@ import it.uniroma2.dicii.bd.interfaces.FilamentDao;
 import it.uniroma2.dicii.bd.interfaces.GPointDao;
 import it.uniroma2.dicii.bd.model.Filament;
 import it.uniroma2.dicii.bd.model.GPoint;
+import it.uniroma2.dicii.bd.model.Star;
+import it.uniroma2.dicii.bd.model.Tool;
 
 import java.sql.*;
 import java.util.*;
@@ -470,12 +472,12 @@ public class PGFilamentDao implements FilamentDao{
     }
 
     @Override
-    public Map<String, Float> countStarsInsideFilamentByID(Integer filamentID) throws DaoException {
+    public List<Star> getStarsInsideFilamentByID(Integer filamentID) throws DaoException {
 
         ConnectionManager manager = ConnectionManager.getSingletonInstance();
         Connection conn = null;
 
-        Map<String, Float> map = new HashMap<>();
+        List<Star> starList = new ArrayList<>();
 
         try {
 
@@ -483,7 +485,7 @@ public class PGFilamentDao implements FilamentDao{
 
             Filament filament = new Filament(filamentID);
 
-            map = this._countStarsInsideFilament(filament, map, conn);
+            starList = this._getStarsInsideFilament(filament, starList, conn);
 
             conn.close();
 
@@ -503,12 +505,12 @@ public class PGFilamentDao implements FilamentDao{
             }
         }
 
-        return map;
+        return starList;
     }
 
     // PRIVATE
 
-    private Map<String, Float> _countStarsInsideFilament(Filament filament, Map<String, Float> map, Connection conn) throws DaoException {
+    private List<Star> _getStarsInsideFilament(Filament filament, List<Star> starList, Connection conn) throws DaoException {
 
         Statement stmt = null;
 
@@ -516,12 +518,6 @@ public class PGFilamentDao implements FilamentDao{
 
             // get all boundary point per filament
             List<GPoint> filamentBoundary = this.getFilamentBoundary(filament);
-
-            // for calculating
-            Float numberOfProtostellar = 0.0f;
-            Float numberOfPrestellar = 0.0f;
-            Float numberOfUnbound = 0.0f;
-            Float totalStar = 0.0f;
 
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -532,64 +528,33 @@ public class PGFilamentDao implements FilamentDao{
 
             while (rs.next()){
 
-                Double star_longitude = rs.getDouble("galactic_longitude");
-                Double star_latitude = rs.getDouble("galactic_latitude");
+                Star star = new Star(rs.getInt("idstar"));
+                star.setName(rs.getString("name_star"));
+                star.setFlux(rs.getBigDecimal("flux"));
+                star.setType(StarType.valueOf(rs.getString("type")));
+                star.setPosition(new GPoint(rs.getDouble("galactic_longitude"), rs.getDouble("galactic_latitude")));
+                star.setTool(new Tool(rs.getString("nametool")));
 
-                Double result = 0.0;
+                Double atanResult = 0.0;
 
                 for(int i=0; i < filamentBoundary.size()-1; i++) {
 
                     GPoint actualBoundaryPoint = filamentBoundary.get(i);
                     GPoint nextBoundaryPoint = filamentBoundary.get(i+1);
 
-                    Double numerator = ((actualBoundaryPoint.getGlongitude() - star_longitude)*(nextBoundaryPoint.getGlatitude() - star_latitude)) -
-                                        ((actualBoundaryPoint.getGlatitude()-star_latitude)*(nextBoundaryPoint.getGlongitude()-star_longitude));
+                    Double num = ((actualBoundaryPoint.getGlongitude() - star.getPosition().getGlongitude())*(nextBoundaryPoint.getGlatitude() - star.getPosition().getGlatitude())) -
+                            ((actualBoundaryPoint.getGlatitude()-star.getPosition().getGlatitude())*(nextBoundaryPoint.getGlongitude()-star.getPosition().getGlongitude()));
 
-                    Double denominator = ((actualBoundaryPoint.getGlongitude() - star_longitude)*(nextBoundaryPoint.getGlongitude() - star_longitude)) +
-                                        ((actualBoundaryPoint.getGlatitude()-star_latitude)*(nextBoundaryPoint.getGlatitude()-star_latitude));
+                    Double den = ((actualBoundaryPoint.getGlongitude() - star.getPosition().getGlongitude())*(nextBoundaryPoint.getGlongitude() - star.getPosition().getGlongitude())) +
+                            ((actualBoundaryPoint.getGlatitude()-star.getPosition().getGlatitude())*(nextBoundaryPoint.getGlatitude()-star.getPosition().getGlatitude()));
 
-                    result += Math.atan(numerator/denominator);
+                    atanResult += Math.atan(num/den);
 
                 }
 
-                switch (StarType.valueOf(rs.getString("type"))){
-
-                    case PROTOSTELLAR:{
-
-                        if (Math.abs(result) >= 0.01){
-                            numberOfProtostellar++;
-                            totalStar++;
-                        }
-
-                        break;
-                    }
-
-                    case PRESTELLAR:{
-
-                        if (Math.abs(result) >= 0.01){
-                            numberOfPrestellar++;
-                            totalStar++;
-                        }
-
-                        break;
-                    }
-
-                    case UNBOUND:{
-
-                        if (Math.abs(result) >= 0.01){
-                            numberOfUnbound++;
-                            totalStar++;
-                        }
-
-                        break;
-                    }
-                }
+                if (Math.abs(atanResult) >= 0.01)
+                    starList.add(star);
             }
-
-            map.put("totalStar", totalStar);
-            map.put("percentageOfProtostellar", (numberOfProtostellar / totalStar) * 100);
-            map.put("percentageOfPrestellar", (numberOfPrestellar / totalStar) * 100);
-            map.put("percentageOfUnbound", (numberOfUnbound / totalStar) * 100);
 
             // Clean-up
             rs.close();
@@ -613,7 +578,7 @@ public class PGFilamentDao implements FilamentDao{
             }
         }
 
-        return map;
+        return starList;
 
     }
 

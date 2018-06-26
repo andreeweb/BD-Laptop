@@ -3,6 +3,7 @@ package it.uniroma2.dicii.bd.interfaces;
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.model.Filament;
 import it.uniroma2.dicii.bd.model.GPoint;
+import it.uniroma2.dicii.bd.model.Star;
 
 import java.sql.Connection;
 import java.util.LinkedList;
@@ -151,6 +152,6 @@ public interface FilamentDao {
      * @return
      * @throws DaoException
      */
-    Map<String, Float> countStarsInsideFilamentByID(Integer filamentID) throws DaoException;
+    List<Star> getStarsInsideFilamentByID(Integer filamentID) throws DaoException;
 
 }
