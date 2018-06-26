@@ -465,6 +465,23 @@ public class SceneManager {
      */
     public void showR12ViewController() {
 
+        try {
+
+            // Load main view
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("R12View.fxml"));
+            BorderPane view = loader.load();
+
+            // Set view into the center of root layout.
+            rootLayout.setCenter(view);
+
+            R12ViewController controller = loader.getController();
+            controller.onCreateView();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     /**

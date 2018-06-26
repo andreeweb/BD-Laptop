@@ -2,15 +2,13 @@ package it.uniroma2.dicii.bd.controller;
 
 import it.uniroma2.dicii.bd.bean.FilamentBean;
 import it.uniroma2.dicii.bd.bean.GPointBean;
+import it.uniroma2.dicii.bd.bean.StarBean;
 import it.uniroma2.dicii.bd.dao.DaoFactory;
 import it.uniroma2.dicii.bd.enumeration.StarType;
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.BranchDao;
 import it.uniroma2.dicii.bd.interfaces.FilamentDao;
-import it.uniroma2.dicii.bd.model.Branch;
-import it.uniroma2.dicii.bd.model.Filament;
-import it.uniroma2.dicii.bd.model.GPoint;
-import it.uniroma2.dicii.bd.model.Star;
+import it.uniroma2.dicii.bd.model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -360,5 +358,43 @@ public class SearchController {
         return minDistance;
     }
 
-    // query per REQ-FN-12 TODO
+    // query per REQ-FN-12
+
+    /**
+     *
+     * @param filamentID
+     * @return
+     * @throws DaoException
+     */
+    public List<StarBean> getStarsInsideFilament(Integer filamentID) throws DaoException {
+
+        FilamentDao dao = DaoFactory.getSingletonInstance().getFilamentDAO();
+        List<Star> starList = dao.getStarsInsideFilamentByID(filamentID);
+
+        Branch spine = dao.getFilamentSpine(new Filament(filamentID));
+
+        List<StarBean> starBeansList = new ArrayList<>();
+
+        for (Star star : starList) {
+
+            StarBean starBean = new StarBean(star.getIdStar());
+            starBean.setName(star.getName());
+            starBean.setFlux(star.getFlux());
+            starBean.setDistanceFromFilamentSpine(Double.MAX_VALUE);
+
+            for (GPointBranch gPointBranch : spine.getgPointBranch()) {
+
+                Double distance = Math.sqrt(
+                        Math.pow((star.getPosition().getGlongitude() - gPointBranch.getGlongitude()), 2) +
+                                Math.pow((star.getPosition().getGlatitude() - gPointBranch.getGlatitude()), 2));
+
+                if (distance < starBean.getDistanceFromFilamentSpine())
+                    starBean.setDistanceFromFilamentSpine(distance);
+            }
+
+            starBeansList.add(starBean);
+        }
+
+        return starBeansList;
+    }
 }

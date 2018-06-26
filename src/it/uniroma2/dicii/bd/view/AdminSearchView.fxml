@@ -76,7 +76,7 @@
                   <Insets left="30.0" top="10.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="reqFN12" mnemonicParsing="false" styleClass="label-button-menu-list" text="- REQ-FN-12 Star position">
+            <Button fx:id="reqFN12" mnemonicParsing="false" styleClass="label-button-menu-list" text="- REQ-FN-12 Star position respect spine">
                <VBox.margin>
                   <Insets left="30.0" top="10.0" />
                </VBox.margin>

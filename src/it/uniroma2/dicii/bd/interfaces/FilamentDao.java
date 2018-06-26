@@ -1,6 +1,7 @@
 package it.uniroma2.dicii.bd.interfaces;
 
 import it.uniroma2.dicii.bd.exception.DaoException;
+import it.uniroma2.dicii.bd.model.Branch;
 import it.uniroma2.dicii.bd.model.Filament;
 import it.uniroma2.dicii.bd.model.GPoint;
 import it.uniroma2.dicii.bd.model.Star;
@@ -154,4 +155,12 @@ public interface FilamentDao {
      */
     List<Star> getStarsInsideFilamentByID(Integer filamentID) throws DaoException;
 
+
+    /**
+     *
+     * @param filament
+     * @return
+     * @throws DaoException
+     */
+    Branch getFilamentSpine(Filament filament) throws DaoException;
 }

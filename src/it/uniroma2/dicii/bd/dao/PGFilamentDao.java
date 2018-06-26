@@ -4,10 +4,7 @@ import it.uniroma2.dicii.bd.enumeration.StarType;
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.FilamentDao;
 import it.uniroma2.dicii.bd.interfaces.GPointDao;
-import it.uniroma2.dicii.bd.model.Filament;
-import it.uniroma2.dicii.bd.model.GPoint;
-import it.uniroma2.dicii.bd.model.Star;
-import it.uniroma2.dicii.bd.model.Tool;
+import it.uniroma2.dicii.bd.model.*;
 
 import java.sql.*;
 import java.util.*;
@@ -508,7 +505,101 @@ public class PGFilamentDao implements FilamentDao{
         return starList;
     }
 
+    @Override
+    public Branch getFilamentSpine(Filament filament) throws DaoException {
+
+        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        Connection conn = null;
+        Branch spine;
+
+        try {
+
+            conn = manager.getConnectionFromConnectionPool();
+
+            spine = this._getFilamentSpine(filament, conn);
+
+            conn.close();
+
+        } catch (SQLException e) {
+
+            throw new DaoException(e.getMessage(), e.getCause());
+
+        } finally {
+
+            try {
+                if (conn != null)
+                    conn.close();
+
+            } catch (SQLException e) {
+
+                throw new DaoException(e.getMessage(), e.getCause());
+            }
+        }
+
+        if (spine == null)
+            throw new DaoException("Spine not found");
+
+        return spine;
+    }
+
     // PRIVATE
+
+    private Branch _getFilamentSpine(Filament filament, Connection conn) throws DaoException {
+
+        Statement stmt = null;
+        Branch spine;
+
+        try {
+
+            ConnectionManager manager = ConnectionManager.getSingletonInstance();
+            conn = manager.getConnectionFromConnectionPool();
+
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            String sql = "SELECT branch, filament_branch.filament, galactic_longitude, galactic_latitude, sequence " +
+                    "FROM filament_branch " +
+                    "JOIN branch ON filament_branch.filament=branch.filament " +
+                    "WHERE filament_branch.filament='" + filament.getIdfil() +"' AND type='S'";
+
+            // execute
+            ResultSet rs = stmt.executeQuery(sql);
+
+            if (!rs.first())
+                throw new DaoException("No branch found");
+
+            rs.first();
+            spine = new Branch(rs.getInt("branch"), new Filament(rs.getInt("filament")));
+
+            while (rs.next()){
+
+                GPointBranch point = new GPointBranch(rs.getDouble("galactic_longitude"), rs.getDouble("galactic_latitude"), rs.getInt("sequence"));
+                spine.addPoint(point);
+            }
+
+            // Clean-up
+            rs.close();
+            stmt.close();
+
+        } catch (SQLException e) {
+            throw new DaoException(e.getMessage());
+
+        } finally {
+
+            try {
+
+                if (stmt != null)
+                    stmt.close();
+
+                if (conn != null)
+                    conn.close();
+
+            } catch (SQLException e) {
+                throw new DaoException(e.getMessage());
+            }
+        }
+
+        return spine;
+    }
 
     private List<Star> _getStarsInsideFilament(Filament filament, List<Star> starList, Connection conn) throws DaoException {
 
@@ -1151,4 +1242,5 @@ public class PGFilamentDao implements FilamentDao{
 
         return boundary;
     }
+
 }
