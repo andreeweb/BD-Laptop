@@ -124,33 +124,31 @@ public class PGBranchDao implements BranchDao{
 
             if (value == Integer.MAX_VALUE){
 
-                sql = "SELECT sequence, idbranch, galactic_longitude, galactic_latitude " +
+                sql = "SELECT sequence, branch, galactic_longitude, galactic_latitude " +
                         "FROM filament " +
                         "JOIN filament_branch ON filament_branch.filament=filament.idfil " +
-                        "JOIN branch ON filament_branch.branch = branch.idbranch " +
-                        "WHERE idbranch=" + branch.getIdBranch() + " AND sequence IN " +
+                        "WHERE branch=" + branch.getIdBranch() + " AND idfil=" + branch.getFilament().getIdfil() + " AND sequence IN " +
                         "(  SELECT MAX(sequence) " +
                         "   FROM filament " +
                         "   JOIN filament_branch ON filament_branch.filament=filament.idfil " +
-                        "   WHERE filament_branch.branch='" + branch.getIdBranch() + "');";
+                        "   WHERE filament_branch.branch=" + branch.getIdBranch() + " AND idfil=" + branch.getFilament().getIdfil() + ");";
 
             }else if(value == Integer.MIN_VALUE){
 
-                sql = "SELECT sequence, idbranch, galactic_longitude, galactic_latitude " +
+                sql = "SELECT sequence, branch, galactic_longitude, galactic_latitude " +
                         "FROM filament " +
                         "JOIN filament_branch ON filament_branch.filament=filament.idfil " +
-                        "JOIN branch ON filament_branch.branch = branch.idbranch " +
-                        "WHERE idbranch=" + branch.getIdBranch() + " AND sequence IN " +
+                        "WHERE branch=" + branch.getIdBranch() + " AND idfil=" + branch.getFilament().getIdfil() + " AND sequence IN " +
                         "(  SELECT MIN(sequence) " +
                         "   FROM filament " +
                         "   JOIN filament_branch ON filament_branch.filament=filament.idfil " +
-                        "   WHERE filament_branch.branch='" + branch.getIdBranch() + "');";
+                        "   WHERE filament_branch.branch=" + branch.getIdBranch() + " AND idfil=" + branch.getFilament().getIdfil() + ");";
 
             }else{
 
                 throw new DaoException("Wrong constant");
             }
-
+            
             // execute
             ResultSet rs = stmt.executeQuery(sql);
 

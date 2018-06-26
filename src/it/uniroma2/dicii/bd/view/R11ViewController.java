@@ -97,7 +97,7 @@ public class R11ViewController {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Dialog");
-            alert.setHeaderText("Filament not found!");
+            alert.setHeaderText("Branch not found!");
             alert.showAndWait();
         }
     }
