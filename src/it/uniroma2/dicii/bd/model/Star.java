@@ -13,6 +13,8 @@ public class Star {
     private GPoint position;
     private Tool tool;
 
+    private Filament filament;
+
     public Star(Integer idStar) {
         this.idStar = idStar;
     }
@@ -111,6 +113,22 @@ public class Star {
      */
     public void setTool(Tool tool) {
         this.tool = tool;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Filament getFilament() {
+        return filament;
+    }
+
+    /**
+     *
+     * @param filament
+     */
+    public void setFilament(Filament filament) {
+        this.filament = filament;
     }
 
     @Override

@@ -469,43 +469,6 @@ public class PGFilamentDao implements FilamentDao{
     }
 
     @Override
-    public List<Star> getStarsInsideFilamentByID(Integer filamentID) throws DaoException {
-
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
-        Connection conn = null;
-
-        List<Star> starList = new ArrayList<>();
-
-        try {
-
-            conn = manager.getConnectionFromConnectionPool();
-
-            Filament filament = new Filament(filamentID);
-
-            starList = this._getStarsInsideFilament(filament, starList, conn);
-
-            conn.close();
-
-        } catch (SQLException e) {
-
-            throw new DaoException(e.getMessage(), e.getCause());
-
-        } finally {
-
-            try {
-                if (conn != null)
-                    conn.close();
-
-            } catch (SQLException e) {
-
-                throw new DaoException(e.getMessage(), e.getCause());
-            }
-        }
-
-        return starList;
-    }
-
-    @Override
     public Branch getFilamentSpine(Filament filament) throws DaoException {
 
         ConnectionManager manager = ConnectionManager.getSingletonInstance();
@@ -599,78 +562,6 @@ public class PGFilamentDao implements FilamentDao{
         }
 
         return spine;
-    }
-
-    private List<Star> _getStarsInsideFilament(Filament filament, List<Star> starList, Connection conn) throws DaoException {
-
-        Statement stmt = null;
-
-        try {
-
-            // get all boundary point per filament
-            List<GPoint> filamentBoundary = this.getFilamentBoundary(filament);
-
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-
-            String sql = "SELECT * FROM star";
-
-            // execute
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while (rs.next()){
-
-                Star star = new Star(rs.getInt("idstar"));
-                star.setName(rs.getString("name_star"));
-                star.setFlux(rs.getBigDecimal("flux"));
-                star.setType(StarType.valueOf(rs.getString("type")));
-                star.setPosition(new GPoint(rs.getDouble("galactic_longitude"), rs.getDouble("galactic_latitude")));
-                star.setTool(new Tool(rs.getString("nametool")));
-
-                Double atanResult = 0.0;
-
-                for(int i=0; i < filamentBoundary.size()-1; i++) {
-
-                    GPoint actualBoundaryPoint = filamentBoundary.get(i);
-                    GPoint nextBoundaryPoint = filamentBoundary.get(i+1);
-
-                    Double num = ((actualBoundaryPoint.getGlongitude() - star.getPosition().getGlongitude())*(nextBoundaryPoint.getGlatitude() - star.getPosition().getGlatitude())) -
-                            ((actualBoundaryPoint.getGlatitude()-star.getPosition().getGlatitude())*(nextBoundaryPoint.getGlongitude()-star.getPosition().getGlongitude()));
-
-                    Double den = ((actualBoundaryPoint.getGlongitude() - star.getPosition().getGlongitude())*(nextBoundaryPoint.getGlongitude() - star.getPosition().getGlongitude())) +
-                            ((actualBoundaryPoint.getGlatitude()-star.getPosition().getGlatitude())*(nextBoundaryPoint.getGlatitude()-star.getPosition().getGlatitude()));
-
-                    atanResult += Math.atan(num/den);
-
-                }
-
-                if (Math.abs(atanResult) >= 0.01)
-                    starList.add(star);
-            }
-
-            // Clean-up
-            rs.close();
-            stmt.close();
-
-        } catch (SQLException e) {
-            throw new DaoException(e.getMessage());
-
-        } finally {
-
-            try {
-
-                if (stmt != null)
-                    stmt.close();
-
-                if (conn != null)
-                    conn.close();
-
-            } catch (SQLException e) {
-                throw new DaoException(e.getMessage());
-            }
-        }
-
-        return starList;
-
     }
 
     private List<Filament> _getFilamentInsideSquareRegion(GPoint center, Float side, List<Filament> filamentList, Connection conn, Integer limit, Integer offset) throws DaoException {

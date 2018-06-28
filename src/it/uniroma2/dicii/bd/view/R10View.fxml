@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@../resources/stylesheets/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.bd.view.R10ViewController">
+    <top>
+        <VBox prefWidth="100.0" BorderPane.alignment="CENTER">
+            <children>
+                <HBox prefWidth="1200.0">
+                    <children>
+                        <HBox prefWidth="600.0">
+                            <children>
+                                <Button fx:id="backButton" contentDisplay="CENTER" mnemonicParsing="false" styleClass="back-button" text="&lt; Search" />
+                            </children>
+                        </HBox>
+                    </children>
+                </HBox>
+                <Label text="Search star inside region" textFill="#3b0250" BorderPane.alignment="TOP_LEFT">
+                    <BorderPane.margin>
+                        <Insets left="30.0" top="30.0" />
+                    </BorderPane.margin>
+                    <font>
+                        <Font size="35.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets left="30.0" top="10.0" />
+                    </VBox.margin>
+                </Label>
+            </children>
+            <BorderPane.margin>
+                <Insets bottom="5.0" right="10.0" top="5.0" />
+            </BorderPane.margin>
+        </VBox>
+    </top>
+    <center>
+        <VBox BorderPane.alignment="CENTER">
+            <children>
+                <VBox>
+                    <children>
+                        <HBox>
+                            <children>
+                                <VBox>
+                                    <children>
+                                        <Label styleClass="label-big" text="Center" />
+                                        <TextField fx:id="longitudeCenterTextField" promptText="Longitude">
+                                            <VBox.margin>
+                                                <Insets top="20.0" />
+                                            </VBox.margin>
+                                        </TextField>
+                                        <TextField fx:id="latitudeCenterTextField" promptText="Latitude">
+                                            <VBox.margin>
+                                                <Insets top="5.0" />
+                                            </VBox.margin>
+                                        </TextField>
+                                    </children>
+                                    <HBox.margin>
+                                        <Insets />
+                                    </HBox.margin>
+                                </VBox>
+                        <VBox>
+                           <children>
+                              <Label styleClass="label-big" text="Sides" />
+                              <TextField fx:id="size1TextField" promptText="Side 1">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <TextField fx:id="size2TextField" promptText="Side 2">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </VBox>
+                                <Button fx:id="searchButton" mnemonicParsing="false" text="Search">
+                                    <HBox.margin>
+                                        <Insets left="20.0" top="73.0" />
+                                    </HBox.margin>
+                                </Button>
+                            </children>
+                            <VBox.margin>
+                                <Insets bottom="10.0" />
+                            </VBox.margin>
+                        </HBox>
+                        <HBox>
+                            <children>
+                                <Label styleClass="label-big" text="Total Star:">
+                                    <HBox.margin>
+                                        <Insets />
+                                    </HBox.margin>
+                                </Label>
+                                <Label fx:id="totalStarLabel" styleClass="label-big" text="****">
+                                    <HBox.margin>
+                                        <Insets left="5.0" />
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                            <VBox.margin>
+                                <Insets top="40.0" />
+                            </VBox.margin>
+                        </HBox>
+                  <HBox>
+                     <children>
+                        <Label styleClass="label-big" text="Total Star inside Filament:">
+                           <HBox.margin>
+                              <Insets top="20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="totalStarInsideFilamentLabel" styleClass="label-big" text="****">
+                           <HBox.margin>
+                              <Insets left="5.0" top="20.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label styleClass="label-big" text="Total Star outside Filament:">
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="totalStarOutsideFilamentLabel" styleClass="label-big" text="****">
+                           <HBox.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label styleClass="label-big" text="Prostellar inside Filament:">
+                           <HBox.margin>
+                              <Insets top="20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="protosInsideFilamentLabel" styleClass="label-big" text="****">
+                           <HBox.margin>
+                              <Insets left="5.0" top="20.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label styleClass="label-big" text="Prestellar inside Filament:">
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="prestInsideFilamentLabel" styleClass="label-big" text="****">
+                           <HBox.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label styleClass="label-big" text="Unbound inside Filament:">
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="unboundInsideFilamentLabel" styleClass="label-big" text="****">
+                           <HBox.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label styleClass="label-big" text="Prostellar outside Filament:">
+                           <HBox.margin>
+                              <Insets top="20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="protosOutsideFilamentLabel" styleClass="label-big" text="****">
+                           <HBox.margin>
+                              <Insets left="5.0" top="20.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label styleClass="label-big" text="Prestellar outside Filament:">
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="prestOutsideFilamentLabel" styleClass="label-big" text="****">
+                           <HBox.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label styleClass="label-big" text="Unbound outside Filament:">
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="unboundOutsideFilamentLabel" styleClass="label-big" text="****">
+                           <HBox.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                    </children>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                    <VBox.margin>
+                        <Insets left="30.0" top="20.0" />
+                    </VBox.margin>
+                </VBox>
+            </children></VBox>
+    </center>
+</BorderPane>

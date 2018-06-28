@@ -149,18 +149,10 @@ public interface FilamentDao {
 
     /**
      *
-     * @param filamentID
-     * @return
-     * @throws DaoException
-     */
-    List<Star> getStarsInsideFilamentByID(Integer filamentID) throws DaoException;
-
-
-    /**
-     *
      * @param filament
      * @return
      * @throws DaoException
      */
     Branch getFilamentSpine(Filament filament) throws DaoException;
+
 }

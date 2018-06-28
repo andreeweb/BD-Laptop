@@ -8,6 +8,7 @@ import it.uniroma2.dicii.bd.enumeration.StarType;
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.BranchDao;
 import it.uniroma2.dicii.bd.interfaces.FilamentDao;
+import it.uniroma2.dicii.bd.interfaces.StarDao;
 import it.uniroma2.dicii.bd.model.*;
 
 import java.util.ArrayList;
@@ -256,7 +257,7 @@ public class SearchController {
      */
     public Map<String, Float> countStarsInsideFilamentByID(Integer filamentID) throws DaoException {
 
-        FilamentDao dao = DaoFactory.getSingletonInstance().getFilamentDAO();
+        StarDao dao = DaoFactory.getSingletonInstance().getStarDAO();
         List<Star> starList = dao.getStarsInsideFilamentByID(filamentID);
 
         // for calculating
@@ -298,7 +299,94 @@ public class SearchController {
         return map;
     }
 
-    // query per REQ-FN-10 TODO
+    // query per REQ-FN-10
+
+    public Map<String, Float> getStarInsideRectRegion(GPointBean center, Float side1, Float side2) throws DaoException {
+
+        GPoint gPointCenter = new GPoint(center.getGlongitude(), center.getGlatitude());
+
+        StarDao dao = DaoFactory.getSingletonInstance().getStarDAO();
+        List<Star> starList = dao.getStarsInsideRectRegion(gPointCenter, side1, side2);
+
+        // for calculating
+        Float numberOfProtostellarInsideFilament = 0.0f;
+        Float numberOfPrestellarInsideFilament = 0.0f;
+        Float numberOfUnboundInsideFilament = 0.0f;
+        Float totalStarInsideFilament = 0.0f;
+
+        Float numberOfProtostellarOutsideFilament = 0.0f;
+        Float numberOfPrestellarOutsideFilament = 0.0f;
+        Float numberOfUnboundOutsideFilament = 0.0f;
+        Float totalStarOutsideFilament = 0.0f;
+
+        Float totalStar = 0.0f;
+
+        List<Star> starWithfilament = dao.areInsideFilament(starList);
+
+        for (Star star : starWithfilament) {
+
+            switch (star.getType()) {
+
+                case PROTOSTELLAR: {
+
+                    if (star.getFilament() != null){
+                        numberOfProtostellarInsideFilament++;
+                        totalStarInsideFilament++;
+                    }else{
+                        numberOfProtostellarOutsideFilament++;
+                        totalStarOutsideFilament++;
+                    }
+
+                    totalStar++;
+                    break;
+                }
+
+                case PRESTELLAR: {
+
+                    if (star.getFilament() != null){
+                        numberOfPrestellarInsideFilament++;
+                        totalStarInsideFilament++;
+                    }else{
+                        numberOfPrestellarOutsideFilament++;
+                        totalStarOutsideFilament++;
+                    }
+
+                    totalStar++;
+                    break;
+                }
+
+                case UNBOUND: {
+
+                    if (star.getFilament() != null){
+                        numberOfUnboundInsideFilament++;
+                        totalStarInsideFilament++;
+                    }else{
+                        numberOfUnboundOutsideFilament++;
+                        totalStarOutsideFilament++;
+                    }
+
+                    totalStar++;
+                    break;
+                }
+            }
+        }
+
+        Map<String, Float> map = new HashMap<>();
+
+        map.put("totalStar", totalStar);
+        map.put("totalStarInsideFilament", totalStarInsideFilament);
+        map.put("totalStarOutsideFilament", totalStarOutsideFilament);
+
+        map.put("percentageOfProtostellarInsideFilament", (numberOfProtostellarInsideFilament / totalStarInsideFilament) * 100);
+        map.put("percentageOfPrestellarInsideFilament", (numberOfPrestellarInsideFilament / totalStarInsideFilament) * 100);
+        map.put("percentageOfUnboundInsideFilament", (numberOfUnboundInsideFilament / totalStarInsideFilament) * 100);
+
+        map.put("percentageOfProtostellarOutsideFilament", (numberOfProtostellarOutsideFilament / totalStarOutsideFilament) * 100);
+        map.put("percentageOfPrestellarOutsideFilament", (numberOfPrestellarOutsideFilament / totalStarOutsideFilament) * 100);
+        map.put("percentageOfUnboundOutsideFilament", (numberOfUnboundOutsideFilament / totalStarOutsideFilament) * 100);
+
+        return map;
+    }
 
     // query per REQ-FN-11
 
@@ -368,10 +456,11 @@ public class SearchController {
      */
     public List<StarBean> getStarsInsideFilament(Integer filamentID) throws DaoException {
 
-        FilamentDao dao = DaoFactory.getSingletonInstance().getFilamentDAO();
-        List<Star> starList = dao.getStarsInsideFilamentByID(filamentID);
+        StarDao starDAO = DaoFactory.getSingletonInstance().getStarDAO();
+        List<Star> starList = starDAO.getStarsInsideFilamentByID(filamentID);
 
-        Branch spine = dao.getFilamentSpine(new Filament(filamentID));
+        FilamentDao filamentDao = DaoFactory.getSingletonInstance().getFilamentDAO();
+        Branch spine = filamentDao.getFilamentSpine(new Filament(filamentID));
 
         List<StarBean> starBeansList = new ArrayList<>();
 

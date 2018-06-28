@@ -1,7 +1,6 @@
 package it.uniroma2.dicii.bd.bean;
 
 import it.uniroma2.dicii.bd.enumeration.StarType;
-import it.uniroma2.dicii.bd.model.Tool;
 
 import java.math.BigDecimal;
 
@@ -13,7 +12,9 @@ public class StarBean {
     private StarType type;
     private GPointBean position;
     private ToolBean tool;
+
     private Double distanceFromFilamentSpine;
+    private FilamentBean filament;
 
     public StarBean(Integer idStar) {
         this.idStar = idStar;
@@ -129,6 +130,22 @@ public class StarBean {
      */
     public void setDistanceFromFilamentSpine(Double distanceFromFilamentSpine) {
         this.distanceFromFilamentSpine = distanceFromFilamentSpine;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public FilamentBean getFilament() {
+        return filament;
+    }
+
+    /**
+     *
+     * @param filament
+     */
+    public void setFilament(FilamentBean filament) {
+        this.filament = filament;
     }
 
     @Override

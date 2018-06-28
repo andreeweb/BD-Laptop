@@ -592,7 +592,7 @@ public class ImportController {
         ImportController.checkSizeDebug+=increase;
     }
 
-    public static void main(String[] args) throws Exception {
+    /*public static void main(String[] args) throws Exception {
 
         ImportController importController = new ImportController();
 
@@ -609,6 +609,6 @@ public class ImportController {
 
         // errore
         //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Herschel.csv");
-    }
+    }*/
 
 }
