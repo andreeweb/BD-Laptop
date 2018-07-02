@@ -27,6 +27,7 @@ public class LoginController {
         UserDao dao = DaoFactory.getSingletonInstance().getUserDAO();
         User user = dao.getUserByUsernameAndPassword(userBean.getUsername(), Sha.sha256(userBean.getPassword()));
 
+        userBean.setUserID(user.getUserID());
         userBean.setUserRole(user.getUserRole());
         userBean.setName(user.getName());
         userBean.setSurname(user.getSurname());
