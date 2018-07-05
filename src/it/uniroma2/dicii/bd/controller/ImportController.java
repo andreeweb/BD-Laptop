@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ImportController {
 
@@ -586,23 +587,51 @@ public class ImportController {
         ImportController.checkSizeDebug+=increase;
     }
 
-    /*public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 
         ImportController importController = new ImportController();
 
+        System.out.println("Start import filament Herschel");
+
+        importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Herschel.csv");
+
+        System.out.println("Import filament Herschel done 1/7\n");
+
+        System.out.println("Start import filament Spitzer");
+
+        importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Spitzer.csv");
+
+        System.out.println("Import filament Spitzer done 2/7\n");
+
+        System.out.println("Start import boundary Herschel");
+
+        importController.importBoundary("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Herschel.csv");
+
+        System.out.println("Import boundary Herschel done 3/7\n");
+
+        System.out.println("Start import boundary Spitzer");
+
+        importController.importBoundary("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Spitzer.csv");
+
+        System.out.println("Import boundary Spitzer done 4/7\n");
+
+        System.out.println("Start import skeleton Herschel");
+
+        importController.importSkeleton("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/scheletro_filamenti_Herschel.csv");
+
+        System.out.println("Import skeleton Herschel done 5/7\n");
+
+        System.out.println("Start import skeleton Spitzer");
+
+        importController.importSkeleton("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/scheletro_filamenti_Spitzer.csv");
+
+        System.out.println("Import skeleton Spitzer done 6/7\n");
+
+        System.out.println("Start import Star");
+
         importController.importStar("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/stelle_Herschel.csv", new SatelliteBean("Herschel"));
 
-        //importController.importSkeleton("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/scheletro_filamenti_Herschel.csv");
-        //importController.importSkeleton("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/scheletro_filamenti_Spitzer.csv");
-
-        //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Herschel.csv");
-        //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/filamenti_Spitzer.csv");
-
-        //importController.importBoundary("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Herschel.csv");
-        //importController.importBoundary("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Spitzer.csv");
-
-        // errore
-        //importController.importFilament("/Users/andrea/Sviluppo/BD/BD-Laptop/src/it/uniroma2/dicii/bd/resources/csv-test/contorni_filamenti_Herschel.csv");
-    }*/
+        System.out.println("Import Star done 7/7\n");
+    }
 
 }
