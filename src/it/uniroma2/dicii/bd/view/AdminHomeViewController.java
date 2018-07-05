@@ -79,6 +79,6 @@ public class AdminHomeViewController {
      * @param event JavaFX event
      */
     private void searchButtonAction(ActionEvent event) {
-        SceneManager.getSingletonInstance().showAdminSearchView();
+        SceneManager.getSingletonInstance().showSearchView();
     }
 }

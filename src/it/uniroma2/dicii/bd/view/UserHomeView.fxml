@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@../resources/stylesheets/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.bd.view.UserHomeViewController">
+    <center>
+        <GridPane alignment="CENTER" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <BorderPane.margin>
+                <Insets top="15.0" />
+            </BorderPane.margin>
+            <children>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                        <Button fx:id="searchButton" mnemonicParsing="false" prefHeight="162.0" prefWidth="179.0" styleClass="search-button" stylesheets="@../resources/stylesheets/style.css" />
+               </children></HBox>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+               <children>
+                        <Button fx:id="logoutButton" mnemonicParsing="false" prefHeight="162.0" prefWidth="179.0" styleClass="logout-button" stylesheets="@../resources/stylesheets/style.css" />
+               </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" />
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            </children>
+        </GridPane>
+    </center>
+    <top>
+        <Label text="User Dashboard" textFill="#3b0250" BorderPane.alignment="CENTER">
+            <font>
+                <Font name="System Bold" size="35.0" />
+            </font>
+            <BorderPane.margin>
+                <Insets top="30.0" />
+            </BorderPane.margin>
+        </Label>
+    </top>
+</BorderPane>

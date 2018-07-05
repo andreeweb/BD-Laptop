@@ -3,6 +3,7 @@ package it.uniroma2.dicii.bd.view;
 import it.uniroma2.dicii.bd.bean.UserBean;
 import it.uniroma2.dicii.bd.controller.LoginController;
 import it.uniroma2.dicii.bd.exception.DaoException;
+import it.uniroma2.dicii.bd.utils.Registry;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -59,12 +60,17 @@ public class LoginViewController {
 
             switch (userBean.getUserRole()){
 
-                case ADMIN:
+                case ADMIN:{
                     SceneManager.getSingletonInstance().showAdminHomeView();
+                    Registry.getSingletonInstance().put("userType", "admin");
                     break;
-                case USER:
-                    //SceneManager.getSingletonInstance().showUserHomeView();
+                }
+
+                case USER:{
+                    SceneManager.getSingletonInstance().showUserHomeView();
+                    Registry.getSingletonInstance().put("userType", "user");
                     break;
+                }
             }
 
         } catch (DaoException e) {

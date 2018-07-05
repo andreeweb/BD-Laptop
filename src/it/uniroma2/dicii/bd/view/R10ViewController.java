@@ -132,6 +132,6 @@ public class R10ViewController {
      */
     private void backButtonAction(ActionEvent event){
 
-        SceneManager.getSingletonInstance().showAdminSearchView();
+        SceneManager.getSingletonInstance().showSearchView();
     }
 }

@@ -166,6 +166,6 @@ public class R7ViewController {
      */
     private void backButtonAction(ActionEvent event){
 
-        SceneManager.getSingletonInstance().showAdminSearchView();
+        SceneManager.getSingletonInstance().showSearchView();
     }
 }

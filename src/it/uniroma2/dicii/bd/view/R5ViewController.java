@@ -3,7 +3,6 @@ package it.uniroma2.dicii.bd.view;
 import it.uniroma2.dicii.bd.bean.GPointBean;
 import it.uniroma2.dicii.bd.controller.SearchController;
 import it.uniroma2.dicii.bd.exception.DaoException;
-import it.uniroma2.dicii.bd.model.GPoint;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -120,6 +119,6 @@ public class R5ViewController {
      */
     private void backButtonAction(ActionEvent event){
 
-        SceneManager.getSingletonInstance().showAdminSearchView();
+        SceneManager.getSingletonInstance().showSearchView();
     }
 }

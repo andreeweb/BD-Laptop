@@ -280,19 +280,19 @@ public class SceneManager {
      *
      *
      */
-    public void showAdminSearchView() {
+    public void showSearchView() {
 
         try {
 
             // Load main view
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("AdminSearchView.fxml"));
+            loader.setLocation(getClass().getResource("SearchView.fxml"));
             BorderPane view = loader.load();
 
             // Set view into the center of root layout.
             rootLayout.setCenter(view);
 
-            AdminSearchViewController controller = loader.getController();
+            SearchViewController controller = loader.getController();
             controller.onCreateView();
 
         } catch (IOException e) {
@@ -505,25 +505,25 @@ public class SceneManager {
      * Shows the main view inside the root layout.
      *
      */
-    /*public void showUserHomeView() {
+    public void showUserHomeView() {
 
         try {
 
             // Load main view
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("AdminHomeView.fxml"));
+            loader.setLocation(getClass().getResource("UserHomeView.fxml"));
             BorderPane view = loader.load();
 
             // Set view into the center of root layout.
             rootLayout.setCenter(view);
 
-            AdminHomeViewController controller = loader.getController();
+            UserHomeViewController controller = loader.getController();
             controller.onCreateView(view);
 
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
-    }*/
+    }
 
 }

@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@../resources/stylesheets/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.bd.view.AdminSearchViewController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@../resources/stylesheets/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.bd.view.SearchViewController">
    <top>
       <VBox prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>

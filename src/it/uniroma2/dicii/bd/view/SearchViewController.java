@@ -1,10 +1,11 @@
 package it.uniroma2.dicii.bd.view;
 
+import it.uniroma2.dicii.bd.utils.Registry;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-public class AdminSearchViewController {
+public class SearchViewController {
 
     @FXML
     private Button backButton;
@@ -56,7 +57,11 @@ public class AdminSearchViewController {
      */
     private void backButtonAction(ActionEvent event){
 
-        SceneManager.getSingletonInstance().showAdminHomeView();
+        if (Registry.getSingletonInstance().get("userType").equals("admin")){
+            SceneManager.getSingletonInstance().showAdminHomeView();
+        }else{
+            SceneManager.getSingletonInstance().showUserHomeView();
+        }
     }
 
     /**

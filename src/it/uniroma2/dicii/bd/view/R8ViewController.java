@@ -5,7 +5,6 @@ import it.uniroma2.dicii.bd.bean.GPointBean;
 import it.uniroma2.dicii.bd.controller.SearchController;
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.exception.ExceptionDialog;
-import it.uniroma2.dicii.bd.model.GPoint;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -194,6 +193,6 @@ public class R8ViewController {
      */
     private void backButtonAction(ActionEvent event){
 
-        SceneManager.getSingletonInstance().showAdminSearchView();
+        SceneManager.getSingletonInstance().showSearchView();
     }
 }
