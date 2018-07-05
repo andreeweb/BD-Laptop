@@ -1,6 +1,6 @@
-package it.uniroma2.dicii.bd.dao;
+package it.uniroma2.dicii.bd.dao.Postgres;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import it.uniroma2.dicii.bd.dao.DaoFactory;
 import it.uniroma2.dicii.bd.enumeration.StarType;
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.FilamentDao;
@@ -20,7 +20,7 @@ public class PGStarDao implements StarDao{
     @Override
     public void insertStar(Star star) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
 
         try {
@@ -55,7 +55,7 @@ public class PGStarDao implements StarDao{
     @Override
     public List<Star> getStarsInsideRectRegion(GPoint center, Float side1, Float side2) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         List<Star> starList = new ArrayList<>();
 
@@ -89,7 +89,7 @@ public class PGStarDao implements StarDao{
     @Override
     public List<Star> getStarsInsideFilamentByID(Integer filamentID) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
 
         List<Star> starList = new ArrayList<>();
@@ -126,7 +126,7 @@ public class PGStarDao implements StarDao{
     @Override
     public List<Star> areInsideFilament(List<Star> starList) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         List<Star> stars;
 

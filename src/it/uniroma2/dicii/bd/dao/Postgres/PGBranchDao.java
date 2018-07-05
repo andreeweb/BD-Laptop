@@ -1,5 +1,6 @@
-package it.uniroma2.dicii.bd.dao;
+package it.uniroma2.dicii.bd.dao.Postgres;
 
+import it.uniroma2.dicii.bd.dao.DaoFactory;
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.BranchDao;
 import it.uniroma2.dicii.bd.interfaces.GPointDao;
@@ -14,7 +15,7 @@ public class PGBranchDao implements BranchDao{
     @Override
     public void insertBranch(Branch branch) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
 
         try {
@@ -47,7 +48,7 @@ public class PGBranchDao implements BranchDao{
     @Override
     public GPoint getBranchMaxVertex(Branch branch) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         GPoint maxVertex = null;
 
@@ -81,7 +82,7 @@ public class PGBranchDao implements BranchDao{
     @Override
     public GPoint getBranchMinVertex(Branch branch) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         GPoint maxVertex = null;
 

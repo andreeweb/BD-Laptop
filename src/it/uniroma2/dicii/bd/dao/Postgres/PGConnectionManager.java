@@ -1,4 +1,4 @@
-package it.uniroma2.dicii.bd.dao;
+package it.uniroma2.dicii.bd.dao.Postgres;
 
 import it.uniroma2.dicii.bd.utils.Config;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -12,25 +12,25 @@ import java.sql.SQLException;
  *
  * @author  Andrea Cerra
  */
-public class ConnectionManager {
+public class PGConnectionManager {
 
-    private static ConnectionManager instance = null;
+    private static PGConnectionManager instance = null;
     private BasicDataSource connectionPool;
 
 
     /**
      *
      */
-    private ConnectionManager() throws URISyntaxException {
+    private PGConnectionManager() throws URISyntaxException {
 
-        String dbUrl = Config.getSingletonInstance().getProperty("dburl");
+        String dbUrl = Config.getSingletonInstance().getProperty("PGdburl");
 
         connectionPool = new BasicDataSource();
 
-        connectionPool.setUsername(Config.getSingletonInstance().getProperty("dbuser"));
-        connectionPool.setPassword(Config.getSingletonInstance().getProperty("dbpassword"));
+        connectionPool.setUsername(Config.getSingletonInstance().getProperty("PGdbuser"));
+        connectionPool.setPassword(Config.getSingletonInstance().getProperty("PGdbpassword"));
 
-        connectionPool.setDriverClassName(Config.getSingletonInstance().getProperty("dbdriver"));
+        connectionPool.setDriverClassName(Config.getSingletonInstance().getProperty("PGdbdriver"));
         connectionPool.setUrl(dbUrl);
 
         connectionPool.setInitialSize(30);
@@ -46,12 +46,12 @@ public class ConnectionManager {
     /**
      *
      */
-    public static synchronized ConnectionManager getSingletonInstance() {
+    public static synchronized PGConnectionManager getSingletonInstance() {
 
-        if (ConnectionManager.instance == null){
+        if (PGConnectionManager.instance == null){
 
             try {
-                ConnectionManager.instance = new ConnectionManager();
+                PGConnectionManager.instance = new PGConnectionManager();
             } catch (URISyntaxException e) {
                 e.printStackTrace();
                 System.exit(1);

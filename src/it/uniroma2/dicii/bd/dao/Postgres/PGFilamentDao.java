@@ -1,6 +1,6 @@
-package it.uniroma2.dicii.bd.dao;
+package it.uniroma2.dicii.bd.dao.Postgres;
 
-import it.uniroma2.dicii.bd.enumeration.StarType;
+import it.uniroma2.dicii.bd.dao.DaoFactory;
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.FilamentDao;
 import it.uniroma2.dicii.bd.interfaces.GPointDao;
@@ -14,7 +14,7 @@ public class PGFilamentDao implements FilamentDao{
     @Override
     public void insertFilament(Filament filament) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
 
         try {
@@ -46,7 +46,7 @@ public class PGFilamentDao implements FilamentDao{
     @Override
     public void insertAllBoundaryPointPerFilament(Filament filament) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
 
         try {
@@ -82,7 +82,7 @@ public class PGFilamentDao implements FilamentDao{
     @Override
     public GPoint getFilamentCentroidByID(Integer filamentID) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         GPoint centoid = null;
 
@@ -118,7 +118,7 @@ public class PGFilamentDao implements FilamentDao{
     @Override
     public GPoint getFilamentCentroidByName(String filamentName) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         GPoint centoid = null;
 
@@ -155,7 +155,7 @@ public class PGFilamentDao implements FilamentDao{
     @Override
     public GPoint getFilamentExtensionByID(Integer filamentID) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         GPoint centoid = null;
 
@@ -191,7 +191,7 @@ public class PGFilamentDao implements FilamentDao{
     @Override
     public GPoint getFilamentExtensionByName(String filamentName) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         GPoint centoid = null;
 
@@ -228,7 +228,7 @@ public class PGFilamentDao implements FilamentDao{
     @Override
     public Integer getCountFilamentSegmentByName(String filamentName) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         Integer numberOfsegment = null;
 
@@ -265,7 +265,7 @@ public class PGFilamentDao implements FilamentDao{
     @Override
     public Integer getCountFilamentSegmentByID(Integer filamentID) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         Integer numberOfsegment = null;
 
@@ -301,7 +301,7 @@ public class PGFilamentDao implements FilamentDao{
     @Override
     public List<Filament> getFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max, Integer limit, Integer offset) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         List<Filament> filamentList = new ArrayList<>();
 
@@ -335,7 +335,7 @@ public class PGFilamentDao implements FilamentDao{
     @Override
     public List<Filament> getFilamentsByNumberOfSegments(Integer from, Integer to, Integer limit, Integer offset) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         List<Filament> filamentList = new ArrayList<>();
 
@@ -369,7 +369,7 @@ public class PGFilamentDao implements FilamentDao{
     @Override
     public List<Filament> getFilamentInsideSquareRegion(GPoint center, Float side, Integer limit, Integer offset) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         List<Filament> filamentList = new ArrayList<>();
 
@@ -403,7 +403,7 @@ public class PGFilamentDao implements FilamentDao{
     @Override
     public List<Filament> getFilamentInsideCircleRegion(GPoint center, Float radius, Integer limit, Integer offset) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         List<Filament> filamentList = new ArrayList<>();
 
@@ -437,7 +437,7 @@ public class PGFilamentDao implements FilamentDao{
     @Override
     public List<GPoint> getFilamentBoundary(Filament filament) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         List<GPoint> boundary = new ArrayList<>();
 
@@ -471,7 +471,7 @@ public class PGFilamentDao implements FilamentDao{
     @Override
     public Branch getFilamentSpine(Filament filament) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
         Branch spine;
 
@@ -514,7 +514,7 @@ public class PGFilamentDao implements FilamentDao{
 
         try {
 
-            ConnectionManager manager = ConnectionManager.getSingletonInstance();
+            PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
             conn = manager.getConnectionFromConnectionPool();
 
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -1091,7 +1091,7 @@ public class PGFilamentDao implements FilamentDao{
 
         try {
 
-            ConnectionManager manager = ConnectionManager.getSingletonInstance();
+            PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
             conn = manager.getConnectionFromConnectionPool();
 
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);

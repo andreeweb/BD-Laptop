@@ -2,13 +2,8 @@ package it.uniroma2.dicii.bd.controller;
 
 import it.uniroma2.dicii.bd.bean.SatelliteBean;
 import it.uniroma2.dicii.bd.dao.DaoFactory;
-import it.uniroma2.dicii.bd.dao.PGToolDao;
 import it.uniroma2.dicii.bd.enumeration.BranchType;
 import it.uniroma2.dicii.bd.enumeration.StarType;
-import it.uniroma2.dicii.bd.exception.DaoException;
-import it.uniroma2.dicii.bd.exception.ExceptionDialog;
-import it.uniroma2.dicii.bd.interfaces.GPointDao;
-import it.uniroma2.dicii.bd.interfaces.SatelliteDao;
 import it.uniroma2.dicii.bd.interfaces.ToolDao;
 import it.uniroma2.dicii.bd.model.*;
 import it.uniroma2.dicii.bd.thread.BoundaryThread;
@@ -27,7 +22,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 public class ImportController {
 

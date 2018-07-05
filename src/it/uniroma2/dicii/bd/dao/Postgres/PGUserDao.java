@@ -1,9 +1,8 @@
-package it.uniroma2.dicii.bd.dao;
+package it.uniroma2.dicii.bd.dao.Postgres;
 
 import it.uniroma2.dicii.bd.enumeration.UserRole;
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.UserDao;
-import it.uniroma2.dicii.bd.model.Filament;
 import it.uniroma2.dicii.bd.model.User;
 
 import java.sql.*;
@@ -29,7 +28,7 @@ public class PGUserDao implements UserDao {
 
         try {
 
-            ConnectionManager manager = ConnectionManager.getSingletonInstance();
+            PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
             conn = manager.getConnectionFromConnectionPool();
 
             stm = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -93,7 +92,7 @@ public class PGUserDao implements UserDao {
 
         try {
 
-            ConnectionManager manager = ConnectionManager.getSingletonInstance();
+            PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
             conn = manager.getConnectionFromConnectionPool();
 
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -146,7 +145,7 @@ public class PGUserDao implements UserDao {
     @Override
     public void insertUser(User user) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         PreparedStatement preparedStatement = null;
         Connection conn = null;
 
@@ -193,7 +192,7 @@ public class PGUserDao implements UserDao {
     @Override
     public void deleteUser(User user) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         PreparedStatement preparedStatement = null;
         Connection conn = null;
 

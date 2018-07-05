@@ -1,4 +1,4 @@
-package it.uniroma2.dicii.bd.dao;
+package it.uniroma2.dicii.bd.dao.Postgres;
 
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.GPointDao;
@@ -12,7 +12,7 @@ public class PGGPointDao implements GPointDao{
     @Override
     public void insertGPoint(GPoint point) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         Connection conn = null;
 
         try {

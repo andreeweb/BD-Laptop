@@ -1,4 +1,4 @@
-package it.uniroma2.dicii.bd.dao;
+package it.uniroma2.dicii.bd.dao.Postgres;
 
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.SatelliteDao;
@@ -20,7 +20,7 @@ public class PGSatelliteDao implements SatelliteDao {
 
         try {
 
-            ConnectionManager manager = ConnectionManager.getSingletonInstance();
+            PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
             conn = manager.getConnectionFromConnectionPool();
 
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -69,7 +69,7 @@ public class PGSatelliteDao implements SatelliteDao {
     @Override
     public void insertSatellite(Satellite satellite) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         PreparedStatement preparedStatement = null;
         Connection conn = null;
 
@@ -113,7 +113,7 @@ public class PGSatelliteDao implements SatelliteDao {
     @Override
     public void deleteSatellite(Satellite satellite) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         PreparedStatement preparedStatement = null;
         Connection conn = null;
 

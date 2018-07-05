@@ -1,4 +1,4 @@
-package it.uniroma2.dicii.bd.dao;
+package it.uniroma2.dicii.bd.dao.Postgres;
 
 import it.uniroma2.dicii.bd.exception.DaoException;
 import it.uniroma2.dicii.bd.interfaces.ToolDao;
@@ -21,7 +21,7 @@ public class PGToolDao implements ToolDao{
 
         try {
 
-            ConnectionManager manager = ConnectionManager.getSingletonInstance();
+            PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
             conn = manager.getConnectionFromConnectionPool();
 
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -79,7 +79,7 @@ public class PGToolDao implements ToolDao{
 
         try {
 
-            ConnectionManager manager = ConnectionManager.getSingletonInstance();
+            PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
             conn = manager.getConnectionFromConnectionPool();
 
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -132,7 +132,7 @@ public class PGToolDao implements ToolDao{
     @Override
     public void insertTool(Tool tool) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         PreparedStatement preparedStatement = null;
         Connection conn = null;
 
@@ -175,7 +175,7 @@ public class PGToolDao implements ToolDao{
     @Override
     public void deleteTool(Tool tool) throws DaoException {
 
-        ConnectionManager manager = ConnectionManager.getSingletonInstance();
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
         PreparedStatement preparedStatement = null;
         Connection conn = null;
 
