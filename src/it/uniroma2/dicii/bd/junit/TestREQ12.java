@@ -19,11 +19,11 @@ public class TestREQ12 {
         List<StarBean> starBeansList = controller.getStarsInsideFilament(45);
 
         ArrayList<String> list = new ArrayList<String >() {{
-            add("HIGALPS012.8948+0.1239");
-            add("HIGALPS012.8957-0.4315");
-            add("HIGALPS012.8974+0.1885");
-            add("HIGALPS012.9008-0.2405");
-            add("HIGALPS012.9048-0.0306");
+            add("HIGALPS012.8034-0.3187");
+            add("HIGALPS012.8089+0.0529");
+            add("HIGALPS012.8154-0.3052");
+            add("HIGALPS012.8297-0.1389");
+            add("HIGALPS012.8274-0.1105");
         }};
 
         for (int i = 0; i < 5; i++){
