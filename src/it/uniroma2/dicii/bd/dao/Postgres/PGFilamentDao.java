@@ -299,6 +299,40 @@ public class PGFilamentDao implements FilamentDao{
     }
 
     @Override
+    public Integer getCountFilament() throws DaoException {
+
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
+        Connection conn = null;
+        Integer numberOfFilament = null;
+
+        try {
+
+            conn = manager.getConnectionFromConnectionPool();
+
+            numberOfFilament = this._getCountFilament(conn);
+
+            conn.close();
+
+        } catch (SQLException e) {
+
+            throw new DaoException(e.getMessage(), e.getCause());
+
+        } finally {
+
+            try {
+                if (conn != null)
+                    conn.close();
+
+            } catch (SQLException e) {
+
+                throw new DaoException(e.getMessage(), e.getCause());
+            }
+        }
+
+        return numberOfFilament;
+    }
+
+    @Override
     public List<Filament> getFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max, Integer limit, Integer offset) throws DaoException {
 
         PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
@@ -330,6 +364,40 @@ public class PGFilamentDao implements FilamentDao{
         }
 
         return filamentList;
+    }
+
+    @Override
+    public Integer getCountFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max) throws DaoException {
+
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
+        Connection conn = null;
+        Integer totalFilament = 0;
+
+        try {
+
+            conn = manager.getConnectionFromConnectionPool();
+
+            totalFilament = _getCountFilamentsByLuminanceAndEllipticity(percentageLuminance, ellipticity_min, ellipticity_max, conn);
+
+            conn.close();
+
+        } catch (SQLException e) {
+
+            throw new DaoException(e.getMessage(), e.getCause());
+
+        } finally {
+
+            try {
+                if (conn != null)
+                    conn.close();
+
+            } catch (SQLException e) {
+
+                throw new DaoException(e.getMessage(), e.getCause());
+            }
+        }
+
+        return totalFilament;
     }
 
     @Override
@@ -506,6 +574,50 @@ public class PGFilamentDao implements FilamentDao{
     }
 
     // PRIVATE
+
+    private Integer _getCountFilament(Connection conn) throws DaoException{
+
+        Statement stmt = null;
+        Integer numberOfSegment = 0;
+        String sql;
+
+        try {
+
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            sql = "SELECT COUNT(filament) FROM filament";
+
+            // execute
+            ResultSet rs = stmt.executeQuery(sql);
+
+            rs.first();
+
+            numberOfSegment = rs.getInt("count");
+
+            // Clean-up
+            rs.close();
+            stmt.close();
+
+        } catch (SQLException e) {
+            throw new DaoException(e.getMessage());
+
+        } finally {
+
+            try {
+
+                if (stmt != null)
+                    stmt.close();
+
+                if (conn != null)
+                    conn.close();
+
+            } catch (SQLException e) {
+                throw new DaoException(e.getMessage());
+            }
+        }
+
+        return numberOfSegment;
+    }
 
     private Branch _getFilamentSpine(Filament filament, Connection conn) throws DaoException {
 
@@ -809,6 +921,52 @@ public class PGFilamentDao implements FilamentDao{
         }
 
         return filamentList;
+    }
+
+    private Integer _getCountFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max, Connection conn) throws DaoException {
+
+        Statement stmt = null;
+        Integer totalFilament = 0;
+
+        try {
+
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            Double contrast = (1 + (percentageLuminance/100));
+
+            String sql = "SELECT COUNT(*) " +
+                    "FROM filament " +
+                    "WHERE contrast >= " + contrast + " and ellipticity >= " +  ellipticity_min + " and ellipticity <= " +  ellipticity_max;
+
+            // execute
+            ResultSet rs = stmt.executeQuery(sql);
+
+            rs.first();
+            totalFilament = rs.getInt("count");
+
+            // Clean-up
+            rs.close();
+            stmt.close();
+
+        } catch (SQLException e) {
+            throw new DaoException(e.getMessage());
+
+        } finally {
+
+            try {
+
+                if (stmt != null)
+                    stmt.close();
+
+                if (conn != null)
+                    conn.close();
+
+            } catch (SQLException e) {
+                throw new DaoException(e.getMessage());
+            }
+        }
+
+        return totalFilament;
     }
 
     private GPoint _getFilamentCentroid(Filament filament, Connection conn) throws DaoException {

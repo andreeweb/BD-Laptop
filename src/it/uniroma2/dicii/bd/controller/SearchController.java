@@ -155,6 +155,29 @@ public class SearchController {
         return filamentBeans;
     }
 
+    /**
+     *
+     * @return
+     * @throws DaoException
+     */
+    public Integer getCountFilamentInDB() throws DaoException {
+
+        FilamentDao dao = DaoFactory.getSingletonInstance().getFilamentDAO();
+        return dao.getCountFilament();
+    }
+
+    /**
+     *
+     * @return
+     * @throws DaoException
+     */
+    public Integer getCountFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max) throws DaoException {
+
+        FilamentDao dao = DaoFactory.getSingletonInstance().getFilamentDAO();
+        return dao.getCountFilamentsByLuminanceAndEllipticity(percentageLuminance, ellipticity_min, ellipticity_max);
+    }
+
+
     // query per REQ-FN-7
 
     /**

@@ -102,11 +102,14 @@ public class R7ViewController {
         try {
 
             minNumberSegment = Integer.valueOf(minNumberText.getText());
-
-            if (minNumberSegment <= 2)
-                throw new NumberFormatException("Insert number > 2");
-
             maxNumberSegment = Integer.valueOf(maxNumberText.getText());
+
+            Integer difference = maxNumberSegment - minNumberSegment;
+
+            System.out.println(difference);
+
+            if (difference <= 2)
+                throw new NumberFormatException("Interval difference must be > 2");
 
             if (maxNumberSegment < minNumberSegment)
                 throw new NumberFormatException("Min must be minus than Max");
@@ -127,7 +130,7 @@ public class R7ViewController {
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information Dialog");
-            alert.setHeaderText("Please insert correct value \n Min value Max value with Min > 2");
+            alert.setHeaderText(nfe.getMessage());
             alert.showAndWait();
 
         }

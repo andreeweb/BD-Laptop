@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import javax.xml.soap.Text;
 import java.util.List;
 
 public class R6ViewController {
@@ -19,10 +20,10 @@ public class R6ViewController {
     private Button backButton;
 
     @FXML
-    private ComboBox<Float> minComboEllipticity;
+    private TextField minTextFieldEllipticity;
 
     @FXML
-    private ComboBox<Float> maxComboEllipticity;
+    private TextField maxTextFieldEllipticity;
 
     @FXML
     private TextField luminanceTextField;
@@ -60,6 +61,9 @@ public class R6ViewController {
     @FXML
     private TableColumn<FilamentBean, String> contrastColumn;
 
+    @FXML
+    private Label filamentFraction;
+
     private ObservableList<FilamentBean> filamentBeans = FXCollections.observableArrayList();
 
     // pagination
@@ -86,14 +90,6 @@ public class R6ViewController {
         ellipticityColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEllipticity().toString()));
         contrastColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getContrast().toString()));
 
-        ObservableList<Float> options = FXCollections.observableArrayList(2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f);
-
-        minComboEllipticity.setValue(2.0f);
-        minComboEllipticity.setItems(options);
-
-        maxComboEllipticity.setValue(9.0f);
-        maxComboEllipticity.setItems(options);
-
     }
 
 
@@ -117,11 +113,11 @@ public class R6ViewController {
 
             luminance = Double.valueOf(luminanceTextField.getText());
 
+            ellipticityMin = Float.valueOf(minTextFieldEllipticity.getText());
+            ellipticityMax = Float.valueOf(maxTextFieldEllipticity.getText());
+
             if (luminance < 0)
                 throw new NumberFormatException("Insert number > 0");
-
-            ellipticityMin = minComboEllipticity.getSelectionModel().getSelectedItem();
-            ellipticityMax = maxComboEllipticity.getSelectionModel().getSelectedItem();
 
             if (ellipticityMax < ellipticityMin)
                 throw new NumberFormatException("Min must be minus than Max");
@@ -131,6 +127,13 @@ public class R6ViewController {
                 List<FilamentBean> listS = controller.getFilamentsByLuminanceAndEllipticityWithLimit(luminance, ellipticityMin, ellipticityMax, limit, offset);
                 filamentBeans.addAll(listS);
                 filamentBeanTableView.setItems(filamentBeans);
+
+                // calculate fraction
+                Integer totalFilament = controller.getCountFilamentInDB();
+                Integer filamentByLuminance = controller.getCountFilamentsByLuminanceAndEllipticity(luminance, ellipticityMin, ellipticityMax);
+                Float fraction = (filamentByLuminance.floatValue() / totalFilament.floatValue()) * 100;
+
+                filamentFraction.setText(String.format("%.2f", fraction) + "%");
 
             } catch (DaoException e) {
 

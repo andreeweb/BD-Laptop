@@ -155,4 +155,21 @@ public interface FilamentDao {
      */
     Branch getFilamentSpine(Filament filament) throws DaoException;
 
+    /**
+     *
+     * @return
+     * @throws DaoException
+     */
+    Integer getCountFilament() throws DaoException;
+
+    /**
+     *
+     * @param percentageLuminance
+     * @param ellipticity_min
+     * @param ellipticity_max
+     * @return
+     * @throws DaoException
+     */
+    Integer getCountFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max) throws DaoException;
+
 }

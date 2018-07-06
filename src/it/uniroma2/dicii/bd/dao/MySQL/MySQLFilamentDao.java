@@ -82,4 +82,14 @@ public class MySQLFilamentDao implements FilamentDao {
     public Branch getFilamentSpine(Filament filament) throws DaoException {
         return null;
     }
+
+    @Override
+    public Integer getCountFilament() throws DaoException {
+        return null;
+    }
+
+    @Override
+    public Integer getCountFilamentsByLuminanceAndEllipticity(Double percentageLuminance, Float ellipticity_min, Float ellipticity_max) throws DaoException {
+        return null;
+    }
 }

@@ -66,12 +66,12 @@
                         <VBox>
                            <children>
                               <Label styleClass="label-big" text="Sides" />
-                              <TextField fx:id="size1TextField" promptText="Side 1">
+                              <TextField fx:id="size1TextField" promptText="SideMin">
                                  <VBox.margin>
                                     <Insets top="20.0" />
                                  </VBox.margin>
                               </TextField>
-                              <TextField fx:id="size2TextField" promptText="Side 2">
+                              <TextField fx:id="size2TextField" promptText="SideMax">
                                  <VBox.margin>
                                     <Insets top="5.0" />
                                  </VBox.margin>

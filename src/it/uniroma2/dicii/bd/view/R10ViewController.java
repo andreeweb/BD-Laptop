@@ -77,8 +77,8 @@ public class R10ViewController {
 
         SearchController controller = new SearchController();
 
-        Float side1Size;
-        Float side2Size;
+        Float sideMin;
+        Float sideMax;
 
         Double centerLatitude;
         Double centerLongitude;
@@ -88,12 +88,15 @@ public class R10ViewController {
             centerLatitude = Double.valueOf(latitudeCenterTextField.getText());
             centerLongitude = Double.valueOf(longitudeCenterTextField.getText());
 
-            side1Size = Float.valueOf(size1TextField.getText());
-            side2Size = Float.valueOf(size2TextField.getText());
+            sideMin = Float.valueOf(size1TextField.getText());
+            sideMax = Float.valueOf(size2TextField.getText());
+
+            if (sideMin > sideMax)
+                throw new NumberFormatException("SideMin must be minus than SideMax");
 
             GPointBean gPointBean = new GPointBean(centerLongitude, centerLatitude);
 
-            Map<String, Float> map = controller.getStarInsideRectRegion(gPointBean, side1Size, side2Size);
+            Map<String, Float> map = controller.getStarInsideRectRegion(gPointBean, sideMin, sideMax);
 
             totalStarLabel.setText(String.format("%.2f", map.get("totalStar")));
 

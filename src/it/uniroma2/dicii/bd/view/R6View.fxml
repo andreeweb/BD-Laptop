@@ -53,11 +53,11 @@
                                     <VBox>
                                        <children>
                                           <Label styleClass="label-sub" text="Min" />
-                                          <ComboBox fx:id="minComboEllipticity" prefWidth="150.0">
+                                          <TextField fx:id="minTextFieldEllipticity">
                                              <VBox.margin>
                                                 <Insets top="10.0" />
                                              </VBox.margin>
-                                          </ComboBox>
+                                          </TextField>
                                        </children>
                                        <HBox.margin>
                                           <Insets top="20.0" />
@@ -66,11 +66,11 @@
                                     <VBox>
                                        <children>
                                           <Label styleClass="label-sub" text="Max" />
-                                          <ComboBox fx:id="maxComboEllipticity" prefWidth="150.0">
+                                          <TextField fx:id="maxTextFieldEllipticity">
                                              <VBox.margin>
                                                 <Insets top="10.0" />
                                              </VBox.margin>
-                                          </ComboBox>
+                                          </TextField>
                                        </children>
                                        <HBox.margin>
                                           <Insets left="20.0" top="20.0" />
@@ -98,6 +98,16 @@
                               <Insets left="40.0" top="73.0" />
                            </HBox.margin>
                         </Button>
+                        <Label styleClass="label-big" text="Filament:">
+                           <HBox.margin>
+                              <Insets left="30.0" top="75.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="filamentFraction" styleClass="label-big" text="***">
+                           <HBox.margin>
+                              <Insets left="10.0" top="75.0" />
+                           </HBox.margin>
+                        </Label>
                             </children>
                             <VBox.margin>
                                 <Insets />
