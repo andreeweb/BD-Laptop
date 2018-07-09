@@ -58,9 +58,22 @@
                                         <Insets />
                                     </HBox.margin>
                                 </VBox>
+                        <VBox>
+                           <children>
+                              <Label styleClass="label-big" text="Order By" />
+                              <ComboBox fx:id="orderComboBox" prefWidth="150.0">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </ComboBox>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </VBox>
                                 <Button fx:id="searchButton" mnemonicParsing="false" text="Search">
                                     <HBox.margin>
-                                        <Insets left="10.0" top="43.0" />
+                                        <Insets left="20.0" top="43.0" />
                                     </HBox.margin>
                                 </Button>
                             </children>

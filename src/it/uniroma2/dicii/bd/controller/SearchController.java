@@ -3,6 +3,7 @@ package it.uniroma2.dicii.bd.controller;
 import it.uniroma2.dicii.bd.bean.FilamentBean;
 import it.uniroma2.dicii.bd.bean.GPointBean;
 import it.uniroma2.dicii.bd.bean.StarBean;
+import it.uniroma2.dicii.bd.bean.StarBeanComparator;
 import it.uniroma2.dicii.bd.dao.DaoFactory;
 import it.uniroma2.dicii.bd.enumeration.StarType;
 import it.uniroma2.dicii.bd.exception.DaoException;
@@ -477,10 +478,16 @@ public class SearchController {
      * @return
      * @throws DaoException
      */
-    public List<StarBean> getStarsInsideFilament(Integer filamentID) throws DaoException {
+    public List<StarBean> getStarsInsideFilament(Integer filamentID, String orderby) throws DaoException {
 
         StarDao starDAO = DaoFactory.getSingletonInstance().getStarDAO();
-        List<Star> starList = starDAO.getStarsInsideFilamentByID(filamentID);
+        List<Star> starList;
+
+        if (orderby.equals("Flux")){
+            starList = starDAO.getStarsInsideFilamentOrdered(filamentID, "flux");
+        }else{
+            starList = starDAO.getStarsInsideFilamentByID(filamentID);
+        }
 
         FilamentDao filamentDao = DaoFactory.getSingletonInstance().getFilamentDAO();
         Branch spine = filamentDao.getFilamentSpine(new Filament(filamentID));
@@ -506,6 +513,9 @@ public class SearchController {
 
             starBeansList.add(starBean);
         }
+
+        if (orderby.equals("Distance"))
+            starBeansList.sort(new StarBeanComparator());
 
         return starBeansList;
     }

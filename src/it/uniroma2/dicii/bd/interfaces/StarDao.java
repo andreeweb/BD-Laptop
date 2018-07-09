@@ -35,6 +35,15 @@ public interface StarDao {
 
     /**
      *
+     * @param filamentID
+     * @param orderby
+     * @return
+     * @throws DaoException
+     */
+    List<Star> getStarsInsideFilamentOrdered(Integer filamentID, String orderby) throws DaoException;
+
+    /**
+     *
      * @param starList
      * @return
      * @throws DaoException

@@ -41,6 +41,9 @@ public class R12ViewController {
     @FXML
     private TableColumn<StarBean, String> fluxColumn;
 
+    @FXML
+    private ComboBox<String> orderComboBox;
+
     private ObservableList<StarBean> starBeans = FXCollections.observableArrayList();
 
     // pagination
@@ -64,6 +67,14 @@ public class R12ViewController {
         distanceColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDistanceFromFilamentSpine().toString()));
         fluxColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFlux().toString()));
 
+        ObservableList<String> options =
+                FXCollections.observableArrayList(
+                        "Flux",
+                        "Distance"
+                );
+
+        orderComboBox.setValue("Flux");
+        orderComboBox.setItems(options);
     }
 
     /**
@@ -84,11 +95,15 @@ public class R12ViewController {
         try {
 
             Integer filamentID = Integer.valueOf(searchTextField.getText());
+            String orderby = orderComboBox.getSelectionModel().getSelectedItem();
 
             try {
 
                 // total list
-                starBeansList = controller.getStarsInsideFilament(filamentID);
+                starBeansList = controller.getStarsInsideFilament(filamentID, orderby);
+
+                if (starBeansList.size() < 20)
+                    to = starBeansList.size();
 
                 starBeans.addAll(starBeansList.subList(from, to));
                 starBeanTableView.setItems(starBeans);

@@ -16,7 +16,7 @@ public class TestREQ12 {
 
         SearchController controller = new SearchController();
 
-        List<StarBean> starBeansList = controller.getStarsInsideFilament(45);
+        List<StarBean> starBeansList = controller.getStarsInsideFilament(45, "no_order");
 
         ArrayList<String> list = new ArrayList<String >() {{
             add("HIGALPS012.8034-0.3187");

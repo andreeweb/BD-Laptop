@@ -76,7 +76,6 @@ public class LoginViewController {
         } catch (DaoException e) {
 
             errorLabel.setManaged(true);
-            errorLabel.setText("Username e/o password errati.");
             e.printStackTrace();
         }
 

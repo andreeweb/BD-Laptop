@@ -100,7 +100,44 @@ public class PGStarDao implements StarDao{
 
             Filament filament = new Filament(filamentID);
 
-            starList = this._getStarsInsideFilament(filament, starList, conn);
+            starList = this._getStarsInsideFilament(filament, starList, null, conn);
+
+            conn.close();
+
+        } catch (SQLException e) {
+
+            throw new DaoException(e.getMessage(), e.getCause());
+
+        } finally {
+
+            try {
+                if (conn != null)
+                    conn.close();
+
+            } catch (SQLException e) {
+
+                throw new DaoException(e.getMessage(), e.getCause());
+            }
+        }
+
+        return starList;
+    }
+
+    @Override
+    public List<Star> getStarsInsideFilamentOrdered(Integer filamentID, String orderby) throws DaoException {
+
+        PGConnectionManager manager = PGConnectionManager.getSingletonInstance();
+        Connection conn = null;
+
+        List<Star> starList = new ArrayList<>();
+
+        try {
+
+            conn = manager.getConnectionFromConnectionPool();
+
+            Filament filament = new Filament(filamentID);
+
+            starList = this._getStarsInsideFilament(filament, starList, orderby, conn);
 
             conn.close();
 
@@ -245,9 +282,10 @@ public class PGStarDao implements StarDao{
 
     }
 
-    private List<Star> _getStarsInsideFilament(Filament filament, List<Star> starList, Connection conn) throws DaoException {
+    private List<Star> _getStarsInsideFilament(Filament filament, List<Star> starList, String orderby, Connection conn) throws DaoException {
 
         Statement stmt = null;
+        String sql;
 
         try {
 
@@ -256,7 +294,11 @@ public class PGStarDao implements StarDao{
 
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
-            String sql = "SELECT * FROM star";
+            if (orderby != null){
+                sql = "SELECT * FROM star ORDER BY " + orderby + " ASC";
+            }else{
+                sql = "SELECT * FROM star";
+            }
 
             // execute
             ResultSet rs = stmt.executeQuery(sql);
